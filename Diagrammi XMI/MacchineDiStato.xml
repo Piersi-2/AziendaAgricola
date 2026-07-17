@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1252" standalone="no" ?>
-<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2026-07-15 17:06:45">
+<XMI xmi.version="1.1" xmlns:UML="omg.org/UML1.3" timestamp="2026-07-17 17:43:04">
 	<XMI.header>
 		<XMI.documentation>
 			<XMI.exporter>Enterprise Architect</XMI.exporter>
@@ -687,10 +687,14 @@
 								</UML:Class>
 								<UML:ActivityModel xmi.id="EAID_16655130_4E41_449a_BEFB_C24037FCC30C_ActivityModel" context="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C" name="ActivityModel" visibility="public">
 									<UML:StateMachine.transitions>
-										<UML:Transition xmi.id="EAID_1AFFBB20_0483_4841_B369_DBB6973851E3" visibility="public" source="EAID_A87348D4_0B75_48b4_B69B_C55C36071D8D" target="EAID_2C2971CF_E5F4_4978_9C06_1A17C689C3BD">
-											<UML:Transition.trigger>
-												<UML:Event name="Elimina Profilo"/>
-											</UML:Transition.trigger>
+										<UML:Transition xmi.id="EAID_086F7E9E_AD78_448c_8D23_A76E93A5EB3C" visibility="public" source="EAID_86DAD4B4_0484_416c_A694_F9BB58D9FFF2" target="EAID_2C2971CF_E5F4_4978_9C06_1A17C689C3BD">
+											<UML:Transition.guard>
+												<UML:Guard>
+													<UML:Guard.expression>
+														<UML:BooleanExpression body="nessuna modifica"/>
+													</UML:Guard.expression>
+												</UML:Guard>
+											</UML:Transition.guard>
 											<UML:ModelElement.taggedValue>
 												<UML:TaggedValue tag="style" value="3"/>
 												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
@@ -701,13 +705,13 @@
 												<UML:TaggedValue tag="seqno" value="0"/>
 												<UML:TaggedValue tag="headStyle" value="0"/>
 												<UML:TaggedValue tag="lineStyle" value="0"/>
-												<UML:TaggedValue tag="privatedata1" value="Elimina Profilo"/>
-												<UML:TaggedValue tag="ea_localid" value="174"/>
-												<UML:TaggedValue tag="ea_sourceName" value="Attivo"/>
+												<UML:TaggedValue tag="privatedata2" value="nessuna modifica"/>
+												<UML:TaggedValue tag="ea_localid" value="195"/>
+												<UML:TaggedValue tag="ea_sourceName" value="c_modifica"/>
 												<UML:TaggedValue tag="ea_targetName" value="In eliminazione"/>
-												<UML:TaggedValue tag="ea_sourceType" value="State"/>
+												<UML:TaggedValue tag="ea_sourceType" value="StateNode"/>
 												<UML:TaggedValue tag="ea_targetType" value="State"/>
-												<UML:TaggedValue tag="ea_sourceID" value="292"/>
+												<UML:TaggedValue tag="ea_sourceID" value="327"/>
 												<UML:TaggedValue tag="ea_targetID" value="293"/>
 												<UML:TaggedValue tag="src_visibility" value="Public"/>
 												<UML:TaggedValue tag="src_aggregation" value="0"/>
@@ -725,7 +729,51 @@
 												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
 												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
-												<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={703B23DA-B14E-4e4c-A9E2-E9006F55BE2D}$XID;$NAM=MOFProps$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$BEH=trigger$BEH;$PAR=0$PAR;$DES={1CA5F2E5-D944-465e-B7AE-A76A35DF3828}$DES;$CLT={1AFFBB20-0483-4841-B369-DBB6973851E3}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+												<UML:TaggedValue tag="virtualInheritance" value="0"/>
+											</UML:ModelElement.taggedValue>
+										</UML:Transition>
+										<UML:Transition xmi.id="EAID_10B95C5B_EC79_461a_AE5B_70D03FDDEC64" visibility="public" source="EAID_5C51C340_CF5E_4e5a_A459_6CF53919957E" target="EAID_2C2971CF_E5F4_4978_9C06_1A17C689C3BD">
+											<UML:Transition.guard>
+												<UML:Guard>
+													<UML:Guard.expression>
+														<UML:BooleanExpression body="modifiche valide"/>
+													</UML:Guard.expression>
+												</UML:Guard>
+											</UML:Transition.guard>
+											<UML:ModelElement.taggedValue>
+												<UML:TaggedValue tag="style" value="3"/>
+												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
+												<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
+												<UML:TaggedValue tag="linemode" value="3"/>
+												<UML:TaggedValue tag="linecolor" value="-1"/>
+												<UML:TaggedValue tag="linewidth" value="0"/>
+												<UML:TaggedValue tag="seqno" value="0"/>
+												<UML:TaggedValue tag="headStyle" value="0"/>
+												<UML:TaggedValue tag="lineStyle" value="0"/>
+												<UML:TaggedValue tag="privatedata2" value="modifiche valide"/>
+												<UML:TaggedValue tag="ea_localid" value="199"/>
+												<UML:TaggedValue tag="ea_sourceName" value="c_valida"/>
+												<UML:TaggedValue tag="ea_targetName" value="In eliminazione"/>
+												<UML:TaggedValue tag="ea_sourceType" value="StateNode"/>
+												<UML:TaggedValue tag="ea_targetType" value="State"/>
+												<UML:TaggedValue tag="ea_sourceID" value="330"/>
+												<UML:TaggedValue tag="ea_targetID" value="293"/>
+												<UML:TaggedValue tag="src_visibility" value="Public"/>
+												<UML:TaggedValue tag="src_aggregation" value="0"/>
+												<UML:TaggedValue tag="src_isOrdered" value="false"/>
+												<UML:TaggedValue tag="src_targetScope" value="instance"/>
+												<UML:TaggedValue tag="src_changeable" value="none"/>
+												<UML:TaggedValue tag="src_isNavigable" value="false"/>
+												<UML:TaggedValue tag="src_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="src_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="dst_visibility" value="Public"/>
+												<UML:TaggedValue tag="dst_aggregation" value="0"/>
+												<UML:TaggedValue tag="dst_isOrdered" value="false"/>
+												<UML:TaggedValue tag="dst_targetScope" value="instance"/>
+												<UML:TaggedValue tag="dst_changeable" value="none"/>
+												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
+												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 												<UML:TaggedValue tag="virtualInheritance" value="0"/>
 											</UML:ModelElement.taggedValue>
 										</UML:Transition>
@@ -897,6 +945,175 @@
 												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
 												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 												<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={12DB52B7-A2AC-4b36-A900-D740B1AAFB67}$XID;$NAM=MOFProps$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$BEH=trigger$BEH;$PAR=0$PAR;$DES={D885E15A-4B75-47d5-801F-0D77F1B26B40}$DES;$CLT={FB396BB1-3A06-4b6e-87BC-27326B5A4B46}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+												<UML:TaggedValue tag="virtualInheritance" value="0"/>
+											</UML:ModelElement.taggedValue>
+										</UML:Transition>
+										<UML:Transition xmi.id="EAID_078D428D_BD77_4fba_8F86_E6BBD65E216E" visibility="public" source="EAID_7A050C24_3BA5_4ad7_A6CA_4D1AF3554B3D" target="EAID_5C51C340_CF5E_4e5a_A459_6CF53919957E">
+											<UML:Transition.trigger>
+												<UML:Event name="salvataggio modifiche()"/>
+											</UML:Transition.trigger>
+											<UML:ModelElement.taggedValue>
+												<UML:TaggedValue tag="style" value="3"/>
+												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
+												<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
+												<UML:TaggedValue tag="linemode" value="3"/>
+												<UML:TaggedValue tag="linecolor" value="-1"/>
+												<UML:TaggedValue tag="linewidth" value="0"/>
+												<UML:TaggedValue tag="seqno" value="0"/>
+												<UML:TaggedValue tag="headStyle" value="0"/>
+												<UML:TaggedValue tag="lineStyle" value="0"/>
+												<UML:TaggedValue tag="privatedata1" value="salvataggio modifiche()"/>
+												<UML:TaggedValue tag="ea_localid" value="198"/>
+												<UML:TaggedValue tag="ea_sourceName" value="In modifica"/>
+												<UML:TaggedValue tag="ea_targetName" value="c_valida"/>
+												<UML:TaggedValue tag="ea_sourceType" value="State"/>
+												<UML:TaggedValue tag="ea_targetType" value="StateNode"/>
+												<UML:TaggedValue tag="ea_sourceID" value="328"/>
+												<UML:TaggedValue tag="ea_targetID" value="330"/>
+												<UML:TaggedValue tag="src_visibility" value="Public"/>
+												<UML:TaggedValue tag="src_aggregation" value="0"/>
+												<UML:TaggedValue tag="src_isOrdered" value="false"/>
+												<UML:TaggedValue tag="src_targetScope" value="instance"/>
+												<UML:TaggedValue tag="src_changeable" value="none"/>
+												<UML:TaggedValue tag="src_isNavigable" value="false"/>
+												<UML:TaggedValue tag="src_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="src_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="dst_visibility" value="Public"/>
+												<UML:TaggedValue tag="dst_aggregation" value="0"/>
+												<UML:TaggedValue tag="dst_isOrdered" value="false"/>
+												<UML:TaggedValue tag="dst_targetScope" value="instance"/>
+												<UML:TaggedValue tag="dst_changeable" value="none"/>
+												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
+												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={7900C402-C4D2-4b0e-BC8D-52AD8E01FFB3}$XID;$NAM=MOFProps$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$BEH=trigger$BEH;$PAR=0$PAR;$DES={B48FCB77-72F1-4b3b-B822-6338D572FA17}$DES;$CLT={078D428D-BD77-4fba-8F86-E6BBD65E216E}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+												<UML:TaggedValue tag="virtualInheritance" value="0"/>
+											</UML:ModelElement.taggedValue>
+										</UML:Transition>
+										<UML:Transition xmi.id="EAID_15786A01_12ED_44ea_9A5A_EB42528E729A" visibility="public" source="EAID_5C51C340_CF5E_4e5a_A459_6CF53919957E" target="EAID_7A050C24_3BA5_4ad7_A6CA_4D1AF3554B3D">
+											<UML:Transition.guard>
+												<UML:Guard>
+													<UML:Guard.expression>
+														<UML:BooleanExpression body="dati errati"/>
+													</UML:Guard.expression>
+												</UML:Guard>
+											</UML:Transition.guard>
+											<UML:ModelElement.taggedValue>
+												<UML:TaggedValue tag="style" value="3"/>
+												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
+												<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
+												<UML:TaggedValue tag="linemode" value="3"/>
+												<UML:TaggedValue tag="linecolor" value="-1"/>
+												<UML:TaggedValue tag="linewidth" value="0"/>
+												<UML:TaggedValue tag="seqno" value="0"/>
+												<UML:TaggedValue tag="headStyle" value="0"/>
+												<UML:TaggedValue tag="lineStyle" value="0"/>
+												<UML:TaggedValue tag="privatedata2" value="dati errati"/>
+												<UML:TaggedValue tag="ea_localid" value="200"/>
+												<UML:TaggedValue tag="ea_sourceName" value="c_valida"/>
+												<UML:TaggedValue tag="ea_targetName" value="In modifica"/>
+												<UML:TaggedValue tag="ea_sourceType" value="StateNode"/>
+												<UML:TaggedValue tag="ea_targetType" value="State"/>
+												<UML:TaggedValue tag="ea_sourceID" value="330"/>
+												<UML:TaggedValue tag="ea_targetID" value="328"/>
+												<UML:TaggedValue tag="src_visibility" value="Public"/>
+												<UML:TaggedValue tag="src_aggregation" value="0"/>
+												<UML:TaggedValue tag="src_isOrdered" value="false"/>
+												<UML:TaggedValue tag="src_targetScope" value="instance"/>
+												<UML:TaggedValue tag="src_changeable" value="none"/>
+												<UML:TaggedValue tag="src_isNavigable" value="false"/>
+												<UML:TaggedValue tag="src_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="src_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="dst_visibility" value="Public"/>
+												<UML:TaggedValue tag="dst_aggregation" value="0"/>
+												<UML:TaggedValue tag="dst_isOrdered" value="false"/>
+												<UML:TaggedValue tag="dst_targetScope" value="instance"/>
+												<UML:TaggedValue tag="dst_changeable" value="none"/>
+												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
+												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="virtualInheritance" value="0"/>
+											</UML:ModelElement.taggedValue>
+										</UML:Transition>
+										<UML:Transition xmi.id="EAID_B752F769_677C_4ff9_ACCD_01D1B4E395FE" visibility="public" source="EAID_86DAD4B4_0484_416c_A694_F9BB58D9FFF2" target="EAID_7A050C24_3BA5_4ad7_A6CA_4D1AF3554B3D">
+											<UML:Transition.guard>
+												<UML:Guard>
+													<UML:Guard.expression>
+														<UML:BooleanExpression body="Modifica richiesta"/>
+													</UML:Guard.expression>
+												</UML:Guard>
+											</UML:Transition.guard>
+											<UML:ModelElement.taggedValue>
+												<UML:TaggedValue tag="style" value="3"/>
+												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
+												<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
+												<UML:TaggedValue tag="linemode" value="3"/>
+												<UML:TaggedValue tag="linecolor" value="-1"/>
+												<UML:TaggedValue tag="linewidth" value="0"/>
+												<UML:TaggedValue tag="seqno" value="0"/>
+												<UML:TaggedValue tag="headStyle" value="0"/>
+												<UML:TaggedValue tag="lineStyle" value="0"/>
+												<UML:TaggedValue tag="privatedata2" value="Modifica richiesta"/>
+												<UML:TaggedValue tag="ea_localid" value="196"/>
+												<UML:TaggedValue tag="ea_sourceName" value="c_modifica"/>
+												<UML:TaggedValue tag="ea_targetName" value="In modifica"/>
+												<UML:TaggedValue tag="ea_sourceType" value="StateNode"/>
+												<UML:TaggedValue tag="ea_targetType" value="State"/>
+												<UML:TaggedValue tag="ea_sourceID" value="327"/>
+												<UML:TaggedValue tag="ea_targetID" value="328"/>
+												<UML:TaggedValue tag="src_visibility" value="Public"/>
+												<UML:TaggedValue tag="src_aggregation" value="0"/>
+												<UML:TaggedValue tag="src_isOrdered" value="false"/>
+												<UML:TaggedValue tag="src_targetScope" value="instance"/>
+												<UML:TaggedValue tag="src_changeable" value="none"/>
+												<UML:TaggedValue tag="src_isNavigable" value="false"/>
+												<UML:TaggedValue tag="src_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="src_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="dst_visibility" value="Public"/>
+												<UML:TaggedValue tag="dst_aggregation" value="0"/>
+												<UML:TaggedValue tag="dst_isOrdered" value="false"/>
+												<UML:TaggedValue tag="dst_targetScope" value="instance"/>
+												<UML:TaggedValue tag="dst_changeable" value="none"/>
+												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
+												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="virtualInheritance" value="0"/>
+											</UML:ModelElement.taggedValue>
+										</UML:Transition>
+										<UML:Transition xmi.id="EAID_6439D843_AE3C_4c39_9063_91A1C78D3142" visibility="public" source="EAID_A87348D4_0B75_48b4_B69B_C55C36071D8D" target="EAID_86DAD4B4_0484_416c_A694_F9BB58D9FFF2">
+											<UML:ModelElement.taggedValue>
+												<UML:TaggedValue tag="style" value="3"/>
+												<UML:TaggedValue tag="ea_type" value="StateFlow"/>
+												<UML:TaggedValue tag="direction" value="Source -&gt; Destination"/>
+												<UML:TaggedValue tag="linemode" value="3"/>
+												<UML:TaggedValue tag="linecolor" value="-1"/>
+												<UML:TaggedValue tag="linewidth" value="0"/>
+												<UML:TaggedValue tag="seqno" value="0"/>
+												<UML:TaggedValue tag="headStyle" value="0"/>
+												<UML:TaggedValue tag="lineStyle" value="0"/>
+												<UML:TaggedValue tag="ea_localid" value="194"/>
+												<UML:TaggedValue tag="ea_sourceName" value="Attivo"/>
+												<UML:TaggedValue tag="ea_targetName" value="c_modifica"/>
+												<UML:TaggedValue tag="ea_sourceType" value="State"/>
+												<UML:TaggedValue tag="ea_targetType" value="StateNode"/>
+												<UML:TaggedValue tag="ea_sourceID" value="292"/>
+												<UML:TaggedValue tag="ea_targetID" value="327"/>
+												<UML:TaggedValue tag="src_visibility" value="Public"/>
+												<UML:TaggedValue tag="src_aggregation" value="0"/>
+												<UML:TaggedValue tag="src_isOrdered" value="false"/>
+												<UML:TaggedValue tag="src_targetScope" value="instance"/>
+												<UML:TaggedValue tag="src_changeable" value="none"/>
+												<UML:TaggedValue tag="src_isNavigable" value="false"/>
+												<UML:TaggedValue tag="src_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="src_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
+												<UML:TaggedValue tag="dst_visibility" value="Public"/>
+												<UML:TaggedValue tag="dst_aggregation" value="0"/>
+												<UML:TaggedValue tag="dst_isOrdered" value="false"/>
+												<UML:TaggedValue tag="dst_targetScope" value="instance"/>
+												<UML:TaggedValue tag="dst_changeable" value="none"/>
+												<UML:TaggedValue tag="dst_isNavigable" value="true"/>
+												<UML:TaggedValue tag="dst_containment" value="Unspecified"/>
+												<UML:TaggedValue tag="dst_style" value="Union=0;Derived=0;AllowDuplicates=0;"/>
 												<UML:TaggedValue tag="virtualInheritance" value="0"/>
 											</UML:ModelElement.taggedValue>
 										</UML:Transition>
@@ -1124,6 +1341,78 @@
 														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
 													</UML:ModelElement.taggedValue>
 												</UML:SimpleState>
+												<UML:PseudoState name="c_valida" xmi.id="EAID_5C51C340_CF5E_4e5a_A459_6CF53919957E" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C">
+													<UML:ModelElement.taggedValue>
+														<UML:TaggedValue tag="isAbstract" value="false"/>
+														<UML:TaggedValue tag="isSpecification" value="false"/>
+														<UML:TaggedValue tag="ea_stype" value="StateNode"/>
+														<UML:TaggedValue tag="ea_ntype" value="11"/>
+														<UML:TaggedValue tag="version" value="1.0"/>
+														<UML:TaggedValue tag="isActive" value="false"/>
+														<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+														<UML:TaggedValue tag="date_created" value="2026-07-17 17:30:47"/>
+														<UML:TaggedValue tag="date_modified" value="2026-07-17 17:41:36"/>
+														<UML:TaggedValue tag="gentype" value="&lt;none&gt;"/>
+														<UML:TaggedValue tag="tagged" value="0"/>
+														<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+														<UML:TaggedValue tag="phase" value="1.0"/>
+														<UML:TaggedValue tag="author" value="ASUS"/>
+														<UML:TaggedValue tag="complexity" value="1"/>
+														<UML:TaggedValue tag="status" value="Proposed"/>
+														<UML:TaggedValue tag="tpos" value="0"/>
+														<UML:TaggedValue tag="ea_localid" value="330"/>
+														<UML:TaggedValue tag="ea_eleType" value="element"/>
+														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+													</UML:ModelElement.taggedValue>
+												</UML:PseudoState>
+												<UML:SimpleState name="In modifica" xmi.id="EAID_7A050C24_3BA5_4ad7_A6CA_4D1AF3554B3D" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C">
+													<UML:ModelElement.taggedValue>
+														<UML:TaggedValue tag="isAbstract" value="false"/>
+														<UML:TaggedValue tag="isSpecification" value="false"/>
+														<UML:TaggedValue tag="ea_stype" value="State"/>
+														<UML:TaggedValue tag="ea_ntype" value="0"/>
+														<UML:TaggedValue tag="version" value="1.0"/>
+														<UML:TaggedValue tag="isActive" value="false"/>
+														<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+														<UML:TaggedValue tag="date_created" value="2026-07-17 17:04:37"/>
+														<UML:TaggedValue tag="date_modified" value="2026-07-17 17:04:45"/>
+														<UML:TaggedValue tag="gentype" value="Java"/>
+														<UML:TaggedValue tag="tagged" value="0"/>
+														<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+														<UML:TaggedValue tag="phase" value="1.0"/>
+														<UML:TaggedValue tag="author" value="ASUS"/>
+														<UML:TaggedValue tag="complexity" value="1"/>
+														<UML:TaggedValue tag="status" value="Proposed"/>
+														<UML:TaggedValue tag="tpos" value="0"/>
+														<UML:TaggedValue tag="ea_localid" value="328"/>
+														<UML:TaggedValue tag="ea_eleType" value="element"/>
+														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
+													</UML:ModelElement.taggedValue>
+												</UML:SimpleState>
+												<UML:PseudoState name="c_modifica" xmi.id="EAID_86DAD4B4_0484_416c_A694_F9BB58D9FFF2" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C">
+													<UML:ModelElement.taggedValue>
+														<UML:TaggedValue tag="isAbstract" value="false"/>
+														<UML:TaggedValue tag="isSpecification" value="false"/>
+														<UML:TaggedValue tag="ea_stype" value="StateNode"/>
+														<UML:TaggedValue tag="ea_ntype" value="11"/>
+														<UML:TaggedValue tag="version" value="1.0"/>
+														<UML:TaggedValue tag="isActive" value="false"/>
+														<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+														<UML:TaggedValue tag="date_created" value="2026-07-17 17:01:55"/>
+														<UML:TaggedValue tag="date_modified" value="2026-07-17 17:02:02"/>
+														<UML:TaggedValue tag="gentype" value="&lt;none&gt;"/>
+														<UML:TaggedValue tag="tagged" value="0"/>
+														<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+														<UML:TaggedValue tag="phase" value="1.0"/>
+														<UML:TaggedValue tag="author" value="ASUS"/>
+														<UML:TaggedValue tag="complexity" value="1"/>
+														<UML:TaggedValue tag="status" value="Proposed"/>
+														<UML:TaggedValue tag="tpos" value="0"/>
+														<UML:TaggedValue tag="ea_localid" value="327"/>
+														<UML:TaggedValue tag="ea_eleType" value="element"/>
+														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+													</UML:ModelElement.taggedValue>
+												</UML:PseudoState>
 												<UML:PseudoState name="Final" xmi.id="EAID_8704AD46_53CC_4738_8C9F_7BEBAD9BABB2" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C" kind="final">
 													<UML:ModelElement.taggedValue>
 														<UML:TaggedValue tag="isAbstract" value="false"/>
@@ -1192,6 +1481,30 @@
 														<UML:TaggedValue tag="status" value="Proposed"/>
 														<UML:TaggedValue tag="tpos" value="0"/>
 														<UML:TaggedValue tag="ea_localid" value="292"/>
+														<UML:TaggedValue tag="ea_eleType" value="element"/>
+														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
+													</UML:ModelElement.taggedValue>
+												</UML:SimpleState>
+												<UML:SimpleState name="In Modifica" xmi.id="EAID_ADEBFEE9_B23A_46a6_B34B_63CE0B904472" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C">
+													<UML:ModelElement.taggedValue>
+														<UML:TaggedValue tag="isAbstract" value="false"/>
+														<UML:TaggedValue tag="isSpecification" value="false"/>
+														<UML:TaggedValue tag="ea_stype" value="State"/>
+														<UML:TaggedValue tag="ea_ntype" value="0"/>
+														<UML:TaggedValue tag="version" value="1.0"/>
+														<UML:TaggedValue tag="isActive" value="false"/>
+														<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+														<UML:TaggedValue tag="date_created" value="2026-07-17 16:45:12"/>
+														<UML:TaggedValue tag="date_modified" value="2026-07-17 16:46:26"/>
+														<UML:TaggedValue tag="gentype" value="Java"/>
+														<UML:TaggedValue tag="tagged" value="0"/>
+														<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+														<UML:TaggedValue tag="phase" value="1.0"/>
+														<UML:TaggedValue tag="author" value="ASUS"/>
+														<UML:TaggedValue tag="complexity" value="1"/>
+														<UML:TaggedValue tag="status" value="Proposed"/>
+														<UML:TaggedValue tag="tpos" value="0"/>
+														<UML:TaggedValue tag="ea_localid" value="326"/>
 														<UML:TaggedValue tag="ea_eleType" value="element"/>
 														<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=0;HSwimLanes=0;BorderStyle=0;"/>
 													</UML:ModelElement.taggedValue>
@@ -1294,6 +1607,54 @@
 										<UML:TaggedValue tag="ea_eleType" value="element"/>
 										<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
 										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={1C4C03E1-15E7-4b49-8C13-DE85D49E42B0}$XID;$NAM=MOFProps$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$BEH=event$BEH;$PAR=0$PAR;$DES=RefGUID={C11147EA-486E-4d75-942F-1A9FCB24CE3C};$DES;$CLT={3FD13671-1204-4cbf-B13F-7682A3042A27}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;$XREFPROP=$XID={C7DEB8E9-4539-479a-B4BA-124BDB7BD6F3}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@PROP=@NAME=kind@ENDNAME;@TYPE=TriggerKind@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={3FD13671-1204-4cbf-B13F-7682A3042A27}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+									</UML:ModelElement.taggedValue>
+								</UML:Class>
+								<UML:Class name="modifiche_completate()" xmi.id="EAID_83D08E13_26B9_4434_87B8_C5C79ACF8E46" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C" isRoot="false" isLeaf="false" isAbstract="false">
+									<UML:ModelElement.taggedValue>
+										<UML:TaggedValue tag="isSpecification" value="false"/>
+										<UML:TaggedValue tag="ea_stype" value="Trigger"/>
+										<UML:TaggedValue tag="ea_ntype" value="0"/>
+										<UML:TaggedValue tag="version" value="1.0"/>
+										<UML:TaggedValue tag="isActive" value="false"/>
+										<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+										<UML:TaggedValue tag="date_created" value="2026-07-17 17:13:15"/>
+										<UML:TaggedValue tag="date_modified" value="2026-07-17 17:13:37"/>
+										<UML:TaggedValue tag="gentype" value="&lt;none&gt;"/>
+										<UML:TaggedValue tag="tagged" value="0"/>
+										<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+										<UML:TaggedValue tag="phase" value="1.0"/>
+										<UML:TaggedValue tag="author" value="ASUS"/>
+										<UML:TaggedValue tag="complexity" value="1"/>
+										<UML:TaggedValue tag="status" value="Proposed"/>
+										<UML:TaggedValue tag="tpos" value="0"/>
+										<UML:TaggedValue tag="ea_localid" value="329"/>
+										<UML:TaggedValue tag="ea_eleType" value="element"/>
+										<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={818C4F31-43F0-4fae-A4CC-BA665DDA6D51}$XID;$NAM=MOFProps$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$BEH=event$BEH;$PAR=0$PAR;$DES=RefGUID={B63E0FA1-4741-4a2b-831C-25F45FEAEE39};$DES;$CLT={83D08E13-26B9-4434-87B8-C5C79ACF8E46}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;$XREFPROP=$XID={4D9533FB-9415-47d9-B243-5D17356372F8}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@PROP=@NAME=kind@ENDNAME;@TYPE=TriggerKind@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={83D08E13-26B9-4434-87B8-C5C79ACF8E46}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+									</UML:ModelElement.taggedValue>
+								</UML:Class>
+								<UML:Class name="salvataggio modifiche()" xmi.id="EAID_B48FCB77_72F1_4b3b_B822_6338D572FA17" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C" isRoot="false" isLeaf="false" isAbstract="false">
+									<UML:ModelElement.taggedValue>
+										<UML:TaggedValue tag="isSpecification" value="false"/>
+										<UML:TaggedValue tag="ea_stype" value="Trigger"/>
+										<UML:TaggedValue tag="ea_ntype" value="0"/>
+										<UML:TaggedValue tag="version" value="1.0"/>
+										<UML:TaggedValue tag="isActive" value="false"/>
+										<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
+										<UML:TaggedValue tag="date_created" value="2026-07-17 17:32:15"/>
+										<UML:TaggedValue tag="date_modified" value="2026-07-17 17:32:15"/>
+										<UML:TaggedValue tag="gentype" value="&lt;none&gt;"/>
+										<UML:TaggedValue tag="tagged" value="0"/>
+										<UML:TaggedValue tag="package_name" value="ProfiloUtente"/>
+										<UML:TaggedValue tag="phase" value="1.0"/>
+										<UML:TaggedValue tag="author" value="ASUS"/>
+										<UML:TaggedValue tag="complexity" value="1"/>
+										<UML:TaggedValue tag="status" value="Proposed"/>
+										<UML:TaggedValue tag="tpos" value="0"/>
+										<UML:TaggedValue tag="ea_localid" value="331"/>
+										<UML:TaggedValue tag="ea_eleType" value="element"/>
+										<UML:TaggedValue tag="style" value="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+										<UML:TaggedValue tag="$ea_xref_property" value="$XREFPROP=$XID={0BBF7448-3187-468d-83BD-A6118CF30FDF}$XID;$NAM=MOFProps$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$BEH=event$BEH;$PAR=0$PAR;$DES=RefGUID={88F7F5D4-15F1-4ca6-A78D-092159109319};$DES;$CLT={B48FCB77-72F1-4b3b-B822-6338D572FA17}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;$XREFPROP=$XID={4ECF4F82-904C-4066-91C4-808BBCEBB4B2}$XID;$NAM=CustomProperties$NAM;$TYP=element property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@PROP=@NAME=kind@ENDNAME;@TYPE=TriggerKind@ENDTYPE;@VALU=@ENDVALU;@PRMT=@ENDPRMT;@ENDPROP;$DES;$CLT={B48FCB77-72F1-4b3b-B822-6338D572FA17}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
 									</UML:ModelElement.taggedValue>
 								</UML:Class>
 								<UML:Class name="elaborazione dati()" xmi.id="EAID_D885E15A_4B75_47d5_801F_0D77F1B26B40" visibility="public" namespace="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C" isRoot="false" isLeaf="false" isAbstract="false">
@@ -2002,34 +2363,42 @@
 				<UML:TaggedValue tag="version" value="1.0"/>
 				<UML:TaggedValue tag="author" value="ASUS"/>
 				<UML:TaggedValue tag="created_date" value="2026-07-15 16:28:35"/>
-				<UML:TaggedValue tag="modified_date" value="2026-07-15 16:55:52"/>
+				<UML:TaggedValue tag="modified_date" value="2026-07-17 17:42:53"/>
 				<UML:TaggedValue tag="package" value="EAPK_16655130_4E41_449a_BEFB_C24037FCC30C"/>
 				<UML:TaggedValue tag="type" value="Statechart"/>
 				<UML:TaggedValue tag="swimlanes" value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;bro=0;SwimlaneFont=lfh:-21,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
 				<UML:TaggedValue tag="matrixitems" value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
 				<UML:TaggedValue tag="ea_localid" value="33"/>
 				<UML:TaggedValue tag="EAStyle" value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
-				<UML:TaggedValue tag="styleex" value="SaveTag=53E76AF0;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<UML:TaggedValue tag="styleex" value="SaveTag=6B5744AB;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
 				<UML:TaggedValue tag="persistentstyle" value="DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;"/>
 			</UML:ModelElement.taggedValue>
 			<UML:Diagram.element>
-				<UML:DiagramElement geometry="Left=281;Top=561;Right=301;Bottom=581;" subject="EAID_8704AD46_53CC_4738_8C9F_7BEBAD9BABB2" seqno="1" style="DUID=60881E0F;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
-				<UML:DiagramElement geometry="Left=271;Top=404;Right=311;Bottom=445;" subject="EAID_E22B60FD_D2F4_49d0_99EC_F04A8645B175" seqno="2" style="DUID=28B9B3B1;LBL=CX=39:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
-				<UML:DiagramElement geometry="Left=271;Top=157;Right=309;Bottom=198;" subject="EAID_DBDEF29C_F99B_4ef4_85B7_68CE79C7A611" seqno="3" style="DUID=0ABD0D0A;LBL=CX=27:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
-				<UML:DiagramElement geometry="Left=256;Top=504;Right=326;Bottom=530;" subject="EAID_EF1EDBD5_260D_4df1_BDD8_6182DA24947E" seqno="4" style="DUID=C1FEAFD8;"/>
-				<UML:DiagramElement geometry="Left=251;Top=312;Right=330;Bottom=340;" subject="EAID_2C2971CF_E5F4_4978_9C06_1A17C689C3BD" seqno="5" style="DUID=89F34796;"/>
-				<UML:DiagramElement geometry="Left=253;Top=240;Right=328;Bottom=266;" subject="EAID_A87348D4_0B75_48b4_B69B_C55C36071D8D" seqno="6" style="DUID=54F47933;"/>
-				<UML:DiagramElement geometry="Left=232;Top=81;Right=347;Bottom=107;" subject="EAID_3F00558C_DE58_4f4c_9FC8_95DD97EE847A" seqno="7" style="DUID=4AEE5369;"/>
-				<UML:DiagramElement geometry="Left=277;Top=5;Right=297;Bottom=25;" subject="EAID_9F71084D_7320_4fc6_BAB7_571AE392DFD6" seqno="8" style="DUID=4E4683CE;LBL=CX=23:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=269;Top=550;Right=309;Bottom=595;" subject="EAID_5C51C340_CF5E_4e5a_A459_6CF53919957E" seqno="1" style="DUID=539B0DE7;LBL=CX=34:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=249;Top=444;Right=329;Bottom=471;" subject="EAID_7A050C24_3BA5_4ad7_A6CA_4D1AF3554B3D" seqno="2" style="DUID=6D85DA9D;"/>
+				<UML:DiagramElement geometry="Left=268;Top=327;Right=313;Bottom=370;" subject="EAID_86DAD4B4_0484_416c_A694_F9BB58D9FFF2" seqno="3" style="DUID=C9DC5552;LBL=CX=44:CY=14:OX=-21:OY=-14:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=282;Top=937;Right=302;Bottom=957;" subject="EAID_8704AD46_53CC_4738_8C9F_7BEBAD9BABB2" seqno="4" style="DUID=60881E0F;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=271;Top=780;Right=311;Bottom=821;" subject="EAID_E22B60FD_D2F4_49d0_99EC_F04A8645B175" seqno="5" style="DUID=28B9B3B1;LBL=CX=39:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=271;Top=157;Right=309;Bottom=198;" subject="EAID_DBDEF29C_F99B_4ef4_85B7_68CE79C7A611" seqno="6" style="DUID=0ABD0D0A;LBL=CX=27:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+				<UML:DiagramElement geometry="Left=257;Top=880;Right=327;Bottom=906;" subject="EAID_EF1EDBD5_260D_4df1_BDD8_6182DA24947E" seqno="7" style="DUID=C1FEAFD8;"/>
+				<UML:DiagramElement geometry="Left=251;Top=687;Right=330;Bottom=715;" subject="EAID_2C2971CF_E5F4_4978_9C06_1A17C689C3BD" seqno="8" style="DUID=89F34796;"/>
+				<UML:DiagramElement geometry="Left=253;Top=240;Right=328;Bottom=266;" subject="EAID_A87348D4_0B75_48b4_B69B_C55C36071D8D" seqno="9" style="DUID=54F47933;"/>
+				<UML:DiagramElement geometry="Left=232;Top=81;Right=347;Bottom=107;" subject="EAID_3F00558C_DE58_4f4c_9FC8_95DD97EE847A" seqno="10" style="DUID=4AEE5369;"/>
+				<UML:DiagramElement geometry="Left=277;Top=5;Right=297;Bottom=25;" subject="EAID_9F71084D_7320_4fc6_BAB7_571AE392DFD6" seqno="11" style="DUID=4E4683CE;LBL=CX=23:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=73:CY=14:OX=1:OY=6:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_FA4C0292_2258_4caf_BCDD_19CF858C50EB" style="Mode=3;EOID=4AEE5369;SOID=4E4683CE;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=-13;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=75:CY=14:OX=2:OY=6:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=232:-181$289:-181$;" subject="EAID_FB396BB1_3A06_4b6e_87BC_27326B5A4B46" style="Mode=1;EOID=0ABD0D0A;SOID=4AEE5369;Color=-1;LWidth=0;Hidden=0;"/>
-				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=57:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_1AFFBB20_0483_4841_B369_DBB6973851E3" style="Mode=3;EOID=89F34796;SOID=54F47933;Color=-1;LWidth=0;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_6439D843_AE3C_4c39_9063_91A1C78D3142" style="Mode=3;EOID=C9DC5552;SOID=54F47933;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=-1;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=119:CY=14:OX=4:OY=2:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=357:-327$357:-396$;" subject="EAID_9E0E6F0D_2107_48a6_BD3E_0D520A2265C7" style="Mode=1;EOID=28B9B3B1;SOID=89F34796;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_6A734A01_3EF8_4c5d_A69B_203BEF142093" style="Mode=3;EOID=60881E0F;SOID=C1FEAFD8;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=75:CY=14:OX=3:OY=6:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_3D0211FF_0A22_4dc5_87BE_15FA52D9F686" style="Mode=3;EOID=54F47933;SOID=0ABD0D0A;Color=-1;LWidth=0;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=1;EDGE=2;$LLB=;LLT=;LMT=CX=126:CY=14:OX=69:OY=3:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=381:-177$381:-93$;" subject="EAID_0D83A46D_CBD1_4ee7_B6BA_224662902C01" style="Mode=3;EOID=4AEE5369;SOID=0ABD0D0A;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
 				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=147:CY=14:OX=2:OY=7:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_77A5371F_003A_4184_9F64_B99AEF2F9BF5" style="Mode=3;EOID=C1FEAFD8;SOID=28B9B3B1;Color=-1;LWidth=0;Hidden=0;"/>
-				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=CX=139:CY=14:OX=-90:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=205:-424$205:-253$;" subject="EAID_2CCFBF65_9057_4a88_B0BB_A36F87DE4869" style="Mode=3;EOID=54F47933;SOID=28B9B3B1;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=CX=139:CY=14:OX=-90:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=11:-800$11:-253$;" subject="EAID_2CCFBF65_9057_4a88_B0BB_A36F87DE4869" style="Mode=3;EOID=54F47933;SOID=28B9B3B1;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=1;EDGE=2;$LLB=;LLT=;LMT=CX=76:CY=14:OX=33:OY=-3:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=485:-348$485:-700$;" subject="EAID_086F7E9E_AD78_448c_8D23_A76E93A5EB3C" style="Mode=3;EOID=89F34796;SOID=C9DC5552;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=77:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B752F769_677C_4ff9_ACCD_01D1B4E395FE" style="Mode=3;EOID=6D85DA9D;SOID=C9DC5552;Color=-1;LWidth=0;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=-13;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=94:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=233:-470$233:-572$;" subject="EAID_078D428D_BD77_4fba_8F86_E6BBD65E216E" style="Mode=1;EOID=539B0DE7;SOID=6D85DA9D;Color=-1;LWidth=0;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=CX=72:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_10B95C5B_EC79_461a_AE5B_70D03FDDEC64" style="Mode=3;EOID=89F34796;SOID=539B0DE7;Color=-1;LWidth=0;Hidden=0;"/>
+				<UML:DiagramElement geometry="SX=0;SY=0;EX=0;EY=-3;EDGE=2;$LLB=;LLT=;LMT=CX=45:CY=14:OX=0:OY=31:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=386:-572$386:-460$;" subject="EAID_15786A01_12ED_44ea_9A5A_EB42528E729A" style="Mode=3;EOID=6D85DA9D;SOID=539B0DE7;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
 			</UML:Diagram.element>
 		</UML:Diagram>
 		<UML:Diagram name="SessioneUtente" xmi.id="EAID_F0BC2871_B2F1_4d81_922F_30A757FB50D3" diagramType="StateDiagram" owner="EAPK_B1488FCA_8429_4b24_A007_5EE53C5E3178" toolName="Enterprise Architect 2.5">
