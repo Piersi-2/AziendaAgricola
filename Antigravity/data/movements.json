@@ -1,0 +1,18 @@
+[
+  {
+    "idMovimento": "MOV-ENT-1dcb7d93",
+    "tipo": "ENTRATA",
+    "quantita": 15.0,
+    "prezzoTotale": 70.0,
+    "dataMovimento": "2026-07-23",
+    "descrizione": "fabio beve vino",
+    "sottoTipoEntrata": "VINO",
+    "sottoTipoUscita": null,
+    "prodottoId": null,
+    "prodottoNome": null,
+    "contattoId": "fa961417",
+    "contattoDescrizione": "Azienda: cacca, P.IVA: wbyefgq263, SDI:  | ID: fa961417, Email: 245372973, Tel: , Indirizzo: ",
+    "documento": null,
+    "creatoreUsername": "AziendaAgricola"
+  }
+]

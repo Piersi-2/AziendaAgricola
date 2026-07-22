@@ -1,0 +1,16 @@
+[
+  {
+    "id": "8ccaf745",
+    "nomeUtente": "AziendaAgricola",
+    "password": "123456789",
+    "nome": "Gaicomo",
+    "cognome": "Sdabbatini",
+    "email": "dsknuisd@gmail.com",
+    "telefono": "3241583625",
+    "dataNascita": "20/11/2025",
+    "ruolo": "MANAGER",
+    "ultimoLogin": "2026-07-22 19:13:31",
+    "statoAttivo": true,
+    "codiceAutorizzazione": "MNG-ADMIN"
+  }
+]
