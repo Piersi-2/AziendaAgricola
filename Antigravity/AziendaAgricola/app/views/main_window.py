@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QTabWidget, QMessageBox, QStatusBar
 )
 from PyQt6.QtCore import QTimer, Qt
-from app.models import Utente
+from app.models import Utente, livelloAccesso
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
 from app.views.user_management_view import UserManagementView
@@ -13,37 +13,83 @@ from app.views.report_view import ReportAndBackupView
 
 STYLE_MAIN = """
 QMainWindow {
-    background-color: #f7f9fb;
+    background-color: #ffffff;
     font-family: 'Segoe UI', sans-serif;
+}
+QWidget {
+    background-color: #ffffff;
+    color: #000000;
+}
+QLabel {
+    background-color: transparent;
+    color: #000000;
 }
 QTabWidget::pane {
     border: 1px solid #dcdcdc;
     background: #ffffff;
-    border-radius: 4px;
 }
 QTabBar::tab {
-    background: #e0e0e0;
-    color: #333333;
-    padding: 10px 18px;
+    background-color: #f2f2f2;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-bottom: none;
+    padding: 8px 16px;
     font-weight: bold;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    margin-right: 2px;
 }
 QTabBar::tab:selected {
-    background: #2e7d32;
-    color: white;
+    background-color: #ffffff;
+    color: #000000;
+    border-bottom: 2px solid #2e7d32;
 }
 QPushButton {
     background-color: #2e7d32;
-    color: white;
+    color: #ffffff;
     font-weight: bold;
-    padding: 7px 14px;
-    border: none;
+    border: 1px solid #1b5e20;
     border-radius: 4px;
+    padding: 7px 14px;
 }
 QPushButton:hover {
     background-color: #1b5e20;
+}
+QPushButton:disabled {
+    background-color: #cccccc;
+    color: #666666;
+}
+QLineEdit, QTextEdit, QComboBox, QDateEdit {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    padding: 4px;
+}
+QTableWidget {
+    background-color: #ffffff;
+    color: #000000;
+    gridline-color: #dcdcdc;
+    border: 1px solid #dcdcdc;
+}
+QHeaderView::section {
+    background-color: #f2f2f2;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    padding: 4px;
+    font-weight: bold;
+}
+QGroupBox {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    margin-top: 12px;
+    padding-top: 12px;
+    font-weight: bold;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    padding: 0 3px;
 }
 """
 
@@ -76,18 +122,18 @@ class MainWindow(QMainWindow):
         header_box = QHBoxLayout()
 
         lbl_app_name = QLabel("Azienda Agricola")
-        lbl_app_name.setStyleSheet("font-size: 18px; font-weight: bold; color: #1b5e20;")
+        lbl_app_name.setStyleSheet("font-size: 18px; font-weight: bold; color: #1b5e20; background-color: transparent;")
 
-        lbl_user_info = QLabel(f"Utente collegato: <b>{self.current_user.nome} {self.current_user.cognome}</b> ({self.current_user.ruolo.value})")
-        lbl_user_info.setStyleSheet("font-size: 13px; color: #333333;")
+        self.lbl_user_info = QLabel(f"Utente collegato: <b>{self.current_user.nome} {self.current_user.cognome}</b> ({self.current_user.ruolo.value})")
+        self.lbl_user_info.setStyleSheet("font-size: 13px; color: #000000; background-color: transparent;")
 
         btn_logout = QPushButton("Disconnetti (Logout)")
-        btn_logout.setStyleSheet("background-color: #757575;")
+        btn_logout.setStyleSheet("background-color: #757575; color: white; border: 1px solid #616161;")
         btn_logout.clicked.connect(self.handle_logout)
 
         header_box.addWidget(lbl_app_name)
         header_box.addStretch()
-        header_box.addWidget(lbl_user_info)
+        header_box.addWidget(self.lbl_user_info)
         header_box.addWidget(btn_logout)
 
         main_layout.addLayout(header_box)
@@ -98,21 +144,31 @@ class MainWindow(QMainWindow):
         self.user_view = UserManagementView(self.current_user, self.user_manager, self.auth_service)
         self.product_view = ProductManagementView(self.product_service)
         self.movement_view = FinancialMovementView(self.financial_service, self.product_service, self.current_user)
-        self.report_view = ReportAndBackupView(self.report_service, self.repo)
 
-        self.tabs.addTab(self.user_view, "Gestione Utenti & Profilo")
+        self.tabs.addTab(self.user_view, "Gestione utenti")
         self.tabs.addTab(self.product_view, "Catalogo Prodotti Agricoli")
-        self.tabs.addTab(self.movement_view, "Entrate & Uscite")
-        self.tabs.addTab(self.report_view, "Guadagno Aziendale & Backup")
+        self.tabs.addTab(self.movement_view, "Movimenti")
+
+        # Dipendente non deve vedere il guadagno aziendale
+        if self.current_user.ruolo == livelloAccesso.MANAGER:
+            self.report_view = ReportAndBackupView(self.report_service, self.repo)
+            self.tabs.addTab(self.report_view, "Guadagno aziendale")
+
+        # Connetti segnale per aggiornamento del nome in header_box
+        self.user_view.profile_updated.connect(self.update_user_header)
 
         main_layout.addWidget(self.tabs)
-
         self.setCentralWidget(central)
 
         # Status Bar
         self.statusBar = QStatusBar()
         self.setStatusBar(self.statusBar)
+        self.statusBar.setStyleSheet("background-color: #f2f2f2; color: #000000; border-top: 1px solid #dcdcdc;")
         self.statusBar.showMessage(f"Sessione attiva per l'utente {self.current_user.nomeUtente} | Ultimo Login: {self.current_user.ultimoLogin or 'Oggi'}")
+
+    def update_user_header(self):
+        self.lbl_user_info.setText(f"Utente collegato: <b>{self.current_user.nome} {self.current_user.cognome}</b> ({self.current_user.ruolo.value})")
+        self.setWindowTitle(f"Azienda Agricola - Gestione Integrata [{self.current_user.nomeUtente} ({self.current_user.ruolo.value})]")
 
     def init_session_timer(self):
         """Timer di controllo inattività e validità della sessione."""

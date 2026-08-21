@@ -6,14 +6,19 @@ from PyQt6.QtCore import pyqtSignal, Qt
 from app.services import AuthService, UserManager
 from app.models import Utente
 
-# Palette di base pulita e minimale
+# Palette di base pulita e minimale - Nero su Bianco
 STYLE_LOGIN = """
 QDialog {
-    background-color: #f7f9fb;
+    background-color: #ffffff;
     font-family: 'Segoe UI', sans-serif;
 }
+QWidget {
+    background-color: #ffffff;
+    color: #000000;
+}
 QLabel {
-    color: #2c3e50;
+    background-color: transparent;
+    color: #000000;
     font-size: 13px;
 }
 QLabel#TitleLabel {
@@ -26,6 +31,7 @@ QLineEdit {
     border: 1px solid #cccccc;
     border-radius: 4px;
     background-color: #ffffff;
+    color: #000000;
     font-size: 13px;
 }
 QLineEdit:focus {
@@ -45,9 +51,19 @@ QPushButton:hover {
 }
 QPushButton#SecondaryButton {
     background-color: #757575;
+    color: white;
 }
 QPushButton#SecondaryButton:hover {
     background-color: #616161;
+}
+QGroupBox {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-weight: bold;
 }
 """
 
@@ -74,7 +90,7 @@ class LoginDialog(QDialog):
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle = QLabel("Gestione Entrate, Uscite e Guadagno Aziendale")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        subtitle.setStyleSheet("color: #666; font-size: 12px; margin-bottom: 15px;")
+        subtitle.setStyleSheet("color: #666666; font-size: 12px; margin-bottom: 15px; background-color: transparent;")
 
         main_layout.addWidget(title)
         main_layout.addWidget(subtitle)
@@ -121,12 +137,7 @@ class LoginDialog(QDialog):
         btn_login = QPushButton("Accedi")
         btn_login.clicked.connect(self.handle_login)
 
-        btn_recover = QPushButton("Recupera Password")
-        btn_recover.setObjectName("SecondaryButton")
-        btn_recover.clicked.connect(self.handle_password_recovery)
-
         layout.addWidget(btn_login)
-        layout.addWidget(btn_recover)
         layout.addStretch()
         return widget
 
@@ -209,13 +220,4 @@ class LoginDialog(QDialog):
         except Exception as e:
             QMessageBox.critical(self, "Errore Registrazione", str(e))
 
-    def handle_password_recovery(self):
-        """RNF6: Gestione recupero password tramite email."""
-        from PyQt6.QtWidgets import QInputDialog
-        email, ok = QInputDialog.getText(self, "Recupero Password", "Inserisci la tua email di registrazione:")
-        if ok and email.strip():
-            success, msg = self.auth_service.recupera_password_email(email.strip())
-            if success:
-                QMessageBox.information(self, "Recupero Password", msg)
-            else:
-                QMessageBox.warning(self, "Errore", msg)
+

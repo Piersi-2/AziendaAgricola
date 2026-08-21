@@ -1,7 +1,7 @@
 import unittest
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    ProdottoAgricolo, Movimento, TipoMovimento, TipoEntrata, TipoUscita,
+    ProdottoAgricolo, Movimento, TipoMovimento, TipoUscita,
     ReportGuadagno
 )
 

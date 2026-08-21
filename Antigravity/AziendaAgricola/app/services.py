@@ -7,8 +7,8 @@ from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
     Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno,
     Contatto, Azienda, Privato,
-    Documento, Movimento, TipoMovimento, TipoEntrata, TipoUscita,
-    ReportGuadagno, Sessione
+    Documento, Movimento, TipoMovimento, TipoUscita,
+    ReportGuadagno, Sessione, CategoriaProdotto
 )
 from app.repositories import DataRepository
 
@@ -250,6 +250,39 @@ class ProductService:
     def get_all_products(self) -> List[Prodotto]:
         return self.repo.load_products()
 
+    def aggiungi_categoria(self, nome: str, unita: str) -> CategoriaProdotto:
+        nome_clean = nome.strip().upper()
+        if not nome_clean:
+            raise ValueError("Il nome della categoria non puo essere vuoto.")
+        if unita not in ["kilogrammi", "grammi", "litri"]:
+            raise ValueError("L'unita di misura selezionata non e valida.")
+
+        categories = self.repo.load_categories()
+        if any(c.nome == nome_clean for c in categories):
+            raise ValueError(f"La categoria '{nome_clean}' esiste gia.")
+
+        cat = CategoriaProdotto(nome=nome_clean, unitaMisura=unita)
+        categories.append(cat)
+        self.repo.save_categories(categories)
+        return cat
+
+    def get_all_categories(self) -> List[CategoriaProdotto]:
+        return self.repo.load_categories()
+
+    def elimina_categoria(self, nome_categoria: str):
+        nome_clean = nome_categoria.strip().upper()
+        
+        # 1. Load categories, filter out this category, save
+        categories = self.repo.load_categories()
+        categories = [c for c in categories if c.nome != nome_clean]
+        self.repo.save_categories(categories)
+
+        # 2. Load products, filter out products belonging to this category, save
+        prods = self.repo.load_products()
+        prods = [p for p in prods if getattr(p, 'tipoProdotto', getattr(p, 'tipoMateriale', getattr(p, 'fornitore', 'Generico'))).strip().upper() != nome_clean]
+        self.repo.save_products(prods)
+
+
 
 class FinancialService:
     def __init__(self, repo: DataRepository):
@@ -260,12 +293,12 @@ class FinancialService:
         if not os.path.exists(source_path):
             raise FileNotFoundError(f"Il file '{source_path}' non esiste.")
 
-        dest_name = f"doc_{uuid.uuid4()[:8]}_{os.path.basename(source_path)}"
+        dest_name = f"doc_{str(uuid.uuid4())[:8]}_{os.path.basename(source_path)}"
         dest_path = os.path.join(self.repo.uploads_dir, dest_name)
         shutil.copy2(source_path, dest_path)
         return dest_path
 
-    def registra_entrata(self, categoria_prodotto: str, cliente_tipo: str, importo: float, quantita: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
+    def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin", quantita: float = 1.0) -> Movimento:
         """RF9, RF10: Registrazione entrate catalogate per prodotto e cliente (Azienda o Privato)."""
         doc = None
         if pdf_path:
@@ -307,6 +340,10 @@ class FinancialService:
             contatto_id = c_id
             contatto_desc = c.getDatiFatturazione()
 
+        prods = self.repo.load_products()
+        prod = next((x for x in prods if x.idProdotto == prodotto_id), None)
+        prod_nome = prod.nome if prod else None
+
         m = Movimento(
             idMovimento=f"MOV-ENT-{str(uuid.uuid4())[:8]}",
             tipo=TipoMovimento.ENTRATA,
@@ -315,6 +352,8 @@ class FinancialService:
             dataMovimento=data or datetime.date.today().isoformat(),
             descrizione=descrizione,
             sottoTipoEntrata=categoria_prodotto,
+            prodottoId=prodotto_id,
+            prodottoNome=prod_nome,
             contattoId=contatto_id,
             contattoDescrizione=contatto_desc,
             documento=doc,
@@ -326,7 +365,7 @@ class FinancialService:
         self.repo.save_movements(movs)
         return m
 
-    def registra_uscita(self, categoria_uscita: str, importo: float, quantita: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
+    def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
         """RF11-RF18: Registrazione uscite (Manutenzione, Produzione, Vendita, Tasse, Stipendi, Assicurazioni, Rifiuti, Straordinarie)."""
         doc = None
         if pdf_path:
@@ -337,14 +376,20 @@ class FinancialService:
                 allegatoPDF=saved_pdf
             )
 
+        prods = self.repo.load_products()
+        prod = next((x for x in prods if x.idProdotto == prodotto_id), None)
+        prod_nome = prod.nome if prod else None
+
         m = Movimento(
             idMovimento=f"MOV-USC-{str(uuid.uuid4())[:8]}",
             tipo=TipoMovimento.USCITA,
-            quantita=quantita,
+            quantita=1.0,
             prezzoTotale=importo,
             dataMovimento=data or datetime.date.today().isoformat(),
             descrizione=descrizione,
             sottoTipoUscita=categoria_uscita,
+            prodottoId=prodotto_id,
+            prodottoNome=prod_nome,
             contattoDescrizione=fornitore_note,
             documento=doc,
             creatoreUsername=username
@@ -392,7 +437,12 @@ MARGINE NETTO:    € {report.margineNetto:,.2f}
 DETTAGLIO MOVIMENTI ({len(movs)} registrari):
 """
         for m in movs:
-            content += f"- [{m.dataMovimento}] {m.tipo.value} - {m.sottoTipoEntrata or m.sottoTipoUscita}: €{m.prezzoTotale:.2f} ({m.descrizione})\n"
+            try:
+                dt = datetime.datetime.strptime(m.dataMovimento, "%Y-%m-%d")
+                date_str = dt.strftime("%d/%m/%Y")
+            except Exception:
+                date_str = m.dataMovimento
+            content += f"- [{date_str}] {m.tipo.value} - {m.sottoTipoEntrata or m.sottoTipoUscita}: €{m.prezzoTotale:.2f} ({m.descrizione})\n"
 
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)

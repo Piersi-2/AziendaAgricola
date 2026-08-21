@@ -1,18 +1,34 @@
 [
   {
-    "idMovimento": "MOV-ENT-1dcb7d93",
-    "tipo": "ENTRATA",
-    "quantita": 15.0,
-    "prezzoTotale": 70.0,
-    "dataMovimento": "2026-07-23",
-    "descrizione": "fabio beve vino",
-    "sottoTipoEntrata": "VINO",
-    "sottoTipoUscita": null,
+    "idMovimento": "MOV-USC-7af9b655",
+    "tipo": "USCITA",
+    "quantita": 1.0,
+    "prezzoTotale": 10.0,
+    "dataMovimento": "2026-08-21",
+    "descrizione": "NO",
+    "sottoTipoEntrata": null,
+    "sottoTipoUscita": "SPESE DI MANUTENZIONE",
     "prodottoId": null,
     "prodottoNome": null,
-    "contattoId": "fa961417",
-    "contattoDescrizione": "Azienda: cacca, P.IVA: wbyefgq263, SDI:  | ID: fa961417, Email: 245372973, Tel: , Indirizzo: ",
+    "contattoId": null,
+    "contattoDescrizione": "FABIO MENGHINI",
     "documento": null,
-    "creatoreUsername": "AziendaAgricola"
+    "creatoreUsername": "Paolino"
+  },
+  {
+    "idMovimento": "MOV-ENT-3aee4a9c",
+    "tipo": "ENTRATA",
+    "quantita": 2.0,
+    "prezzoTotale": 40.0,
+    "dataMovimento": "2026-08-21",
+    "descrizione": "",
+    "sottoTipoEntrata": "OLIO",
+    "sottoTipoUscita": null,
+    "prodottoId": "38d08e2f",
+    "prodottoNome": "OLIOVERGINE",
+    "contattoId": "11c68ff9",
+    "contattoDescrizione": "Azienda: CASPIO, P.IVA: 23, SDI:  | ID: 11c68ff9, Email: AD, Tel: , Indirizzo: ",
+    "documento": null,
+    "creatoreUsername": "Paolino"
   }
 ]

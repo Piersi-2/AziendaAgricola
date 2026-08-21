@@ -16,14 +16,12 @@ class TipoMovimento(str, Enum):
     ENTRATA = "ENTRATA"
     USCITA = "USCITA"
 
-class TipoEntrata(str, Enum):
-    OLIO = "OLIO"
-    VINO = "VINO"
-    MIELE = "MIELE"
-    GRANO = "GRANO"
-    UVA = "UVA"
-    GIRASOLI = "GIRASOLI"
-    OLIVE = "OLIVE"
+@dataclass
+class CategoriaProdotto:
+    nome: str
+    unitaMisura: str  # kilogrammi, grammi, litri
+
+
 
 class TipoUscita(str, Enum):
     SPESE_DI_MANUTENZIONE = "SPESE DI MANUTENZIONE"

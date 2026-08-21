@@ -1,15 +1,15 @@
 [
   {
-    "id": "8ccaf745",
-    "nomeUtente": "AziendaAgricola",
-    "password": "123456789",
-    "nome": "Gaicomo",
-    "cognome": "Sdabbatini",
-    "email": "dsknuisd@gmail.com",
-    "telefono": "3241583625",
-    "dataNascita": "20/11/2025",
+    "id": "2ec81374",
+    "nomeUtente": "Paolino",
+    "password": "12345678",
+    "nome": "Paolo",
+    "cognome": "Crippa",
+    "email": "paolocrippa@elettronica.com",
+    "telefono": "3333333333",
+    "dataNascita": "2000-12-03",
     "ruolo": "MANAGER",
-    "ultimoLogin": "2026-07-22 19:13:31",
+    "ultimoLogin": "2026-08-21 19:04:19",
     "statoAttivo": true,
     "codiceAutorizzazione": "MNG-ADMIN"
   }

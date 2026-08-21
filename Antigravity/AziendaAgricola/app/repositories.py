@@ -8,7 +8,7 @@ from app.models import (
     Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno,
     Contatto, Azienda, Privato,
     Documento, Movimento, TipoMovimento,
-    GestoreBackupInfo
+    GestoreBackupInfo, CategoriaProdotto
 )
 
 class DataRepository:
@@ -19,6 +19,7 @@ class DataRepository:
         self.movements_file = os.path.join(self.data_dir, "movements.json")
         self.contacts_file = os.path.join(self.data_dir, "contacts.json")
         self.login_history_file = os.path.join(self.data_dir, "login_history.json")
+        self.categories_file = os.path.join(self.data_dir, "categories.json")
         self.backup_dir = os.path.join(self.data_dir, "backups")
         self.uploads_dir = os.path.join(self.data_dir, "uploads")
 
@@ -127,6 +128,25 @@ class DataRepository:
                 return json.load(f)
         except Exception:
             return {}
+
+    # ---------------------------------------------------------
+    # CATEGORIE PRODOTTO
+    # ---------------------------------------------------------
+    def load_categories(self) -> List[CategoriaProdotto]:
+        if not os.path.exists(self.categories_file):
+            return []
+        try:
+            with open(self.categories_file, 'r', encoding='utf-8') as f:
+                raw_list = json.load(f)
+            return [CategoriaProdotto(nome=d["nome"], unitaMisura=d["unitaMisura"]) for d in raw_list]
+        except Exception as e:
+            print(f"Errore caricamento categorie: {e}")
+            return []
+
+    def save_categories(self, categories: List[CategoriaProdotto]):
+        raw_list = [{"nome": c.nome, "unitaMisura": c.unitaMisura} for c in categories]
+        with open(self.categories_file, 'w', encoding='utf-8') as f:
+            json.dump(raw_list, f, indent=2, ensure_ascii=False)
 
     # ---------------------------------------------------------
     # PRODOTTI
@@ -342,7 +362,7 @@ class DataRepository:
         target_dir = dest_folder or os.path.join(self.backup_dir, f"backup_{timestamp}")
         os.makedirs(target_dir, exist_ok=True)
 
-        for filename in [self.users_file, self.products_file, self.movements_file, self.contacts_file, self.login_history_file]:
+        for filename in [self.users_file, self.products_file, self.movements_file, self.contacts_file, self.login_history_file, self.categories_file]:
             if os.path.exists(filename):
                 shutil.copy2(filename, target_dir)
 
@@ -361,7 +381,7 @@ class DataRepository:
         if not os.path.exists(backup_folder):
             raise FileNotFoundError("La cartella di backup specificata non esiste.")
 
-        for fname in ["users.json", "products.json", "movements.json", "contacts.json", "login_history.json"]:
+        for fname in ["users.json", "products.json", "movements.json", "contacts.json", "login_history.json", "categories.json"]:
             src = os.path.join(backup_folder, fname)
             if os.path.exists(src):
                 dst = os.path.join(self.data_dir, fname)

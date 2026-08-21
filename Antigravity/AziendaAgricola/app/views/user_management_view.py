@@ -1,13 +1,15 @@
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QMessageBox, QGroupBox, QFormLayout,
-    QHeaderView, QSplitter, QTextEdit, QDialog
+    QHeaderView, QSplitter, QTextEdit, QDialog, QAbstractItemView
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 from app.services import UserManager, AuthService
 from app.models import Utente, Manager, Dipendente, livelloAccesso
 
 class UserManagementView(QWidget):
+    profile_updated = pyqtSignal()  # Segnale per notificare modifiche al proprio profilo
+
     def __init__(self, current_user: Utente, user_manager: UserManager, auth_service: AuthService, parent=None):
         super().__init__(parent)
         self.current_user = current_user
@@ -55,14 +57,19 @@ class UserManagementView(QWidget):
             btn_add_user = QPushButton("+ Crea Nuovo Profilo Utente/Dipendente")
             btn_add_user.clicked.connect(self.show_create_user_dialog)
 
+            btn_edit_user = QPushButton("Modifica Profilo Dipendente")
+            btn_edit_user.setStyleSheet("background-color: #f57c00; color: white; border: 1px solid #e65100;")
+            btn_edit_user.clicked.connect(self.show_edit_user_dialog)
+
             btn_del_user = QPushButton("- Elimina Profilo Dipendente")
-            btn_del_user.setStyleSheet("background-color: #c62828;")
+            btn_del_user.setStyleSheet("background-color: #c62828; color: white; border: 1px solid #b71c1c;")
             btn_del_user.clicked.connect(self.handle_delete_user)
 
             btn_login_hist = QPushButton("Visualizza Cronologia Login Dipendenti")
             btn_login_hist.clicked.connect(self.show_login_history_dialog)
 
             top_bar.addWidget(btn_add_user)
+            top_bar.addWidget(btn_edit_user)
             top_bar.addWidget(btn_del_user)
             top_bar.addWidget(btn_login_hist)
             m_layout.addLayout(top_bar)
@@ -74,6 +81,10 @@ class UserManagementView(QWidget):
                 "ID", "Username", "Ruolo", "Nome", "Cognome", "Email", "Ultimo Login"
             ])
             self.users_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+            
+            # Disabilita modifica diretta dei campi
+            self.users_table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+            
             m_layout.addWidget(self.users_table)
 
             main_layout.addWidget(manager_box)
@@ -107,8 +118,19 @@ class UserManagementView(QWidget):
                 dataNascita=self.p_nascita.text().strip(),
                 password=pwd
             )
+            
+            # Aggiorna i dati in memoria dell'utente connesso
+            self.current_user.nome = self.p_nome.text().strip()
+            self.current_user.cognome = self.p_cognome.text().strip()
+            self.current_user.email = self.p_email.text().strip()
+            self.current_user.telefono = self.p_telefono.text().strip()
+            self.current_user.dataNascita = self.p_nascita.text().strip()
+            if pwd:
+                self.current_user.password = pwd
+
             QMessageBox.information(self, "Successo", "Profilo aggiornato con successo!")
             self.p_password.clear()
+            self.profile_updated.emit() # Notifica MainWindow per cambiare l'header
             self.load_users_table()
         except Exception as e:
             QMessageBox.critical(self, "Errore Aggiornamento", str(e))
@@ -167,6 +189,103 @@ class UserManagementView(QWidget):
                 QMessageBox.critical(dlg, "Errore", str(e))
 
         btn.clicked.connect(create_action)
+        layout.addWidget(btn)
+        dlg.exec()
+
+    def show_edit_user_dialog(self):
+        row = self.users_table.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "Attenzione", "Selezionare un utente dalla tabella degli utenti.")
+            return
+
+        uid = self.users_table.item(row, 0).text()
+        users = self.user_manager.get_all_users()
+        target = next((u for u in users if u.id == uid), None)
+        if not target:
+            return
+
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Modifica Profilo Dipendente")
+        dlg.setFixedSize(380, 420)
+        layout = QVBoxLayout(dlg)
+
+        form = QFormLayout()
+        u_nome = QLineEdit(target.nome)
+        u_cognome = QLineEdit(target.cognome)
+        u_email = QLineEdit(target.email)
+        u_telefono = QLineEdit(target.telefono)
+        u_nascita = QLineEdit(target.dataNascita)
+        u_password = QLineEdit()
+        u_password.setPlaceholderText("Lascia vuoto se inalterata")
+        u_password.setEchoMode(QLineEdit.EchoMode.Password)
+
+        form.addRow("Nome:", u_nome)
+        form.addRow("Cognome:", u_cognome)
+        form.addRow("Email:", u_email)
+        form.addRow("Telefono:", u_telefono)
+        form.addRow("Data Nascita:", u_nascita)
+        form.addRow("Nuova Password:", u_password)
+
+        is_dip = isinstance(target, Dipendente)
+        if is_dip:
+            u_mansione = QLineEdit(target.mansione)
+            u_stipendio = QLineEdit(str(target.stipendioMensile))
+            form.addRow("Mansione:", u_mansione)
+            form.addRow("Stipendio Mensile (€):", u_stipendio)
+
+        layout.addLayout(form)
+
+        btn = QPushButton("Salva Modifiche")
+        def save_action():
+            try:
+                pwd = u_password.text().strip() or None
+                self.user_manager.modifica_profilo(
+                    user_id=uid,
+                    nome=u_nome.text().strip(),
+                    cognome=u_cognome.text().strip(),
+                    email=u_email.text().strip(),
+                    telefono=u_telefono.text().strip(),
+                    dataNascita=u_nascita.text().strip(),
+                    password=pwd
+                )
+                
+                # Se è dipendente, aggiorna anche i campi specifici
+                if is_dip:
+                    all_users = self.user_manager.get_all_users()
+                    t_user = next((x for x in all_users if x.id == uid), None)
+                    if t_user and isinstance(t_user, Dipendente):
+                        t_user.mansione = u_mansione.text().strip()
+                        t_user.stipendioMensile = float(u_stipendio.text().strip() or "0")
+                        self.user_manager.repo.save_users(all_users)
+
+                # Se e l'utente corrente in sessione, aggiorna in memoria e aggiorna la UI
+                if uid == self.current_user.id:
+                    self.current_user.nome = u_nome.text().strip()
+                    self.current_user.cognome = u_cognome.text().strip()
+                    self.current_user.email = u_email.text().strip()
+                    self.current_user.telefono = u_telefono.text().strip()
+                    self.current_user.dataNascita = u_nascita.text().strip()
+                    if pwd:
+                        self.current_user.password = pwd
+                    if is_dip and isinstance(self.current_user, Dipendente):
+                        self.current_user.mansione = u_mansione.text().strip()
+                        self.current_user.stipendioMensile = float(u_stipendio.text().strip() or "0")
+                    
+                    self.p_nome.setText(self.current_user.nome)
+                    self.p_cognome.setText(self.current_user.cognome)
+                    self.p_email.setText(self.current_user.email)
+                    self.p_telefono.setText(self.current_user.telefono)
+                    self.p_nascita.setText(self.current_user.dataNascita)
+                    
+                    self.profile_updated.emit()
+
+                QMessageBox.information(dlg, "Successo", "Profilo dipendente modificato con successo!")
+                self.load_users_table()
+                dlg.accept()
+            except Exception as e:
+                QMessageBox.critical(dlg, "Errore", str(e))
+
+        btn.clicked.connect(save_action)
         layout.addWidget(btn)
         dlg.exec()
 

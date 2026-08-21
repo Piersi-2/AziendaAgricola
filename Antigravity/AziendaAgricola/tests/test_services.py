@@ -4,7 +4,7 @@ import shutil
 import os
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
-from app.models import livelloAccesso, TipoMovimento, TipoEntrata, TipoUscita
+from app.models import livelloAccesso, TipoMovimento, TipoUscita
 
 class TestServices(unittest.TestCase):
     def setUp(self):
@@ -97,31 +97,73 @@ class TestServices(unittest.TestCase):
         self.assertIn("Password123", msg)
 
     def test_registrazione_entrate_e_uscite(self):
-        # Registrazione entrata (RF9, RF10)
+        # Registra categoria e prodotto prima (Richiesto da RNF / PROMPT3)
+        cat = self.product_service.aggiungi_categoria("OLIO", "litri")
+        prod = self.product_service.aggiungi_prodotto_agricolo(
+            nome="Olio di Oliva",
+            descrizione="Extravergine",
+            prezzo=12.0,
+            unita="litri",
+            tipo="OLIO"
+        )
+
+        # Registrazione entrata
         e = self.financial_service.registra_entrata(
             categoria_prodotto="OLIO",
+            prodotto_id=prod.idProdotto,
             cliente_tipo="Azienda",
             importo=1200.0,
-            quantita=100.0,
             data="2026-07-20",
             descrizione="Fornitura olio extravergine ristorante",
             cliente_dettagli={"ragioneSociale": "Ristorante Da Mario", "partitaIVA": "12345678901"}
         )
         self.assertEqual(e.prezzoTotale, 1200.0)
+        self.assertEqual(e.prodottoId, prod.idProdotto)
+        self.assertEqual(e.prodottoNome, "Olio di Oliva")
 
-        # Registrazione uscita (RF11-RF18)
+        # Registrazione uscita
         u = self.financial_service.registra_uscita(
-            categoria_uscita="SPESE DI PRODUZIONE",
+            categoria_uscita="OLIO",
+            prodotto_id=prod.idProdotto,
             importo=350.0,
-            quantita=1.0,
             data="2026-07-21",
-            descrizione="Acquisto concime biologico",
+            descrizione="Acquisto bottiglie olio",
             fornitore_note="AgriBio Srl"
         )
         self.assertEqual(u.prezzoTotale, 350.0)
+        self.assertEqual(u.prodottoId, prod.idProdotto)
 
         movs = self.financial_service.get_all_movements()
         self.assertEqual(len(movs), 2)
+
+    def test_categorie_dinamiche_e_unita_misura(self):
+        # 1. Aggiunta categoria valida
+        cat = self.product_service.aggiungi_categoria("MIELE", "grammi")
+        self.assertEqual(cat.nome, "MIELE")
+        self.assertEqual(cat.unitaMisura, "grammi")
+
+        # 2. Controllo duplicato categoria
+        with self.assertRaises(ValueError):
+            self.product_service.aggiungi_categoria("MIELE", "litri")
+
+        # 3. Controllo unita di misura non valida
+        with self.assertRaises(ValueError):
+            self.product_service.aggiungi_categoria("VINO", "bottiglie")
+
+        # 4. Creazione prodotto e ereditarieta dell'unita di misura
+        cats = self.product_service.get_all_categories()
+        miele_cat = next((c for c in cats if c.nome == "MIELE"), None)
+        self.assertIsNotNone(miele_cat)
+        
+        prod = self.product_service.aggiungi_prodotto_agricolo(
+            nome="Miele Millefiori",
+            descrizione="Vasetto 500g",
+            prezzo=6.50,
+            unita=miele_cat.unitaMisura,
+            tipo="MIELE"
+        )
+        self.assertEqual(prod.unitaMisura, "grammi")
+        self.assertEqual(prod.tipoProdotto, "MIELE")
 
 if __name__ == '__main__':
     unittest.main()
