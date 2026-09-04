@@ -5,7 +5,7 @@ import datetime
 import re
 
 # =========================================================
-# ENUMERAZIONI UML
+# ENUMERAZIONI
 # =========================================================
 
 class livelloAccesso(str, Enum):
@@ -52,7 +52,7 @@ class Utente:
 
     @staticmethod
     def valida_password(password: str) -> bool:
-        """RNF3: La password deve contenere almeno 8 caratteri alfanumerici."""
+        """RNF3: La password deve contenere almeno 8 caratteri alfanumerici.""" #Serve?
         if not password or len(password) < 8:
             return False
         return password.isalnum()
@@ -208,7 +208,7 @@ class Movimento:
 
 @dataclass
 class ReportGuadagno:
-    periodoRiferimento: int  # Anno (es. 2026)
+    periodoRiferimento: int 
     totaleEntrate: float
     totaleUscite: float
     margineNetto: float
@@ -246,7 +246,7 @@ class Sessione:
 # =========================================================
 # GESTORE BACKUP (UML: GestoreBackup)
 # =========================================================
-
+# Serve? 
 @dataclass
 class GestoreBackupInfo:
     percorsoSalvataggio: str

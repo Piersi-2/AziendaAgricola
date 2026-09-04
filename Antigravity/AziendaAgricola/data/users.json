@@ -1,0 +1,16 @@
+[
+  {
+    "id": "d4679da9",
+    "nomeUtente": "Piersus",
+    "password": "1234567890",
+    "nome": "Gabri",
+    "cognome": "Piersi",
+    "email": "lollo@lallo.it",
+    "telefono": "",
+    "dataNascita": "1990-01-01",
+    "ruolo": "MANAGER",
+    "ultimoLogin": "2026-09-04 10:09:01",
+    "statoAttivo": true,
+    "codiceAutorizzazione": "MNG-ADMIN"
+  }
+]

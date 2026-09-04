@@ -70,24 +70,6 @@ class ReportAndBackupView(QWidget):
             else:
                 res_text += "\n  ESITO: Bilancio in Disavanzo / Perdita (-) "
             res_text += "\n=================================================="
-
-            # Aggiunta dettaglio dei movimenti dell'anno selezionato
-            movs = [m for m in self.report_service.repo.load_movements() if m.dataMovimento.startswith(str(anno))]
-            res_text += f"\n\nDETTAGLIO MOVIMENTI ({len(movs)} registrati):\n"
-            for m in movs:
-                try:
-                    # Parse yyyy-MM-dd
-                    parts = m.dataMovimento.split('-')
-                    if len(parts) == 3:
-                        date_formatted = f"{parts[2]}/{parts[1]}/{parts[0]}"
-                    else:
-                        date_formatted = m.dataMovimento
-                except Exception:
-                    date_formatted = m.dataMovimento
-                
-                cat = m.sottoTipoEntrata or m.sottoTipoUscita or "Generico"
-                res_text += f"- [{date_formatted}] {m.tipo.value} - {cat}: € {m.prezzoTotale:,.2f} ({m.descrizione})\n"
-
             self.report_display.setPlainText(res_text)
         except Exception as e:
             QMessageBox.critical(self, "Errore", str(e))

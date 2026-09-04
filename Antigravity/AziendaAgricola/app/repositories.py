@@ -11,6 +11,10 @@ from app.models import (
     GestoreBackupInfo, CategoriaProdotto
 )
 
+# ---------------------------------------------------------
+# DATA REPOSITORY - intermediario tra applicazione e file JSON
+# ---------------------------------------------------------
+
 class DataRepository:
     def __init__(self, data_dir: str = "data"):
         self.data_dir = data_dir

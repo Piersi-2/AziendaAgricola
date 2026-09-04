@@ -66,16 +66,33 @@ class TestServices(unittest.TestCase):
                 "m2", "Pass1234", "A", "B", "mario@azienda.it", "456", "1990-01-01", "", "", 0.0
             )
 
+    def test_impossibile_aggiungere_prodotto_senza_categoria(self):
+        # Nessuna categoria ancora presente: deve sollevare ValueError
+        with self.assertRaises(ValueError) as ctx:
+            self.product_service.aggiungi_prodotto_agricolo(
+                nome="Mele Golden", descrizione="Frutta fresca", prezzo=1.5, unita="kilogrammi", tipo="FRUTTA"
+            )
+        self.assertIn("categoria", str(ctx.exception).lower())
+
+        # Anche con categorie esistenti, se si specifica una categoria non registrata, deve fallire
+        self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
+        with self.assertRaises(ValueError) as ctx2:
+            self.product_service.aggiungi_prodotto_agricolo(
+                nome="Mele Golden", descrizione="Frutta fresca", prezzo=1.5, unita="litri", tipo="NON_ESISTE"
+            )
+        self.assertIn("non esiste", str(ctx2.exception).lower())
+
     def test_unicita_prodotto_rnf5(self):
+        self.product_service.aggiungi_categoria("VINO", "litri")
         p1 = self.product_service.aggiungi_prodotto_agricolo(
-            nome="Vino Chianti", descrizione="Rosso DOCG", prezzo=15.0, unita="bottiglie", tipo="Vino"
+            nome="Vino Chianti", descrizione="Rosso DOCG", prezzo=15.0, unita="litri", tipo="VINO"
         )
         self.assertIsNotNone(p1)
 
         # Duplicato deve sollevare errore
         with self.assertRaises(ValueError):
             self.product_service.aggiungi_prodotto_agricolo(
-                nome="Vino Chianti", descrizione="Altro", prezzo=20.0, unita="bottiglie", tipo="Vino"
+                nome="Vino Chianti", descrizione="Altro", prezzo=20.0, unita="litri", tipo="VINO"
             )
 
     def test_login_logout_e_recupero_password(self):

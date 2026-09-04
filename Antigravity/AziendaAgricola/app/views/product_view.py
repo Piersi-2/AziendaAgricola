@@ -80,6 +80,15 @@ class ProductManagementView(QWidget):
             self.table.setItem(idx, 4, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
 
     def show_add_product_dialog(self):
+        cats = self.product_service.get_all_categories()
+        if not cats:
+            QMessageBox.warning(
+                self,
+                "Attenzione",
+                "Impossibile aggiungere un prodotto se prima non è stata inserita una categoria."
+            )
+            return
+
         dlg = QDialog(self)
         dlg.setWindowTitle("Aggiungi Nuovo Prodotto Agricolo")
         dlg.setFixedSize(400, 260)
@@ -87,7 +96,7 @@ class ProductManagementView(QWidget):
 
         form = QFormLayout()
         cb_tipo = QComboBox()
-        tipi = [c.nome for c in self.product_service.get_all_categories()]
+        tipi = [c.nome for c in cats]
         cb_tipo.addItems(tipi)
 
         input_nome = QLineEdit()
@@ -104,10 +113,14 @@ class ProductManagementView(QWidget):
         btn_save = QPushButton("Salva Prodotto")
         def save_action():
             try:
+                tipo = cb_tipo.currentText().strip()
+                if not tipo:
+                    QMessageBox.warning(dlg, "Attenzione", "Impossibile aggiungere un prodotto se prima non è stata inserita una categoria.")
+                    return
+
                 nome = input_nome.text().strip()
                 desc = input_desc.text().strip()
                 prezzo = float(input_prezzo.text().strip() or "0")
-                tipo = cb_tipo.currentText()
 
                 if not nome:
                     QMessageBox.warning(dlg, "Attenzione", "Inserire il nome del prodotto.")

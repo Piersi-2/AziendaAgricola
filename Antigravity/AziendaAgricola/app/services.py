@@ -12,6 +12,10 @@ from app.models import (
 )
 from app.repositories import DataRepository
 
+# ---------------------------------------------------------
+# AUTHSERVICE - gestisce autenticazione, autorizzazione, sessioni, recupero password e log accessi
+# ---------------------------------------------------------
+
 class AuthService:
     def __init__(self, repo: DataRepository, session_timeout_minutes: int = 30):
         self.repo = repo
@@ -74,6 +78,9 @@ class AuthService:
         # In una vera applicazione invierebbe un'email; qui restituisce le istruzioni/password mock
         return True, f"Istruzioni di recupero inviate all'indirizzo {email}. (Password utente: {user.password})"
 
+# ---------------------------------------------------------
+# USER MANAGER - gestisce utenti e manager
+# ---------------------------------------------------------
 
 class UserManager:
     def __init__(self, repo: DataRepository):
@@ -181,6 +188,9 @@ class UserManager:
     def get_all_users(self) -> List[Utente]:
         return self.repo.load_users()
 
+# ---------------------------------------------------------
+# PRODUCT SERVICE - gestisce prodotti agricoli, materiali di consumo e servizi esterni
+# ---------------------------------------------------------
 
 class ProductService:
     def __init__(self, repo: DataRepository):
@@ -188,6 +198,15 @@ class ProductService:
 
     def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str, quantita: float = 0.0) -> ProdottoAgricolo:
         """RF6, RNF5: Aggiungi nuovo prodotto agricolo con controllo di unicità."""
+        categories = self.repo.load_categories()
+        if not categories:
+            raise ValueError("Impossibile aggiungere un prodotto se prima non è stata inserita una categoria.")
+
+        tipo_clean = tipo.strip().upper()
+        cat_match = next((c for c in categories if c.nome.upper() == tipo_clean), None)
+        if not cat_match:
+            raise ValueError(f"La categoria '{tipo}' non esiste. È necessario inserire prima la categoria.")
+
         self._valida_unicita_prodotto(nome)
         p = ProdottoAgricolo(
             idProdotto=str(uuid.uuid4())[:8],
@@ -195,8 +214,8 @@ class ProductService:
             descrizione=descrizione.strip(),
             prezzoUnitario=prezzo,
             quantitaDisponibile=quantita,
-            tipoProdotto=tipo.strip(),
-            unitaMisura=unita.strip()
+            tipoProdotto=cat_match.nome,
+            unitaMisura=cat_match.unitaMisura if cat_match.unitaMisura else unita.strip()
         )
         prods = self.repo.load_products()
         prods.append(p)
@@ -282,7 +301,9 @@ class ProductService:
         prods = [p for p in prods if getattr(p, 'tipoProdotto', getattr(p, 'tipoMateriale', getattr(p, 'fornitore', 'Generico'))).strip().upper() != nome_clean]
         self.repo.save_products(prods)
 
-
+# ---------------------------------------------------------
+# FINANCIAL SERVICE - gestisce transazioni e registri finanziari
+# ---------------------------------------------------------
 
 class FinancialService:
     def __init__(self, repo: DataRepository):
@@ -409,6 +430,9 @@ class FinancialService:
     def get_uscite(self) -> List[Movimento]:
         return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.USCITA]
 
+# ---------------------------------------------------------
+# REPORT SERVICE - gestisce report
+# ---------------------------------------------------------
 
 class ReportService:
     def __init__(self, repo: DataRepository):
@@ -422,7 +446,6 @@ class ReportService:
     def genera_report_pdf(self, anno: int, file_path: str) -> str:
         """Generazione report PDF sintetica per l'anno specificato."""
         report = self.calcola_guadagno_aziendale(anno)
-        movs = [m for m in self.repo.load_movements() if m.dataMovimento.startswith(str(anno))]
 
         # Creazione report testuale / PDF
         content = f"""==================================================
@@ -433,17 +456,7 @@ Totale Uscite:    € {report.totaleUscite:,.2f}
 --------------------------------------------------
 MARGINE NETTO:    € {report.margineNetto:,.2f}
 ==================================================
-
-DETTAGLIO MOVIMENTI ({len(movs)} registrari):
 """
-        for m in movs:
-            try:
-                dt = datetime.datetime.strptime(m.dataMovimento, "%Y-%m-%d")
-                date_str = dt.strftime("%d/%m/%Y")
-            except Exception:
-                date_str = m.dataMovimento
-            content += f"- [{date_str}] {m.tipo.value} - {m.sottoTipoEntrata or m.sottoTipoUscita}: €{m.prezzoTotale:.2f} ({m.descrizione})\n"
-
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
 

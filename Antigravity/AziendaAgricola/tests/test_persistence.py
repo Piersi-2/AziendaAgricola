@@ -21,16 +21,18 @@ class TestPersistenceAndBackup(unittest.TestCase):
         self.user_manager.registra_primo_manager(
             "m1", "Pass1234", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
-        self.product_service.aggiungi_prodotto_agricolo(
-            "Miele Acacia", "Miele biologico", 8.5, "vasetti", "Miele", 50.0
+        self.product_service.aggiungi_categoria("MIELE", "grammi")
+        prod = self.product_service.aggiungi_prodotto_agricolo(
+            "Miele Acacia", "Miele biologico", 8.5, "grammi", "MIELE", 50.0
         )
         self.financial_service.registra_entrata(
-            "MIELE", "Privato", 425.0, 50.0, "2026-07-22", "Vendita miele"
+            "MIELE", prod.idProdotto, "Privato", 425.0, "2026-07-22", "Vendita miele"
         )
 
         self.assertEqual(len(self.repo.load_users()), 1)
         self.assertEqual(len(self.repo.load_products()), 1)
         self.assertEqual(len(self.repo.load_movements()), 1)
+        self.assertEqual(len(self.repo.load_categories()), 1)
 
         # 2. Esegui backup
         backup_folder = self.repo.esegui_backup()
@@ -40,10 +42,12 @@ class TestPersistenceAndBackup(unittest.TestCase):
         self.repo.save_users([])
         self.repo.save_products([])
         self.repo.save_movements([])
+        self.repo.save_categories([])
 
         self.assertEqual(len(self.repo.load_users()), 0)
         self.assertEqual(len(self.repo.load_products()), 0)
         self.assertEqual(len(self.repo.load_movements()), 0)
+        self.assertEqual(len(self.repo.load_categories()), 0)
 
         # 4. Ripristina da backup
         self.repo.ripristina_dati(backup_folder)
@@ -52,6 +56,7 @@ class TestPersistenceAndBackup(unittest.TestCase):
         self.assertEqual(len(self.repo.load_users()), 1)
         self.assertEqual(len(self.repo.load_products()), 1)
         self.assertEqual(len(self.repo.load_movements()), 1)
+        self.assertEqual(len(self.repo.load_categories()), 1)
         self.assertEqual(self.repo.load_products()[0].nome, "Miele Acacia")
 
 if __name__ == '__main__':
