@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from app.services import ProductService
-from app.models import Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno, CategoriaProdotto
+from app.models import Prodotto, ProdottoAgricolo, CategoriaProdotto
 
 class ProductManagementView(QWidget):
     def __init__(self, product_service: ProductService, parent=None):
@@ -19,29 +19,31 @@ class ProductManagementView(QWidget):
 
         # Barra Azioni Superiore
         top_bar = QHBoxLayout()
+
+        btn_add_category = QPushButton("+ Aggiungi Nuova Categoria")
+        btn_add_category.setStyleSheet("background-color: #1b5e20; color: white; border: 1px solid #144718;")
+        btn_add_category.clicked.connect(self.show_add_category_dialog)
+
         btn_add = QPushButton("+ Aggiungi Nuovo Prodotto Agricolo")
         btn_add.clicked.connect(self.show_add_product_dialog)
 
-        btn_add_category = QPushButton("+ Aggiungi Nuova Categoria")
-        btn_add_category.setStyleSheet("background-color: #0288d1; color: white; border: 1px solid #01579b;")
-        btn_add_category.clicked.connect(self.show_add_category_dialog)
-
-        btn_del_category = QPushButton("- Elimina Categoria")
-        btn_del_category.setStyleSheet("background-color: #e65100; color: white; border: 1px solid #bf360c;")
-        btn_del_category.clicked.connect(self.show_delete_category_dialog)
-
         btn_edit = QPushButton("Modifica Prodotto Selezionato")
+        btn_edit.setStyleSheet("background-color: #c88a00; color: white; border: 1px solid #a87400;")
         btn_edit.clicked.connect(self.show_edit_product_dialog)
 
-        btn_del = QPushButton("- Elimina Prodotto")
-        btn_del.setStyleSheet("background-color: #c62828; color: white; border: 1px solid #b71c1c;")
+        btn_del = QPushButton("- Elimina Prodotto Agricolo")
+        btn_del.setStyleSheet("background-color: #ff5858; color: white; border: 1px solid #ff5858;")
         btn_del.clicked.connect(self.handle_delete_product)
 
-        top_bar.addWidget(btn_add)
+        btn_del_category = QPushButton("- Elimina Categoria")
+        btn_del_category.setStyleSheet("background-color: #b71c1c; color: white; border: 1px solid #7f0000;")
+        btn_del_category.clicked.connect(self.show_delete_category_dialog)
+
         top_bar.addWidget(btn_add_category)
-        top_bar.addWidget(btn_del_category)
+        top_bar.addWidget(btn_add)
         top_bar.addWidget(btn_edit)
         top_bar.addWidget(btn_del)
+        top_bar.addWidget(btn_del_category)
         top_bar.addStretch()
 
         main_layout.addLayout(top_bar)
@@ -71,11 +73,10 @@ class ProductManagementView(QWidget):
         self.table.setRowCount(len(prods))
 
         for idx, p in enumerate(prods):
+            tipo = getattr(p, 'tipoProdotto', 'Agricolo')
             self.table.setItem(idx, 0, QTableWidgetItem(p.idProdotto))
             self.table.setItem(idx, 1, QTableWidgetItem(p.nome))
-
-            cat_str = getattr(p, 'tipoProdotto', getattr(p, 'tipoMateriale', getattr(p, 'fornitore', 'Generico')))
-            self.table.setItem(idx, 2, QTableWidgetItem(cat_str))
+            self.table.setItem(idx, 2, QTableWidgetItem(tipo))
             self.table.setItem(idx, 3, QTableWidgetItem(p.descrizione))
             self.table.setItem(idx, 4, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
 
@@ -126,7 +127,6 @@ class ProductManagementView(QWidget):
                     QMessageBox.warning(dlg, "Attenzione", "Inserire il nome del prodotto.")
                     return
 
-                # Il software non si occupa di gestire le scorte, passiamo valori di default
                 self.product_service.aggiungi_prodotto_agricolo(
                     nome=nome, descrizione=desc, prezzo=prezzo, unita="kg", tipo=tipo, quantita=0.0
                 )
@@ -177,7 +177,7 @@ class ProductManagementView(QWidget):
                     nome=input_nome.text().strip(),
                     descrizione=input_desc.text().strip(),
                     prezzo=float(input_prezzo.text().strip()),
-                    quantita=target.quantitaDisponibile # Mantiene la quantità invariata
+                    quantita=target.quantitaDisponibile
                 )
                 QMessageBox.information(dlg, "Successo", "Prodotto aggiornato!")
                 self.load_products_table()
@@ -288,4 +288,3 @@ class ProductManagementView(QWidget):
         btn_delete.clicked.connect(delete_action)
         layout.addWidget(btn_delete)
         dlg.exec()
-

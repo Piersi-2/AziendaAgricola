@@ -1,17 +1,15 @@
-import os
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QMessageBox, QGroupBox, QComboBox, QTextEdit
 )
 from PyQt6.QtCore import Qt, QDate
 from app.services import ReportService
 from app.models import ReportGuadagno
 
-class ReportAndBackupView(QWidget):
+class ReportView(QWidget):
     def __init__(self, report_service: ReportService, repo=None, parent=None):
         super().__init__(parent)
         self.report_service = report_service
-        self.repo = repo
         self.init_ui()
 
     def init_ui(self):
@@ -73,3 +71,6 @@ class ReportAndBackupView(QWidget):
             self.report_display.setPlainText(res_text)
         except Exception as e:
             QMessageBox.critical(self, "Errore", str(e))
+
+# Alias per retrocompatibilita
+ReportAndBackupView = ReportView

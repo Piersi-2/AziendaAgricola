@@ -5,7 +5,7 @@ import os
 from app.repositories import DataRepository
 from app.services import UserManager, ProductService, FinancialService
 
-class TestPersistenceAndBackup(unittest.TestCase):
+class TestPersistence(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.repo = DataRepository(data_dir=self.temp_dir)
@@ -16,7 +16,7 @@ class TestPersistenceAndBackup(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
-    def test_backup_and_restore_rf23(self):
+    def test_json_persistence(self):
         # 1. Popola dati
         self.user_manager.registra_primo_manager(
             "m1", "Pass1234", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
@@ -29,35 +29,22 @@ class TestPersistenceAndBackup(unittest.TestCase):
             "MIELE", prod.idProdotto, "Privato", 425.0, "2026-07-22", "Vendita miele"
         )
 
-        self.assertEqual(len(self.repo.load_users()), 1)
-        self.assertEqual(len(self.repo.load_products()), 1)
-        self.assertEqual(len(self.repo.load_movements()), 1)
-        self.assertEqual(len(self.repo.load_categories()), 1)
+        # 2. Crea una nuova istanza di DataRepository che legge dalla stessa cartella
+        repo_reload = DataRepository(data_dir=self.temp_dir)
 
-        # 2. Esegui backup
-        backup_folder = self.repo.esegui_backup()
-        self.assertTrue(os.path.exists(backup_folder))
+        users = repo_reload.load_users()
+        categories = repo_reload.load_categories()
+        products = repo_reload.load_products()
+        movements = repo_reload.load_movements()
 
-        # 3. Svuota il database corrente
-        self.repo.save_users([])
-        self.repo.save_products([])
-        self.repo.save_movements([])
-        self.repo.save_categories([])
-
-        self.assertEqual(len(self.repo.load_users()), 0)
-        self.assertEqual(len(self.repo.load_products()), 0)
-        self.assertEqual(len(self.repo.load_movements()), 0)
-        self.assertEqual(len(self.repo.load_categories()), 0)
-
-        # 4. Ripristina da backup
-        self.repo.ripristina_dati(backup_folder)
-
-        # 5. Verifica che i dati siano stati completamente ripristinati
-        self.assertEqual(len(self.repo.load_users()), 1)
-        self.assertEqual(len(self.repo.load_products()), 1)
-        self.assertEqual(len(self.repo.load_movements()), 1)
-        self.assertEqual(len(self.repo.load_categories()), 1)
-        self.assertEqual(self.repo.load_products()[0].nome, "Miele Acacia")
+        self.assertEqual(len(users), 1)
+        self.assertEqual(users[0].nomeUtente, "m1")
+        self.assertEqual(len(categories), 1)
+        self.assertEqual(categories[0].nome, "MIELE")
+        self.assertEqual(len(products), 1)
+        self.assertEqual(products[0].nome, "Miele Acacia")
+        self.assertEqual(len(movements), 1)
+        self.assertEqual(movements[0].prezzoTotale, 425.0)
 
 if __name__ == '__main__':
     unittest.main()

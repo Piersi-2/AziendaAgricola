@@ -5,14 +5,14 @@ import datetime
 from typing import List, Dict, Optional, Any
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno,
+    Prodotto, ProdottoAgricolo,
     Contatto, Azienda, Privato,
     Documento, Movimento, TipoMovimento,
-    GestoreBackupInfo, CategoriaProdotto
+    CategoriaProdotto
 )
 
 # ---------------------------------------------------------
-# DATA REPOSITORY - intermediario tra applicazione e file JSON
+# DATA REPOSITORY - gestione della persistenza su file JSON
 # ---------------------------------------------------------
 
 class DataRepository:
@@ -24,14 +24,12 @@ class DataRepository:
         self.contacts_file = os.path.join(self.data_dir, "contacts.json")
         self.login_history_file = os.path.join(self.data_dir, "login_history.json")
         self.categories_file = os.path.join(self.data_dir, "categories.json")
-        self.backup_dir = os.path.join(self.data_dir, "backups")
         self.uploads_dir = os.path.join(self.data_dir, "uploads")
 
         self._ensure_directories()
 
     def _ensure_directories(self):
         os.makedirs(self.data_dir, exist_ok=True)
-        os.makedirs(self.backup_dir, exist_ok=True)
         os.makedirs(self.uploads_dir, exist_ok=True)
 
     # ---------------------------------------------------------
@@ -45,7 +43,7 @@ class DataRepository:
                 raw_list = json.load(f)
             users = []
             for d in raw_list:
-                ruolo = livelloAccesso(d.get("ruolo", d.get("ruolo", "DIPENDENTE")))
+                ruolo = livelloAccesso(d.get("ruolo", "DIPENDENTE"))
                 if ruolo == livelloAccesso.MANAGER:
                     u = Manager(
                         id=d["id"],
@@ -112,7 +110,7 @@ class DataRepository:
             json.dump(raw_list, f, indent=2, ensure_ascii=False)
 
     # ---------------------------------------------------------
-    # HISTORIC LOGIN TRACKING (UML: Autenticatore/Manager requirement)
+    # CRONOLOGIA LOGIN
     # ---------------------------------------------------------
     def record_login(self, username: str):
         history = self.load_login_history()
@@ -163,35 +161,15 @@ class DataRepository:
                 raw_list = json.load(f)
             prods = []
             for d in raw_list:
-                ptype = d.get("class_type", "ProdottoAgricolo")
-                if ptype == "MaterialeConsumo":
-                    p = MaterialeConsumo(
-                        idProdotto=d["idProdotto"],
-                        nome=d["nome"],
-                        descrizione=d["descrizione"],
-                        prezzoUnitario=float(d["prezzoUnitario"]),
-                        quantitaDisponibile=float(d.get("quantitaDisponibile", 0.0)),
-                        tipoMateriale=d.get("tipoMateriale", "Generico")
-                    )
-                elif ptype == "ServizioEsterno":
-                    p = ServizioEsterno(
-                        idProdotto=d["idProdotto"],
-                        nome=d["nome"],
-                        descrizione=d["descrizione"],
-                        prezzoUnitario=float(d["prezzoUnitario"]),
-                        quantitaDisponibile=float(d.get("quantitaDisponibile", 0.0)),
-                        fornitore=d.get("fornitore", "Fornitore Esterno")
-                    )
-                else:
-                    p = ProdottoAgricolo(
-                        idProdotto=d["idProdotto"],
-                        nome=d["nome"],
-                        descrizione=d["descrizione"],
-                        prezzoUnitario=float(d["prezzoUnitario"]),
-                        quantitaDisponibile=float(d.get("quantitaDisponibile", 0.0)),
-                        tipoProdotto=d.get("tipoProdotto", "Agricolo"),
-                        unitaMisura=d.get("unitaMisura", "kg")
-                    )
+                p = ProdottoAgricolo(
+                    idProdotto=d["idProdotto"],
+                    nome=d["nome"],
+                    descrizione=d["descrizione"],
+                    prezzoUnitario=float(d["prezzoUnitario"]),
+                    quantitaDisponibile=float(d.get("quantitaDisponibile", 0.0)),
+                    tipoProdotto=d.get("tipoProdotto", "Agricolo"),
+                    unitaMisura=d.get("unitaMisura", "kg")
+                )
                 prods.append(p)
             return prods
         except Exception as e:
@@ -212,10 +190,6 @@ class DataRepository:
             if isinstance(p, ProdottoAgricolo):
                 d["tipoProdotto"] = p.tipoProdotto
                 d["unitaMisura"] = p.unitaMisura
-            elif isinstance(p, MaterialeConsumo):
-                d["tipoMateriale"] = p.tipoMateriale
-            elif isinstance(p, ServizioEsterno):
-                d["fornitore"] = p.fornitore
             raw_list.append(d)
 
         with open(self.products_file, 'w', encoding='utf-8') as f:
@@ -357,36 +331,3 @@ class DataRepository:
 
         with open(self.contacts_file, 'w', encoding='utf-8') as f:
             json.dump(raw_list, f, indent=2, ensure_ascii=False)
-
-    # ---------------------------------------------------------
-    # GESTORE BACKUP (UML: GestoreBackup, RF23)
-    # ---------------------------------------------------------
-    def esegui_backup(self, dest_folder: Optional[str] = None) -> str:
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        target_dir = dest_folder or os.path.join(self.backup_dir, f"backup_{timestamp}")
-        os.makedirs(target_dir, exist_ok=True)
-
-        for filename in [self.users_file, self.products_file, self.movements_file, self.contacts_file, self.login_history_file, self.categories_file]:
-            if os.path.exists(filename):
-                shutil.copy2(filename, target_dir)
-
-        # Informazioni di backup
-        info = {
-            "timestamp": timestamp,
-            "data_backup": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "statoSistema": "COMPLETATO"
-        }
-        with open(os.path.join(target_dir, "backup_info.json"), 'w', encoding='utf-8') as f:
-            json.dump(info, f, indent=2)
-
-        return target_dir
-
-    def ripristina_dati(self, backup_folder: str):
-        if not os.path.exists(backup_folder):
-            raise FileNotFoundError("La cartella di backup specificata non esiste.")
-
-        for fname in ["users.json", "products.json", "movements.json", "contacts.json", "login_history.json", "categories.json"]:
-            src = os.path.join(backup_folder, fname)
-            if os.path.exists(src):
-                dst = os.path.join(self.data_dir, fname)
-                shutil.copy2(src, dst)

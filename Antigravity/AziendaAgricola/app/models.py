@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional, List, Dict, Any
 import datetime
-import re
 
 # =========================================================
 # ENUMERAZIONI
@@ -21,8 +20,6 @@ class CategoriaProdotto:
     nome: str
     unitaMisura: str  # kilogrammi, grammi, litri
 
-
-
 class TipoUscita(str, Enum):
     SPESE_DI_MANUTENZIONE = "SPESE DI MANUTENZIONE"
     SPESE_DI_PRODUZIONE = "SPESE DI PRODUZIONE"
@@ -33,7 +30,7 @@ class TipoUscita(str, Enum):
     ASSICURAZIONI = "ASSICURAZIONI"
 
 # =========================================================
-# UTENTI E AUTENTICAZIONE (UML: Utente, Manager, Dipendente)
+# UTENTI E AUTENTICAZIONE
 # =========================================================
 
 @dataclass
@@ -52,7 +49,7 @@ class Utente:
 
     @staticmethod
     def valida_password(password: str) -> bool:
-        """RNF3: La password deve contenere almeno 8 caratteri alfanumerici.""" #Serve?
+        """La password deve contenere almeno 8 caratteri alfanumerici."""
         if not password or len(password) < 8:
             return False
         return password.isalnum()
@@ -85,7 +82,7 @@ class Dipendente(Utente):
         self.ruolo = livelloAccesso.DIPENDENTE
 
 # =========================================================
-# PRODOTTI AGRICOLI E MATERIALI (UML: Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno)
+# PRODOTTI AGRICOLI
 # =========================================================
 
 @dataclass
@@ -110,25 +107,14 @@ class Prodotto:
 @dataclass
 class ProdottoAgricolo(Prodotto):
     tipoProdotto: str = "Agricolo"  # Es: Olio, Vino, Miele, Grano, Girasoli, Uva, Olive
-    unitaMisura: str = "kg"          # Es: kg, litri, bottiglie
+    unitaMisura: str = "kg"          # Es: kg, litri, grammi
 
     def calcolaPrezzoScontato(self, quantita: float, percentualeSconto: float) -> float:
         totale = self.calcolaPrezzoTotale(quantita)
         return totale * (1.0 - (percentualeSconto / 100.0))
 
-@dataclass
-class MaterialeConsumo(Prodotto):
-    tipoMateriale: str = "Generico"  # Concimi, semi, fitosanitari, carburante
-
-@dataclass
-class ServizioEsterno(Prodotto):
-    fornitore: str = "Fornitore Esterno"
-
-    def calcolaPrezzoTotale(self, oreLavoro: float) -> float:
-        return self.prezzoUnitario * oreLavoro
-
 # =========================================================
-# CONTATTI E CLIENTI/FORNITORI (UML: Contatto, Azienda, Privato)
+# CONTATTI E CLIENTI/FORNITORI
 # =========================================================
 
 @dataclass
@@ -162,7 +148,7 @@ class Privato(Contatto):
         return f"Privato: {self.Nome} {self.Cognome}, CF: {self.codiceFiscale} | {base}"
 
 # =========================================================
-# ALLEGATI E DOCUMENTI (UML: Documento)
+# ALLEGATI E DOCUMENTI
 # =========================================================
 
 @dataclass
@@ -177,7 +163,7 @@ class Documento:
             self.dataCaricamento = datetime.date.today().isoformat()
 
 # =========================================================
-# MOVIMENTI FINANZIARI (UML: Movimento)
+# MOVIMENTI FINANZIARI
 # =========================================================
 
 @dataclass
@@ -198,12 +184,11 @@ class Movimento:
     creatoreUsername: str = "admin"
 
     def __post_init__(self):
-        # RNF8: Limite di caratteri per la descrizione del movimento (max 500 caratteri)
         if len(self.descrizione) > 500:
             raise ValueError("La descrizione del movimento non può superare i 500 caratteri.")
 
 # =========================================================
-# REPORT GUADAGNO (UML: ReportGuadagno)
+# REPORT GUADAGNO
 # =========================================================
 
 @dataclass
@@ -234,7 +219,7 @@ class ReportGuadagno:
         return cls(periodoRiferimento=anno, totaleEntrate=entrate, totaleUscite=uscite, margineNetto=margine)
 
 # =========================================================
-# AUTENTICATORE E SESSIONE (UML: Autenticatore)
+# AUTENTICATORE E SESSIONE
 # =========================================================
 
 @dataclass
@@ -242,13 +227,3 @@ class Sessione:
     utente: Utente
     timestampLogin: str
     sessioneAttiva: bool = True
-
-# =========================================================
-# GESTORE BACKUP (UML: GestoreBackup)
-# =========================================================
-# Serve? 
-@dataclass
-class GestoreBackupInfo:
-    percorsoSalvataggio: str
-    ultimoBackup: str
-    statoSistema: str = "OK"

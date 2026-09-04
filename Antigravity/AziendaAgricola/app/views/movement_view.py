@@ -40,15 +40,15 @@ class FinancialMovementView(QWidget):
         btn_new_entrata.clicked.connect(self.show_new_entrata_dialog)
 
         btn_new_uscita = QPushButton("+ Registra Nuova Uscita")
-        btn_new_uscita.setStyleSheet("background-color: #d84315; color: white; border: 1px solid #c62828;")
+        btn_new_uscita.setStyleSheet("background-color: #ff5858; color: white; border: 1px solid #ff5858;")
         btn_new_uscita.clicked.connect(self.show_new_uscita_dialog)
 
         btn_edit_mov = QPushButton("Modifica Movimento Selezionato")
-        btn_edit_mov.setStyleSheet("background-color: #f57c00; color: white; border: 1px solid #e65100;")
+        btn_edit_mov.setStyleSheet("background-color: #c88a00; color: white; border: 1px solid #a87400;")
         btn_edit_mov.clicked.connect(self.show_edit_movement_dialog)
 
         btn_delete_mov = QPushButton("- Rimuovi Movimento Selezionato")
-        btn_delete_mov.setStyleSheet("background-color: #c62828; color: white; border: 1px solid #b71c1c;")
+        btn_delete_mov.setStyleSheet("background-color: #b71c1c; color: white; border: 1px solid #7f0000;")
         btn_delete_mov.clicked.connect(self.handle_delete_movement)
 
         top_bar.addWidget(btn_new_entrata)

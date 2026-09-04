@@ -160,11 +160,11 @@ class LoginDialog(QDialog):
         self.m_data_nascita = QLineEdit()
         self.m_data_nascita.setPlaceholderText("YYYY-MM-DD")
 
-        form.addRow("Username:", self.m_username)
-        form.addRow("Password (min 8 alfanum):", self.m_password)
-        form.addRow("Nome:", self.m_nome)
-        form.addRow("Cognome:", self.m_cognome)
-        form.addRow("Email:", self.m_email)
+        form.addRow("Username:*", self.m_username)
+        form.addRow("Password:*", self.m_password)
+        form.addRow("Nome:*", self.m_nome)
+        form.addRow("Cognome:*", self.m_cognome)
+        form.addRow("Email:*", self.m_email)
         form.addRow("Telefono:", self.m_telefono)
         form.addRow("Data Nascita:", self.m_data_nascita)
 

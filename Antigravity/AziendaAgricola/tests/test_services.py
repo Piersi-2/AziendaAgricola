@@ -22,7 +22,7 @@ class TestServices(unittest.TestCase):
         # Nessun utente inizialmente
         self.assertFalse(self.user_manager.ha_manager())
 
-        # Registrazione primo Manager (RF1, RF27)
+        # Registrazione primo Manager
         manager = self.user_manager.registra_primo_manager(
             username="manager1",
             password="Password123",
@@ -41,7 +41,7 @@ class TestServices(unittest.TestCase):
                 "manager2", "Password123", "Luigi", "Verdi", "luigi@azienda.it", "123", "1990-01-01"
             )
 
-        # Creazione Dipendente da parte del Manager (RF2)
+        # Creazione Dipendente da parte del Manager
         dip = self.user_manager.crea_dipendente(
             username="dipendente1",
             password="SecretPass1",
@@ -49,10 +49,7 @@ class TestServices(unittest.TestCase):
             cognome="Bianchi",
             email="anna.bianchi@azienda.it",
             telefono="3409876543",
-            dataNascita="1995-05-05",
-            dataAssunzione="2024-01-10",
-            mansione="Raccolta Olive",
-            stipendio=1500.0
+            dataNascita="1995-05-05"
         )
         self.assertEqual(dip.ruolo, livelloAccesso.DIPENDENTE)
 
@@ -63,7 +60,7 @@ class TestServices(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.user_manager.crea_dipendente(
-                "m2", "Pass1234", "A", "B", "mario@azienda.it", "456", "1990-01-01", "", "", 0.0
+                "m2", "Pass1234", "A", "B", "mario@azienda.it", "456", "1990-01-01"
             )
 
     def test_impossibile_aggiungere_prodotto_senza_categoria(self):
@@ -95,7 +92,7 @@ class TestServices(unittest.TestCase):
                 nome="Vino Chianti", descrizione="Altro", prezzo=20.0, unita="litri", tipo="VINO"
             )
 
-    def test_login_logout_e_recupero_password(self):
+    def test_login_logout(self):
         self.user_manager.registra_primo_manager(
             "manager1", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
@@ -108,13 +105,8 @@ class TestServices(unittest.TestCase):
         self.assertTrue(self.auth_service.effettuaLogout())
         self.assertFalse(self.auth_service.is_session_valid())
 
-        # Recupero password (RNF6)
-        ok, msg = self.auth_service.recupera_password_email("mario@azienda.it")
-        self.assertTrue(ok)
-        self.assertIn("Password123", msg)
-
     def test_registrazione_entrate_e_uscite(self):
-        # Registra categoria e prodotto prima (Richiesto da RNF / PROMPT3)
+        # Registra categoria e prodotto prima
         cat = self.product_service.aggiungi_categoria("OLIO", "litri")
         prod = self.product_service.aggiungi_prodotto_agricolo(
             nome="Olio di Oliva",
@@ -140,7 +132,7 @@ class TestServices(unittest.TestCase):
 
         # Registrazione uscita
         u = self.financial_service.registra_uscita(
-            categoria_uscita="OLIO",
+            categoria_uscita="SPESE DI PRODUZIONE",
             prodotto_id=prod.idProdotto,
             importo=350.0,
             data="2026-07-21",

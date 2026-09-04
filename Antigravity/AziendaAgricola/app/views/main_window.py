@@ -9,7 +9,7 @@ from app.services import AuthService, UserManager, ProductService, FinancialServ
 from app.views.user_management_view import UserManagementView
 from app.views.product_view import ProductManagementView
 from app.views.movement_view import FinancialMovementView
-from app.views.report_view import ReportAndBackupView
+from app.views.report_view import ReportView
 
 STYLE_MAIN = """
 QMainWindow {
@@ -151,7 +151,7 @@ class MainWindow(QMainWindow):
 
         # Dipendente non deve vedere il guadagno aziendale
         if self.current_user.ruolo == livelloAccesso.MANAGER:
-            self.report_view = ReportAndBackupView(self.report_service, self.repo)
+            self.report_view = ReportView(self.report_service)
             self.tabs.addTab(self.report_view, "Guadagno aziendale")
 
         # Connetti segnale per aggiornamento del nome in header_box
