@@ -1,1 +1,1 @@
-# Package views per le componenti grafiche PyQt6
+# Package views per le componenti grafiche PyQt5

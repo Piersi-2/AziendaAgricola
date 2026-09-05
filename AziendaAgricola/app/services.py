@@ -5,7 +5,7 @@ import datetime
 from typing import List, Optional, Dict, Tuple
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    Prodotto, ProdottoAgricolo, MaterialeConsumo, ServizioEsterno,
+    Prodotto, ProdottoAgricolo,
     Contatto, Azienda, Privato,
     Documento, Movimento, TipoMovimento, TipoUscita,
     ReportGuadagno, Sessione, CategoriaProdotto
@@ -13,14 +13,15 @@ from app.models import (
 from app.repositories import DataRepository
 
 # ---------------------------------------------------------
-# AUTHSERVICE - gestisce autenticazione, autorizzazione, sessioni, recupero password e log accessi
+# AUTHSERVICE - gestisce autenticazione, autorizzazione, sessioni e log accessi
 # ---------------------------------------------------------
 
 class AuthService:
-    def __init__(self, repo: DataRepository, session_timeout_minutes: int = 30):
+    def __init__(self, repo: DataRepository, session_timeout_minutes: int = 10):
         self.repo = repo
         self.session_timeout_minutes = session_timeout_minutes
         self.current_session: Optional[Sessione] = None
+        self._last_activity_dt: Optional[datetime.datetime] = None
 
     def effettuaLogin(self, username: str, password: str) -> Utente:
         users = self.repo.load_users()
@@ -33,28 +34,45 @@ class AuthService:
             raise ValueError("Password errata.")
 
         # Aggiorna ultimo login
-        now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_dt = datetime.datetime.now()
+        now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
         user.ultimoLogin = now_str
         self.repo.save_users(users)
         self.repo.record_login(user.nomeUtente)
 
         # Attiva sessione
-        self.current_session = Sessione(utente=user, timestampLogin=now_str, sessioneAttiva=True)
+        self._last_activity_dt = now_dt
+        self.current_session = Sessione(
+            utente=user,
+            timestampLogin=now_str,
+            sessioneAttiva=True,
+            ultimaAttivita=now_str
+        )
         return user
 
     def effettuaLogout(self) -> bool:
+        self._last_activity_dt = None
         if self.current_session:
             self.current_session.sessioneAttiva = False
             self.current_session = None
             return True
         return False
 
+    def update_activity(self):
+        """Aggiorna il timestamp dell'ultima attività per il calcolo del timeout di inattività."""
+        if self.current_session and self.current_session.sessioneAttiva:
+            now = datetime.datetime.now()
+            if self._last_activity_dt is None or (now - self._last_activity_dt).total_seconds() >= 2:
+                self._last_activity_dt = now
+                self.current_session.ultimaAttivita = now.strftime("%Y-%m-%d %H:%M:%S")
+
     def is_session_valid(self) -> bool:
         if not self.current_session or not self.current_session.sessioneAttiva:
             return False
         try:
-            login_dt = datetime.datetime.strptime(self.current_session.timestampLogin, "%Y-%m-%d %H:%M:%S")
-            elapsed = datetime.datetime.now() - login_dt
+            ref_str = self.current_session.ultimaAttivita or self.current_session.timestampLogin
+            last_dt = datetime.datetime.strptime(ref_str, "%Y-%m-%d %H:%M:%S")
+            elapsed = datetime.datetime.now() - last_dt
             if elapsed.total_seconds() > self.session_timeout_minutes * 60:
                 self.effettuaLogout()
                 return False
@@ -67,16 +85,6 @@ class AuthService:
         if username:
             return {username: history.get(username, [])}
         return history
-
-    def recupera_password_email(self, email: str) -> Tuple[bool, str]:
-        """RNF6: Gestione recupero password tramite email."""
-        users = self.repo.load_users()
-        user = next((u for u in users if u.email.lower() == email.lower()), None)
-        if not user:
-            return False, "Nessun utente trovato con l'indirizzo email specificato."
-        
-        # In una vera applicazione invierebbe un'email; qui restituisce le istruzioni/password mock
-        return True, f"Istruzioni di recupero inviate all'indirizzo {email}. (Password utente: {user.password})"
 
 # ---------------------------------------------------------
 # USER MANAGER - gestisce utenti e manager
@@ -94,7 +102,6 @@ class UserManager:
         return any(isinstance(u, Manager) for u in users)
 
     def registra_primo_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
-        """RF1, RF27: Registrazione iniziale profilo Manager se non ne esistono altri."""
         users = self.repo.load_users()
         if any(isinstance(u, Manager) for u in users):
             raise ValueError("Un Manager è già registrato nel sistema.")
@@ -102,8 +109,7 @@ class UserManager:
         return self.crea_manager(username, password, nome, cognome, email, telefono, dataNascita)
 
     def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
-        """RF1, RF2: Creazione profilo Manager (da parte di un altro Manager)."""
-        self._valida_nuovo_utente(username, email, password)
+        self._valida_nuovo_utente(username, email, password, dataNascita)
         m = Manager(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -121,9 +127,8 @@ class UserManager:
         self.repo.save_users(users)
         return m
 
-    def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str, mansione: str, stipendio: float) -> Dipendente:
-        """RF2: Creazione profilo Dipendente da parte del Manager."""
-        self._valida_nuovo_utente(username, email, password)
+    def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
+        self._valida_nuovo_utente(username, email, password, dataNascita)
         d = Dipendente(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -144,52 +149,59 @@ class UserManager:
         return d
 
     def modifica_profilo(self, user_id: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
-        """RF4: Modifica profilo utente e manager."""
+        if not dataNascita or not str(dataNascita).strip():
+            raise ValueError("La data di nascita è obbligatoria.")
+
         users = self.repo.load_users()
         u = next((x for x in users if x.id == user_id), None)
         if not u:
-            raise ValueError("Utente non trovato.")
+            raise ValueError(f"Utente con ID '{user_id}' non trovato.")
 
-        # RNF4: Unicità email se cambiata
-        if email.lower() != u.email.lower():
-            if any(x.email.lower() == email.lower() and x.id != user_id for x in users):
+        for other in users:
+            if other.id != user_id and other.email.lower() == email.lower():
                 raise ValueError(f"L'email '{email}' è già utilizzata da un altro utente.")
 
-        u.modificaProfiloUtente(nome, cognome, email, telefono, dataNascita, password)
+        u.modificaProfiloUtente(
+            nome=nome,
+            cognome=cognome,
+            email=email,
+            telefono=telefono,
+            dataNascita=dataNascita,
+            password=password
+        )
         self.repo.save_users(users)
 
-    def elimina_dipendente(self, dipendente_id: str):
-        """RF5: Elimina profilo dipendente da parte del manager."""
+    def elimina_dipendente(self, user_id: str):
         users = self.repo.load_users()
-        target = next((x for x in users if x.id == dipendente_id), None)
+        target = next((x for x in users if x.id == user_id), None)
         if not target:
-            raise ValueError("Profilo dipendente non trovato.")
+            raise ValueError("Profilo utente non trovato.")
 
         if isinstance(target, Manager):
-            raise ValueError("Non è possibile eliminare un profilo Manager da questa funzione.")
+            raise ValueError("Non è possibile eliminare un profilo Manager da questa procedura.")
 
-        users = [x for x in users if x.id != dipendente_id]
+        users = [x for x in users if x.id != user_id]
         self.repo.save_users(users)
-
-    def _valida_nuovo_utente(self, username: str, email: str, password: str):
-        users = self.repo.load_users()
-
-        if any(x.nomeUtente.lower() == username.lower() for x in users):
-            raise ValueError(f"Il nome utente '{username}' è già in uso.")
-
-        # RNF4: Unicità email
-        if any(x.email.lower() == email.lower() for x in users):
-            raise ValueError(f"L'email '{email}' è già associata ad un altro profilo.")
-
-        # RNF3: Validazione password >= 8 alfanumerici
-        if not Utente.valida_password(password):
-            raise ValueError("La password deve contenere almeno 8 caratteri alfanumerici.")
 
     def get_all_users(self) -> List[Utente]:
         return self.repo.load_users()
 
+    def _valida_nuovo_utente(self, username: str, email: str, password: str, dataNascita: str = ""):
+        if not dataNascita or not str(dataNascita).strip():
+            raise ValueError("La data di nascita è obbligatoria.")
+
+        if not Utente.valida_password(password):
+            raise ValueError("La password deve contenere almeno 8 caratteri alfanumerici.")
+
+        users = self.repo.load_users()
+        if any(u.nomeUtente.lower() == username.lower() for u in users):
+            raise ValueError(f"Il nome utente '{username}' è già occupato.")
+
+        if any(u.email.lower() == email.lower() for u in users):
+            raise ValueError(f"L'indirizzo email '{email}' è già associato a un account.")
+
 # ---------------------------------------------------------
-# PRODUCT SERVICE - gestisce prodotti agricoli, materiali di consumo e servizi esterni
+# PRODUCT SERVICE - gestisce catalogo prodotti agricoli e categorie
 # ---------------------------------------------------------
 
 class ProductService:
@@ -197,74 +209,54 @@ class ProductService:
         self.repo = repo
 
     def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str, quantita: float = 0.0) -> ProdottoAgricolo:
-        """RF6, RNF5: Aggiungi nuovo prodotto agricolo con controllo di unicità."""
+        prods = self.repo.load_products()
+        if any(p.nome.lower() == nome.lower() for p in prods):
+            raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
+
         categories = self.repo.load_categories()
         if not categories:
             raise ValueError("Impossibile aggiungere un prodotto se prima non è stata inserita una categoria.")
 
-        tipo_clean = tipo.strip().upper()
-        cat_match = next((c for c in categories if c.nome.upper() == tipo_clean), None)
+        cat_match = next((c for c in categories if c.nome.strip().upper() == tipo.strip().upper()), None)
         if not cat_match:
-            raise ValueError(f"La categoria '{tipo}' non esiste. È necessario inserire prima la categoria.")
+            raise ValueError(f"La categoria '{tipo}' non esiste. Aggiungerla prima di procedere.")
 
-        self._valida_unicita_prodotto(nome)
+        effettiva_unita = cat_match.unitaMisura
+
         p = ProdottoAgricolo(
             idProdotto=str(uuid.uuid4())[:8],
-            nome=nome.strip(),
-            descrizione=descrizione.strip(),
+            nome=nome,
+            descrizione=descrizione,
             prezzoUnitario=prezzo,
             quantitaDisponibile=quantita,
-            tipoProdotto=cat_match.nome,
-            unitaMisura=cat_match.unitaMisura if cat_match.unitaMisura else unita.strip()
+            tipoProdotto=tipo,
+            unitaMisura=effettiva_unita
         )
-        prods = self.repo.load_products()
         prods.append(p)
         self.repo.save_products(prods)
         return p
 
-    def aggiungi_materiale(self, nome: str, descrizione: str, prezzo: float, tipo_materiale: str, quantita: float = 0.0) -> MaterialeConsumo:
-        self._valida_unicita_prodotto(nome)
-        p = MaterialeConsumo(
-            idProdotto=str(uuid.uuid4())[:8],
-            nome=nome.strip(),
-            descrizione=descrizione.strip(),
-            prezzoUnitario=prezzo,
-            quantitaDisponibile=quantita,
-            tipoMateriale=tipo_materiale.strip()
-        )
-        prods = self.repo.load_products()
-        prods.append(p)
-        self.repo.save_products(prods)
-        return p
-
-    def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float, quantita: float):
-        """RF7: Modifica prodotto agricolo o materiale presente."""
+    def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float, quantita: Optional[float] = None):
         prods = self.repo.load_products()
         p = next((x for x in prods if x.idProdotto == prodotto_id), None)
         if not p:
-            raise ValueError("Prodotto non trovato.")
+            raise ValueError(f"Prodotto ID '{prodotto_id}' non trovato.")
 
-        if nome.strip().lower() != p.nome.lower():
-            if any(x.nome.lower() == nome.strip().lower() and x.idProdotto != prodotto_id for x in prods):
-                raise ValueError(f"Esiste già un prodotto denominato '{nome}'.")
+        for other in prods:
+            if other.idProdotto != prodotto_id and other.nome.lower() == nome.lower():
+                raise ValueError(f"Un prodotto con nome '{nome}' è già registrato.")
 
-        p.nome = nome.strip()
-        p.descrizione = descrizione.strip()
+        p.nome = nome
+        p.descrizione = descrizione
         p.aggiornaPrezzoListino(prezzo)
-        p.quantitaDisponibile = quantita
+        if quantita is not None:
+            p.quantitaDisponibile = quantita
         self.repo.save_products(prods)
 
     def elimina_prodotto(self, prodotto_id: str):
-        """RF8: Elimina prodotto agricolo."""
         prods = self.repo.load_products()
-        prods = [x for x in prods if x.idProdotto != prodotto_id]
+        prods = [p for p in prods if p.idProdotto != prodotto_id]
         self.repo.save_products(prods)
-
-    def _valida_unicita_prodotto(self, nome: str):
-        """RNF5: Unicità prodotto."""
-        prods = self.repo.load_products()
-        if any(x.nome.lower() == nome.strip().lower() for x in prods):
-            raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
 
     def get_all_products(self) -> List[Prodotto]:
         return self.repo.load_products()
@@ -272,13 +264,15 @@ class ProductService:
     def aggiungi_categoria(self, nome: str, unita: str) -> CategoriaProdotto:
         nome_clean = nome.strip().upper()
         if not nome_clean:
-            raise ValueError("Il nome della categoria non puo essere vuoto.")
-        if unita not in ["kilogrammi", "grammi", "litri"]:
-            raise ValueError("L'unita di misura selezionata non e valida.")
+            raise ValueError("Il nome della categoria non può essere vuoto.")
+
+        unita_valide = ["kilogrammi", "grammi", "litri"]
+        if unita not in unita_valide:
+            raise ValueError(f"Unità di misura non valida. Scegliere tra: {', '.join(unita_valide)}.")
 
         categories = self.repo.load_categories()
         if any(c.nome == nome_clean for c in categories):
-            raise ValueError(f"La categoria '{nome_clean}' esiste gia.")
+            raise ValueError(f"La categoria '{nome_clean}' esiste già.")
 
         cat = CategoriaProdotto(nome=nome_clean, unitaMisura=unita)
         categories.append(cat)
@@ -291,14 +285,14 @@ class ProductService:
     def elimina_categoria(self, nome_categoria: str):
         nome_clean = nome_categoria.strip().upper()
         
-        # 1. Load categories, filter out this category, save
+        # 1. Carica categorie, filtra la categoria da eliminare, salva
         categories = self.repo.load_categories()
         categories = [c for c in categories if c.nome != nome_clean]
         self.repo.save_categories(categories)
 
-        # 2. Load products, filter out products belonging to this category, save
+        # 2. Carica prodotti, rimuovi prodotti associati alla categoria, salva
         prods = self.repo.load_products()
-        prods = [p for p in prods if getattr(p, 'tipoProdotto', getattr(p, 'tipoMateriale', getattr(p, 'fornitore', 'Generico'))).strip().upper() != nome_clean]
+        prods = [p for p in prods if getattr(p, 'tipoProdotto', '').strip().upper() != nome_clean]
         self.repo.save_products(prods)
 
 # ---------------------------------------------------------
@@ -310,7 +304,6 @@ class FinancialService:
         self.repo = repo
 
     def salva_allegato_pdf(self, source_path: str) -> str:
-        """RF19: Caricamento e salvataggio file PDF di supporto."""
         if not os.path.exists(source_path):
             raise FileNotFoundError(f"Il file '{source_path}' non esiste.")
 
@@ -320,7 +313,6 @@ class FinancialService:
         return dest_path
 
     def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin", quantita: float = 1.0) -> Movimento:
-        """RF9, RF10: Registrazione entrate catalogate per prodotto e cliente (Azienda o Privato)."""
         doc = None
         if pdf_path:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
@@ -387,7 +379,6 @@ class FinancialService:
         return m
 
     def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
-        """RF11-RF18: Registrazione uscite (Manutenzione, Produzione, Vendita, Tasse, Stipendi, Assicurazioni, Rifiuti, Straordinarie)."""
         doc = None
         if pdf_path:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
@@ -431,7 +422,7 @@ class FinancialService:
         return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.USCITA]
 
 # ---------------------------------------------------------
-# REPORT SERVICE - gestisce report
+# REPORT SERVICE - calcolo del guadagno aziendale
 # ---------------------------------------------------------
 
 class ReportService:
@@ -439,25 +430,5 @@ class ReportService:
         self.repo = repo
 
     def calcola_guadagno_aziendale(self, anno: int) -> ReportGuadagno:
-        """RF22: Guadagno aziendale annuo."""
         movs = self.repo.load_movements()
         return ReportGuadagno.genera(anno, movs)
-
-    def genera_report_pdf(self, anno: int, file_path: str) -> str:
-        """Generazione report PDF sintetica per l'anno specificato."""
-        report = self.calcola_guadagno_aziendale(anno)
-
-        # Creazione report testuale / PDF
-        content = f"""==================================================
-AZIENDA AGRICOLA - REPORT FINANZIARIO ANNO {anno}
-==================================================
-Totale Entrate:   € {report.totaleEntrate:,.2f}
-Totale Uscite:    € {report.totaleUscite:,.2f}
---------------------------------------------------
-MARGINE NETTO:    € {report.margineNetto:,.2f}
-==================================================
-"""
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(content)
-
-        return file_path

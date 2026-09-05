@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager
 from app.views.login_dialog import LoginDialog
@@ -27,7 +27,7 @@ def main() -> int:
     if login_dialog.exec() == LoginDialog.DialogCode.Accepted and logged_user:
         window = MainWindow(logged_user, repo, auth_service)
         window.show()
-        return app.exec()
+        return app.exec_()
 
     return 0
 

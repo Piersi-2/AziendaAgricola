@@ -1,15 +1,15 @@
-from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QTabWidget, QMessageBox, QStatusBar
+from PyQt5.QtWidgets import (
+    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
+    QTabWidget, QMessageBox, QStatusBar, QDateEdit #QStatusBar aggiunge barra sotto
 )
-from PyQt6.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer, Qt, QEvent #QTimer aggiunge timer per scadenza sessione
 from app.models import Utente, livelloAccesso
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
 from app.views.user_management_view import UserManagementView
 from app.views.product_view import ProductManagementView
 from app.views.movement_view import FinancialMovementView
-from app.views.report_view import ReportAndBackupView
+from app.views.report_view import ReportView
 
 STYLE_MAIN = """
 QMainWindow {
@@ -33,13 +33,15 @@ QTabBar::tab {
     color: #000000;
     border: 1px solid #dcdcdc;
     border-bottom: none;
-    padding: 8px 16px;
+    padding: 10px 24px;
+    font-size: 14px;
     font-weight: bold;
+    min-width: 120px;
 }
 QTabBar::tab:selected {
     background-color: #ffffff;
     color: #000000;
-    border-bottom: 2px solid #2e7d32;
+    border-bottom: 3px solid #2e7d32;
 }
 QPushButton {
     background-color: #2e7d32;
@@ -145,14 +147,14 @@ class MainWindow(QMainWindow):
         self.product_view = ProductManagementView(self.product_service)
         self.movement_view = FinancialMovementView(self.financial_service, self.product_service, self.current_user)
 
-        self.tabs.addTab(self.user_view, "Gestione utenti")
+        self.tabs.addTab(self.user_view, "Gestione Utenti")
         self.tabs.addTab(self.product_view, "Catalogo Prodotti Agricoli")
         self.tabs.addTab(self.movement_view, "Movimenti")
 
         # Dipendente non deve vedere il guadagno aziendale
         if self.current_user.ruolo == livelloAccesso.MANAGER:
-            self.report_view = ReportAndBackupView(self.report_service, self.repo)
-            self.tabs.addTab(self.report_view, "Guadagno aziendale")
+            self.report_view = ReportView(self.report_service)
+            self.tabs.addTab(self.report_view, "Guadagno Aziendale")
 
         # Connetti segnale per aggiornamento del nome in header_box
         self.user_view.profile_updated.connect(self.update_user_header)
@@ -176,6 +178,35 @@ class MainWindow(QMainWindow):
         self.session_timer.setInterval(60000)  # Controlla ogni minuto
         self.session_timer.timeout.connect(self.check_session_status)
         self.session_timer.start()
+
+        # Installa il filtro eventi sull'applicazione per intercettare l'interazione utente e resettare l'inattività
+        app = QApplication.instance()
+        if app:
+            app.installEventFilter(self)
+
+    def eventFilter(self, watched, event):
+        if event.type() in (
+            QEvent.MouseMove,
+            QEvent.MouseButtonPress,
+            QEvent.KeyPress,
+            QEvent.Wheel,
+        ):
+            self.auth_service.update_activity()
+
+        # Disabilita la modifica della data tramite rotellina del mouse sui QDateEdit
+        if event.type() == QEvent.Wheel:
+            parent = getattr(watched, 'parent', lambda: None)()
+            if isinstance(watched, QDateEdit) or isinstance(parent, QDateEdit):
+                event.ignore()
+                return True
+
+        return super().eventFilter(watched, event)
+
+    def closeEvent(self, event):
+        app = QApplication.instance()
+        if app:
+            app.removeEventFilter(self)
+        super().closeEvent(event)
 
     def check_session_status(self):
         if not self.auth_service.is_session_valid():
