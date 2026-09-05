@@ -1,9 +1,11 @@
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QMessageBox, QGroupBox, QFormLayout,
-    QHeaderView, QTextEdit, QDialog, QAbstractItemView
+    QHeaderView, QTextEdit, QDialog, QAbstractItemView, QDateEdit,
+    QStyle, QStyleOptionComboBox
 )
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt5.QtCore import Qt, pyqtSignal, QDate, QObject, QEvent, QPoint
+from PyQt5.QtGui import QMouseEvent
 from app.services import UserManager, AuthService
 from app.models import Utente, Manager, Dipendente, livelloAccesso
 
@@ -29,7 +31,37 @@ class UserManagementView(QWidget):
         self.p_cognome = QLineEdit(self.current_user.cognome)
         self.p_email = QLineEdit(self.current_user.email)
         self.p_telefono = QLineEdit(self.current_user.telefono)
-        self.p_nascita = QLineEdit(self.current_user.dataNascita)
+        self.p_nascita = QDateEdit()
+        self.p_nascita.setCalendarPopup(True)
+        self.p_nascita.setDisplayFormat("dd/MM/yyyy")
+        self.p_nascita.setMaximumDate(QDate.currentDate())
+        d_self = QDate.fromString(self.current_user.dataNascita, "dd/MM/yyyy")
+        if not d_self.isValid():
+            d_self = QDate.fromString(self.current_user.dataNascita, "yyyy-MM-dd")
+        self.p_nascita.setDate(d_self if d_self.isValid() else QDate(2000, 1, 1))
+
+        # Evita la selezione manuale del testo e apre direttamente il calendario al click
+        self.p_nascita.lineEdit().setReadOnly(True)
+        self.p_nascita.lineEdit().setCursor(Qt.PointingHandCursor)
+
+        def open_nascita_calendar():
+            if not self.p_nascita.calendarWidget().isVisible():
+                opt = QStyleOptionComboBox()
+                opt.initFrom(self.p_nascita)
+                rect = self.p_nascita.style().subControlRect(QStyle.CC_ComboBox, opt, QStyle.SC_ComboBoxArrow, self.p_nascita)
+                me = QMouseEvent(QMouseEvent.MouseButtonPress, QPoint(rect.center()), Qt.LeftButton, Qt.LeftButton, Qt.NoModifier)
+                self.p_nascita.mousePressEvent(me)
+
+        class DateClickFilter(QObject):
+            def eventFilter(self, watched, event):
+                if event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+                    open_nascita_calendar()
+                    return True
+                return False
+
+        self._date_click_filter = DateClickFilter(self.p_nascita)
+        self.p_nascita.lineEdit().installEventFilter(self._date_click_filter)
+
         self.p_password = QLineEdit()
         self.p_password.setPlaceholderText("Lascia vuoto se inalterata")
         self.p_password.setEchoMode(QLineEdit.EchoMode.Password)
@@ -112,11 +144,11 @@ class UserManagementView(QWidget):
         cognome = self.p_cognome.text().strip()
         email = self.p_email.text().strip()
         telefono = self.p_telefono.text().strip()
-        data_nascita = self.p_nascita.text().strip()
+        data_nascita = self.p_nascita.date().toString("dd/MM/yyyy")
         pwd = self.p_password.text().strip() or None
 
-        if not all([nome, cognome, email]):
-            QMessageBox.warning(self, "Attenzione", "Nome, cognome ed email sono obbligatori.")
+        if not all([nome, cognome, email, data_nascita]):
+            QMessageBox.warning(self, "Attenzione", "Nome, cognome, email e data di nascita sono obbligatori.")
             return
 
         try:
@@ -131,11 +163,11 @@ class UserManagementView(QWidget):
             )
             
             # Aggiorna i dati in memoria dell'utente connesso
-            self.current_user.nome = self.p_nome.text().strip()
-            self.current_user.cognome = self.p_cognome.text().strip()
-            self.current_user.email = self.p_email.text().strip()
-            self.current_user.telefono = self.p_telefono.text().strip()
-            self.current_user.dataNascita = self.p_nascita.text().strip()
+            self.current_user.nome = nome
+            self.current_user.cognome = cognome
+            self.current_user.email = email
+            self.current_user.telefono = telefono
+            self.current_user.dataNascita = data_nascita
             if pwd:
                 self.current_user.password = pwd
 
@@ -160,30 +192,45 @@ class UserManagementView(QWidget):
         u_cognome = QLineEdit()
         u_email = QLineEdit()
         u_telefono = QLineEdit()
-        u_nascita = QLineEdit()
-        u_nascita.setPlaceholderText("YYYY-MM-DD")
+        u_nascita = QDateEdit()
+        u_nascita.setCalendarPopup(True)
+        u_nascita.setDisplayFormat("dd/MM/yyyy")
+        u_nascita.setDate(QDate(2000, 1, 1))
+        u_nascita.setMaximumDate(QDate.currentDate())
 
-        form.addRow("Username:", u_username)
-        form.addRow("Password (min 8 alfanum):", u_password)
-        form.addRow("Nome:", u_nome)
-        form.addRow("Cognome:", u_cognome)
-        form.addRow("Email:", u_email)
+        form.addRow("Username:*", u_username)
+        form.addRow("Password (min 8 alfanum):*", u_password)
+        form.addRow("Nome:*", u_nome)
+        form.addRow("Cognome:*", u_cognome)
+        form.addRow("Email:*", u_email)
         form.addRow("Telefono:", u_telefono)
-        form.addRow("Data Nascita:", u_nascita)
+        form.addRow("Data Nascita:*", u_nascita)
 
         layout.addLayout(form)
 
         btn = QPushButton("Crea Dipendente")
         def create_action():
             try:
+                username = u_username.text().strip()
+                password = u_password.text()
+                nome = u_nome.text().strip()
+                cognome = u_cognome.text().strip()
+                email = u_email.text().strip()
+                telefono = u_telefono.text().strip()
+                data_nascita = u_nascita.date().toString("dd/MM/yyyy")
+
+                if not all([username, password, nome, cognome, email, data_nascita]):
+                    QMessageBox.warning(dlg, "Attenzione", "Compilare tutti i campi obbligatori, inclusa la data di nascita.")
+                    return
+
                 self.user_manager.crea_dipendente(
-                    username=u_username.text().strip(),
-                    password=u_password.text(),
-                    nome=u_nome.text().strip(),
-                    cognome=u_cognome.text().strip(),
-                    email=u_email.text().strip(),
-                    telefono=u_telefono.text().strip(),
-                    dataNascita=u_nascita.text().strip()
+                    username=username,
+                    password=password,
+                    nome=nome,
+                    cognome=cognome,
+                    email=email,
+                    telefono=telefono,
+                    dataNascita=data_nascita
                 )
                 QMessageBox.information(dlg, "Successo", "Profilo dipendente creato!")
                 self.load_users_table()
@@ -217,7 +264,15 @@ class UserManagementView(QWidget):
         u_cognome = QLineEdit(target.cognome)
         u_email = QLineEdit(target.email)
         u_telefono = QLineEdit(target.telefono)
-        u_nascita = QLineEdit(target.dataNascita)
+        u_nascita = QDateEdit()
+        u_nascita.setCalendarPopup(True)
+        u_nascita.setDisplayFormat("dd/MM/yyyy")
+        u_nascita.setMaximumDate(QDate.currentDate())
+        d_target = QDate.fromString(target.dataNascita, "dd/MM/yyyy")
+        if not d_target.isValid():
+            d_target = QDate.fromString(target.dataNascita, "yyyy-MM-dd")
+        u_nascita.setDate(d_target if d_target.isValid() else QDate(2000, 1, 1))
+
         u_password = QLineEdit()
         u_password.setPlaceholderText("Lascia vuoto se inalterata")
         u_password.setEchoMode(QLineEdit.EchoMode.Password)
@@ -234,32 +289,42 @@ class UserManagementView(QWidget):
         btn = QPushButton("Salva Modifiche")
         def save_action():
             try:
+                nome = u_nome.text().strip()
+                cognome = u_cognome.text().strip()
+                email = u_email.text().strip()
+                telefono = u_telefono.text().strip()
+                data_nascita = u_nascita.date().toString("dd/MM/yyyy")
                 pwd = u_password.text().strip() or None
+
+                if not all([nome, cognome, email, data_nascita]):
+                    QMessageBox.warning(dlg, "Attenzione", "Nome, cognome, email e data di nascita sono obbligatori.")
+                    return
+
                 self.user_manager.modifica_profilo(
                     user_id=uid,
-                    nome=u_nome.text().strip(),
-                    cognome=u_cognome.text().strip(),
-                    email=u_email.text().strip(),
-                    telefono=u_telefono.text().strip(),
-                    dataNascita=u_nascita.text().strip(),
+                    nome=nome,
+                    cognome=cognome,
+                    email=email,
+                    telefono=telefono,
+                    dataNascita=data_nascita,
                     password=pwd
                 )
 
                 # Se e l'utente corrente in sessione, aggiorna in memoria e aggiorna la UI
                 if uid == self.current_user.id:
-                    self.current_user.nome = u_nome.text().strip()
-                    self.current_user.cognome = u_cognome.text().strip()
-                    self.current_user.email = u_email.text().strip()
-                    self.current_user.telefono = u_telefono.text().strip()
-                    self.current_user.dataNascita = u_nascita.text().strip()
+                    self.current_user.nome = nome
+                    self.current_user.cognome = cognome
+                    self.current_user.email = email
+                    self.current_user.telefono = telefono
+                    self.current_user.dataNascita = data_nascita
                     if pwd:
                         self.current_user.password = pwd
                     
-                    self.p_nome.setText(self.current_user.nome)
-                    self.p_cognome.setText(self.current_user.cognome)
-                    self.p_email.setText(self.current_user.email)
-                    self.p_telefono.setText(self.current_user.telefono)
-                    self.p_nascita.setText(self.current_user.dataNascita)
+                    self.p_nome.setText(nome)
+                    self.p_cognome.setText(cognome)
+                    self.p_email.setText(email)
+                    self.p_telefono.setText(telefono)
+                    self.p_nascita.setDate(u_nascita.date())
                     
                     self.profile_updated.emit()
 

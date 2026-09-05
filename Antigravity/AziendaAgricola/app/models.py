@@ -227,3 +227,4 @@ class Sessione:
     utente: Utente
     timestampLogin: str
     sessioneAttiva: bool = True
+    ultimaAttivita: Optional[str] = None

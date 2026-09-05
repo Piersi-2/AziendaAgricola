@@ -1,0 +1,2 @@
+Controllando TUTTI i files nella cartella "Check", elencami nel documento di testo "Risultati.txt" tutti i comandi, le funzioni, gli import e altro presenti nel programma "AziendaAgricola" (quindi tutti i file nelle cartelle "_pycache_", ".vscode", "app", "data", "tests" e il main.py) che non sono mai apparsi nella cartella "Check". 
+Elencameli per file in cui sono stati trovati.

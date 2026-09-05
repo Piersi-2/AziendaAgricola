@@ -1,9 +1,9 @@
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QMessageBox, QGroupBox, QFormLayout,
     QHeaderView, QComboBox, QDialog, QAbstractItemView
 )
-from PyQt6.QtCore import Qt
+from PyQt5.QtCore import Qt
 from app.services import ProductService
 from app.models import Prodotto, ProdottoAgricolo, CategoriaProdotto
 

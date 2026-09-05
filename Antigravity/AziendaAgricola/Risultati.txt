@@ -1,0 +1,547 @@
+====================================================================================================
+                        ANALISI COMPARATIVA: AZIENDAAGRICOLA vs CHECK
+                                      (PROMPT 8)
+====================================================================================================
+Cartella di riferimento (Check):
+  Percorso: AziendaAgricola\Check
+  File esaminati: 4.931 file (.py, .ipynb, .pdf, .txt, .json, .csv, .conda, ecc.)
+  Elementi totali scansionati: 5.299 elementi
+  Testo indicizzato: oltre 137 MB di dati, inclusa l'estrazione integrale del testo dai 9 PDF didattici
+                     (Requisiti, Casi d'uso, Package, Sequenza, Classi, Mockup-Test, Introduzione a Python,
+                      Esercizi-Soluzioni, PyQt) e da tutti i Jupyter Notebook.
+
+Ambito di analisi (AziendaAgricola):
+  File totali analizzati: 63 file
+  Aree coperte:
+    - main.py (entry point)
+    - cartella app/ (models, repositories, services, views GUI e __init__)
+    - cartella tests/ (test unitari di dominio, persistenza e servizi)
+    - cartella data/ (archivi JSON e cartella uploads)
+    - cartella .vscode/ (impostazioni editor settings.json)
+    - cartelle __pycache__/ (bytecode precompilato CPython 3.12, 3.13, 3.14)
+
+Criteri di classificazione adottati per ogni file:
+  1. IMPORT E MODULI NON PRESENTI IN CHECK:
+     Moduli, package o simboli importati che non compaiono nel materiale di Check.
+  2. WIDGET, CLASSI E COMPONENTI DI LIBRERIA (PyQt / Python) MAI APPARSI IN CHECK:
+     Componenti di librerie standard o terze parti utilizzati ma assenti in Check.
+  3. METODI DI LIBRERIA (PyQt / Python) MAI APPARSI IN CHECK:
+     Metodi invocati su oggetti di libreria che non sono mai stati chiamati o descritti in Check.
+  4. FUNZIONI, CLASSI E METODI CUSTOM DI DOMINIO (AZIENDAAGRICOLA):
+     Elementi architetturali e di business logic creati ad-hoc per il progetto e non presenti in Check.
+  5. DATI, CONFIGURAZIONE E BYTECODE COMPILATO:
+     Formati di salvataggio, parametri e file binari .pyc.
+====================================================================================================
+
+
+====================================================================================================
+SEZIONE 1: ENTRY POINT PRINCIPALE (main.py)
+====================================================================================================
+FILE: main.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.repositories import DataRepository  [modulo applicativo interno inedito in Check]
+    - from app.services import UserManager         [modulo applicativo interno inedito in Check]
+    - from app.views.login_dialog import LoginDialog [modulo applicativo interno inedito in Check]
+
+  [NOTE SUGLI IMPORT DI LIBRERIA]:
+    - from PyQt6.QtWidgets import QApplication
+      * Nota di verifica: Il simbolo 'QApplication' e la libreria 'PyQt6' sono entrambi citati nelle
+        slide didattiche (cfr. '7) Introduzione a Python.pdf', pag. 77-78: 'pip install PyQt6' e
+        'from PyQt6.QtWidgets import QApplication, Qwidget, QLabel').
+        Tuttavia, nell'esempio applicativo di riferimento ('Esempio 2') veniva importato da 'PyQt5.QtWidgets'.
+
+  [FUNZIONI / CHIAMATE NON PRESENTI IN CHECK]:
+    - DataRepository()   -> Inizializzazione del repository per la persistenza dati.
+    - UserManager()      -> Inizializzazione del gestore utenti e sessioni.
+    - LoginDialog()      -> Istanziazione della finestra iniziale di login.
+
+  [DIFFERENZE SINTATTICHE RISPETTO AGLI ESEMPI DI CHECK]:
+    - app.exec()         -> Utilizzo della sintassi moderna PyQt6 senza underscore finale
+                           (nei file .py di Check compariva prevalentemente la sintassi PyQt5 'app.exec_()',
+                            anche se 'exec' compare nelle slide a pag. 86).
+
+
+====================================================================================================
+SEZIONE 2: MODULI ARCHITETTURALI APPLICATIVI (cartella app/)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+FILE: app\models.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - Nessun modulo esterno inedito. Tutti i moduli standard utilizzati (dataclasses, enum,
+      typing, datetime, re, hashlib) sono regolarmente presenti nei file e slide di Check.
+
+  [CLASSI E TIPI DI DOMINIO CUSTOM MAI APPARSI IN CHECK]:
+    - class livelloAccesso(Enum)    -> Enumerazione ruoli: MANAGER, DIPENDENTE.
+    - class Utente                  -> Dataclass base per la gestione profilo utente.
+    - class Manager(Utente)         -> Modello con privilegi amministrativi.
+    - class Dipendente(Utente)      -> Modello per operatore dipendente.
+    - class CategoriaProdotto       -> Dataclass per la catalogazione merci (olio, vino, ecc.).
+    - class Prodotto                -> Dataclass base articolo.
+    - class ProdottoAgricolo        -> Dataclass con scorte, unitaMisura e prezzoUnitario.
+    - class Contatto                -> Dataclass anagrafica base clienti/fornitori.
+    - class Azienda(Contatto)       -> Persona giuridica con Partita IVA e ragione sociale.
+    - class Privato(Contatto)       -> Persona fisica con Codice Fiscale.
+    - class Documento               -> Dataclass per tracciamento ricevute/fatture e allegati PDF.
+    - class TipoMovimento(Enum)     -> Enumerazione: ENTRATA, USCITA.
+    - class TipoUscita(Enum)        -> Enumerazione categorie di costo: SPESA_AZIENDALE, STIPENDIO.
+    - class Movimento               -> Dataclass contabile transazioni entrate/uscite.
+    - class ReportGuadagno          -> Dataclass aggregatrice di ricavi, costi e margine netto.
+    - class Sessione                -> Dataclass per il monitoraggio del timeout di inattivita.
+
+  [METODI CUSTOM DI DOMINIO MAI APPARSI IN CHECK]:
+    - .valida_password()            -> Metodo statico di validazione sicurezza password (RNF3).
+    - .calcolaPrezzoTotale()        -> Calcolo importo complessivo (quantita * prezzo unitario).
+    - .calcolaPrezzoScontato()      -> Calcolo valore netto con percentuale di sconto.
+    - .getDatiFatturazione()        -> Metodo polimorfo per reperimento dati fiscali (P.IVA / CF).
+    - .getDescrizioneFattura()      -> Generazione stringa riepilogativa per fatturazione.
+    - .modificaProfiloUtente()      -> Aggiornamento anagrafica profilo.
+    - .aggiornaPrezzoListino()      -> Variazione prezzo a catalogo.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\repositories.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.models import ...    -> Import di tutti i modelli custom sopra elencati.
+
+  [CLASSI E GESTORI CUSTOM MAI APPARSI IN CHECK]:
+    - class DataRepository          -> Classe di persistenza centrale su file JSON.
+
+  [METODI CUSTOM DI PERSISTENZA MAI APPARSI IN CHECK]:
+    - ._ensure_directories()        -> Creazione automatica directory 'data/' e 'data/uploads/'.
+    - .load_users() / .save_users() -> Deserializzazione e salvataggio archivio credenziali.
+    - .load_products() / .save_products()     -> Gestione file products.json.
+    - .load_categories() / .save_categories() -> Gestione file categories.json.
+    - .load_movements() / .save_movements()   -> Gestione file movements.json.
+    - .load_contacts() / .save_contacts()     -> Gestione file contacts.json.
+    - .load_login_history()         -> Lettura storico accessi da login_history.json.
+    - .record_login()               -> Registrazione timestamp di autenticazione.
+    - .salva_allegato_pdf()         -> Copia e archiviazione fisica del file PDF in upload.
+
+  [CHIAMATE COSTRUTTORI CUSTOM IN FASE DI DESERIALIZZAZIONE]:
+    - Azienda(), CategoriaProdotto(), Dipendente(), Documento(), Movimento(), Privato(), ProdottoAgricolo()
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\services.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.models import ...
+    - from app.repositories import DataRepository
+
+  [CLASSI E SERVIZI APPLICATIVI MAI APPARSI IN CHECK]:
+    - class AuthService             -> Servizio autenticazione, hashing SHA-256 e gestione sessione.
+    - class UserManager             -> Servizio anagrafica utenti, ruoli e primo manager.
+    - class ProductService          -> Servizio logica di magazzino, scorte e categorie.
+    - class FinancialService        -> Servizio registrazione movimenti contabili e allegati.
+    - class ReportService           -> Servizio calcolo bilancio economico e guadagno aziendale.
+
+  [METODI DI BUSINESS LOGIC CUSTOM MAI APPARSI IN CHECK]:
+    - .effettuaLogin()              -> Verifica credenziali e creazione Sessione attiva.
+    - .effettuaLogout()             -> Terminazione anticipata della sessione utente.
+    - .is_session_valid()           -> Verifica scadenza sessione (timeout 15 minuti).
+    - .ha_manager()                 -> Verifica esistenza di almeno un profilo MANAGER.
+    - .registra_primo_manager()     -> Procedura di onboarding del primo amministratore.
+    - .crea_dipendente()            -> Creazione nuovo utente con ruolo Dipendente.
+    - .crea_manager()               -> Creazione di un ulteriore account Manager.
+    - ._valida_nuovo_utente()       -> Controllo unicita username ed email (RNF4).
+    - .elimina_dipendente()         -> Cancellazione account dipendente da parte del manager.
+    - .get_all_users()              -> Reperimento lista completa utenti.
+    - .get_login_history()          -> Recupero storico date e orari di accesso.
+    - .aggiungi_prodotto_agricolo() -> Inserimento prodotto con controllo categoria e unicita (RNF5).
+    - .modifica_prodotto()          -> Aggiornamento quantita, prezzi o unita di misura.
+    - .elimina_prodotto()           -> Rimozione articolo dal magazzino.
+    - .aggiungi_categoria()         -> Creazione dinamica nuova categoria merceologica.
+    - .elimina_categoria()          -> Eliminazione categoria esistente.
+    - .get_all_products()           -> Reperimento catalogo merci.
+    - .get_all_categories()         -> Reperimento categorie disponibili.
+    - .registra_entrata()           -> Registrazione vendita con distinzione Azienda/Privato.
+    - .registra_uscita()            -> Registrazione spesa con allegato PDF opzionale.
+    - .get_all_movements()          -> Elenco completo transazioni finanziarie.
+    - .calcola_guadagno_aziendale() -> Calcolo ricavi, spese e guadagno netto su base annua (RF22).
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\__init__.py
+----------------------------------------------------------------------------------------------------
+  Nessun comando, funzione o import inedito (file standard vuoto di package Python).
+
+
+====================================================================================================
+SEZIONE 3: INTERFACCIA GRAFICA UTENTE (cartella app/views/)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\login_dialog.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.services import AuthService, UserManager
+    - from app.models import Utente
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .addStretch()                 -> Spaziatore elastico per posizionamento bottoni e campi nel layout.
+    - .setFixedSize()               -> Blocco delle dimensioni della finestra di dialogo (400x320 px).
+    - .setContentsMargins()         -> Impostazione dei margini perimetrali interni del layout.
+    - .setSpacing()                 -> Definizione della spaziatura tra elementi contigui del layout.
+    - .setObjectName()              -> Assegnazione di un identifier univoco per il targeting CSS.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class LoginDialog(QDialog)    -> Dialog a due schede (Login ordinario / Registrazione Primo Manager).
+    - .init_ui()                    -> Inizializzazione interfaccia e layout.
+    - .create_login_widget()        -> Generazione widget form di autenticazione.
+    - .create_first_manager_widget()-> Generazione form guidato primo avvio manager.
+    - .handle_register_first_manager() -> Handler salvataggio primo amministratore.
+    - login_successful = pyqtSignal(Utente) -> Segnale Qt tipizzato con l'oggetto Utente autenticato.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\main_window.py
+----------------------------------------------------------------------------------------------------
+  [WIDGET E CLASSI DI LIBRERIA (PyQt) IMPORTATE MAI APPARSI IN CHECK]:
+    - from PyQt6.QtWidgets import QStatusBar  -> Barra di stato inferiore della finestra.
+    - from PyQt6.QtCore import QTimer         -> Timer asincrono per il controllo scadenza sessione.
+
+  [IMPORT DI MODULI APPLICATIVI INTERNI]:
+    - from app.models import livelloAccesso
+    - from app.repositories import DataRepository
+    - from app.services import UserManager, ProductService, FinancialService, ReportService
+    - from app.views.user_management_view import UserManagementView
+    - from app.views.product_view import ProductManagementView
+    - from app.views.movement_view import FinancialMovementView
+    - from app.views.report_view import ReportView
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .setInterval()                -> Configurazione intervallo di polling del timer (es. 10.000 ms).
+    - .setStatusBar()               -> Assegnazione della barra di stato a QMainWindow.
+    - .addStretch()                 -> Spaziatore layout barra comandi.
+    - .setContentsMargins()         -> Azzeramento/personalizzazione margini della vista principale.
+
+  [FUNZIONI / CHIAMATE DI LIBRERIA INEDITE]:
+    - QStatusBar()                  -> Costruttore barra di stato.
+    - QTimer()                      -> Costruttore timer eventi.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class MainWindow(QMainWindow) -> Finestra principale multi-tab con controllo accessi RBAC.
+    - .init_session_timer()         -> Configurazione e avvio del monitoraggio timeout utente.
+    - .check_session_status()       -> Callback periodica di verifica validita token sessione.
+    - .update_user_header()         -> Aggiornamento banner con username e ruolo loggato.
+    - .handle_logout()              -> Gestione disconnessione e ritorno alla login dialog.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\movement_view.py
+----------------------------------------------------------------------------------------------------
+  [WIDGET E CLASSI DI LIBRERIA (PyQt) IMPORTATE MAI APPARSI IN CHECK]:
+    - from PyQt6.QtWidgets import QFileDialog        -> Dialog di sistema per selezione file su disco.
+    - from PyQt6.QtWidgets import QTextEdit          -> Casella di testo multilinea con scrolling.
+    - from PyQt6.QtWidgets import QDateEdit          -> Input form per immissione date con calendario.
+    - from PyQt6.QtWidgets import QAbstractItemView  -> Classe base per configurazione modalita di selezione tabelle.
+    - from PyQt6.QtCore import QDate                 -> Tipo dato Qt per gestione di giorno/mese/anno.
+
+  [IMPORT DI MODULI APPLICATIVI INTERNI]:
+    - from app.services import FinancialService, ProductService
+    - from app.models import TipoUscita, TipoMovimento, Movimento, Azienda, Privato
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .currentDate()                -> Reperimento data di sistema corrente tramite QDate.
+    - .currentRow()                 -> Indice della riga attualmente selezionata nella QTableWidget.
+    - .fromString()                 -> Parsing data da stringa testuale (QDate.fromString).
+    - .getOpenFileName()            -> Apertura file dialog per scelta PDF (QFileDialog.getOpenFileName).
+    - .setCalendarPopup()           -> Abilitazione visualizzazione calendario a comparsa in QDateEdit.
+    - .setContentsMargins()         -> Impostazione margini del layout scheda movimenti.
+    - .setData()                    -> Assegnazione payload personalizzato a QTableWidgetItem (Qt.ItemDataRole.UserRole).
+    - .setDate()                    -> Assegnazione data a QDateEdit.
+    - .setEditTriggers()            -> Blocco modifica celle (QAbstractItemView.EditTrigger.NoEditTriggers).
+    - .setFixedSize()               -> Dimensionamento fisso finestre modali di inserimento spesa/ricavo.
+    - .setMaximumHeight()           -> Vincolo altezza massima per aree note/allegati.
+    - .setTextInteractionFlags()    -> Configurazione interazione testo (es. copia/incolla read-only).
+    - .toPlainText()                -> Estrazione testo non formattato da QTextEdit.
+    - .toString()                   -> Formattazione data QDate in stringa ISO (yyyy-MM-dd).
+    - .addStretch()                 -> Allineamento pulsanti e campi.
+
+  [FUNZIONI / CHIAMATE DI LIBRERIA INEDITE]:
+    - QDateEdit()                   -> Istanziazione selettore data.
+    - QTextEdit()                   -> Istanziazione editor note multilinea.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class FinancialMovementView(QWidget) -> Scheda gestione entrate/uscite con filtri e allegati.
+    - .show_new_entrata_dialog()    -> Dialog registrazione vendita ad Azienda o Privato.
+    - .show_new_uscita_dialog()     -> Dialog registrazione costo aziendale o stipendio con upload PDF.
+    - .show_edit_movement_dialog()  -> Dialog modifica voce di bilancio esistente.
+    - .handle_view_pdf()            -> Visualizzazione allegato PDF tramite visualizzatore di sistema.
+    - .handle_delete_movement()     -> Eliminazione transazione selezionata.
+    - .update_entrata_prodotto_combo() -> Aggiornamento selettore articoli in base alla giacenza.
+    - .get_contact_name_and_details()  -> Formattazione anagrafica cliente/fornitore.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\product_view.py
+----------------------------------------------------------------------------------------------------
+  [WIDGET E CLASSI DI LIBRERIA (PyQt) IMPORTATE MAI APPARSI IN CHECK]:
+    - from PyQt6.QtWidgets import QAbstractItemView  -> Modalita di selezione tabelle (SelectRows / NoEditTriggers).
+
+  [IMPORT DI MODULI APPLICATIVI INTERNI]:
+    - from app.services import ProductService
+    - from app.models import ProdottoAgricolo, CategoriaProdotto
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .currentRow()                 -> Reperimento riga selezionata nella tabella catalogo.
+    - .setContentsMargins()         -> Margini layout.
+    - .setEditTriggers()            -> Blocco editing diretto delle celle della griglia magazzino.
+    - .setFixedSize()               -> Dimensioni fisse per dialog di aggiunta/modifica prodotto.
+    - .addStretch()                 -> Spaziatori layout bottoni operativi.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class ProductManagementView(QWidget) -> Pannello gestione articoli, scorte e categorie merceologiche.
+    - .load_products_table()        -> Ricaricamento e visualizzazione griglia prodotti da magazzino.
+    - .show_add_product_dialog()    -> Creazione nuovo prodotto agricolo (olio, vino, grano, ecc.).
+    - .show_edit_product_dialog()   -> Variazione quantita, prezzo listino o soglie.
+    - .handle_delete_product()      -> Cancellazione prodotto dal catalogo.
+    - .show_add_category_dialog()   -> Creazione nuova categoria merceologica.
+    - .show_delete_category_dialog()-> Rimozione categoria.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\report_view.py
+----------------------------------------------------------------------------------------------------
+  [WIDGET E CLASSI DI LIBRERIA (PyQt) IMPORTATE MAI APPARSI IN CHECK]:
+    - from PyQt6.QtWidgets import QTextEdit  -> Visualizzatore formattato per il bilancio economico.
+    - from PyQt6.QtCore import QDate         -> Gestione selettore anno fiscale corrente.
+
+  [IMPORT DI MODULI APPLICATIVI INTERNI]:
+    - from app.services import ReportService
+    - from app.models import ReportGuadagno
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .currentDate()                -> Estrazione anno in corso tramite QDate.currentDate().year().
+    - .setPlainText()               -> Popolamento del report testuale dettagliato.
+    - .setReadOnly()                -> Impostazione visualizzatore bilancio in sola lettura.
+    - .setMinimumHeight() / .setMinimumWidth() -> Vincoli dimensionali minimi del box report.
+    - .setContentsMargins()         -> Margini del pannello.
+    - .addStretch()                 -> Spaziatore layout.
+
+  [FUNZIONI / CHIAMATE DI LIBRERIA INEDITE]:
+    - QTextEdit()                   -> Costruttore box di testo multilinea.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class ReportView(QWidget)     -> Pannello per il calcolo del bilancio e guadagno aziendale annuo (RF22).
+    - .handle_calculate_report()    -> Calcolo aggregato entrate, uscite, utile netto e percentuali.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\user_management_view.py
+----------------------------------------------------------------------------------------------------
+  [WIDGET E CLASSI DI LIBRERIA (PyQt) IMPORTATE MAI APPARSI IN CHECK]:
+    - from PyQt6.QtWidgets import QTextEdit          -> Finestra visualizzazione timestamp login history.
+    - from PyQt6.QtWidgets import QAbstractItemView  -> Selezione per righe e protezione da modifica diretta.
+
+  [IMPORT DI MODULI APPLICATIVI INTERNI]:
+    - from app.services import UserManager
+    - from app.models import livelloAccesso
+
+  [METODI DI LIBRERIA (PyQt) MAI APPARSI IN CHECK]:
+    - .currentRow()                 -> Selezione account da modificare o eliminare.
+    - .setPlainText()               -> Scrittura cronologia login all'interno della dialog.
+    - .setReadOnly()                -> Visualizzazione non modificabile dello storico accessi.
+    - .setEditTriggers()            -> Protezione celle tabella utenti.
+    - .setFixedSize()               -> Dimensionamento fisso dialog profilo e creazione dipendente.
+    - .setContentsMargins()         -> Margini layout.
+
+  [FUNZIONI / CHIAMATE DI LIBRERIA INEDITE]:
+    - QTextEdit()                   -> Costruttore del visualizzatore cronologia.
+
+  [CLASSI E METODI CUSTOM MAI APPARSI IN CHECK]:
+    - class UserManagementView(QWidget) -> Pannello gestione autorizzazioni e anagrafica dipendenti.
+    - .load_users_table()           -> Popolamento tabella utenti con relativo ruolo e ultimo accesso.
+    - .show_create_user_dialog()    -> Form inserimento dipendente da parte del manager (RF2).
+    - .show_edit_user_dialog()      -> Modifica dati dipendente o manager (RF4).
+    - .handle_delete_user()         -> Eliminazione utente (RF5).
+    - .show_login_history_dialog()  -> Visualizzazione storico completo login (riservato al manager).
+    - .handle_update_self()         -> Modifica credenziali del proprio account attualmente connesso.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: app\views\__init__.py
+----------------------------------------------------------------------------------------------------
+  Nessun comando, funzione o import inedito (file standard vuoto di package Python).
+
+
+====================================================================================================
+SEZIONE 4: TEST AUTOMATIZZATI UNITTEST (cartella tests/)
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+FILE: tests\test_domain.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.models import livelloAccesso, ProdottoAgricolo, Movimento, TipoMovimento, \
+                             TipoUscita, ReportGuadagno
+
+  [CLASSI E METODI DI TEST CUSTOM MAI APPARSI IN CHECK]:
+    - class TestDomainModels(unittest.TestCase) -> Suite di test per i requisiti non funzionali e logica pura.
+    - .test_valida_password_rnf3()  -> Verifica vincolo password (minimo 8 caratteri, lettere e numeri).
+    - .test_prodotto_calcoli()      -> Test calcolo prezzo totale e prezzo scontato.
+    - .test_movimento_descrizione_limit_rnf8() -> Test lunghezza massima descrizione movimento contabile.
+    - .test_report_guadagno_rf22()  -> Verifica calcolo aggregato guadagno netto (entrate - uscite).
+
+  [CHIAMATE DI DOMINIO VERIFICATE NEI TEST]:
+    - valida_password(), calcolaPrezzoTotale(), calcolaPrezzoScontato(), Movimento(), ProdottoAgricolo()
+
+
+----------------------------------------------------------------------------------------------------
+FILE: tests\test_persistence.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.repositories import DataRepository
+    - from app.services import UserManager, ProductService, FinancialService
+
+  [CLASSI E METODI DI TEST CUSTOM MAI APPARSI IN CHECK]:
+    - class TestPersistence(unittest.TestCase) -> Suite di test salvataggio e ripristino dati su disco.
+    - .test_json_persistence()      -> Creazione cartella temporanea ed esecuzione ciclo di scrittura/lettura JSON.
+
+  [METODI DI SERVIZIO E REPOSITORY TESTATI]:
+    - .registra_primo_manager(), .aggiungi_categoria(), .aggiungi_prodotto_agricolo(), .registra_entrata(),
+      .load_users(), .load_products(), .load_categories(), .load_movements()
+
+
+----------------------------------------------------------------------------------------------------
+FILE: tests\test_services.py
+----------------------------------------------------------------------------------------------------
+  [IMPORT E MODULI NON PRESENTI IN CHECK]:
+    - from app.repositories import DataRepository
+    - from app.services import UserManager, ProductService, FinancialService, ReportService
+    - from app.models import livelloAccesso, TipoMovimento, TipoUscita
+
+  [CLASSI E METODI DI TEST CUSTOM MAI APPARSI IN CHECK]:
+    - class TestServices(unittest.TestCase) -> Suite completa requisiti funzionali RF1-RF23.
+    - .test_registrazione_primo_manager_e_dipendente() -> RF1, RF2, RF3.
+    - .test_login_logout()          -> Autenticazione, invalidazione sessione e tracciamento data.
+    - .test_unicita_email_rnf4()    -> RNF4 (errore in caso di email duplicate).
+    - .test_unicita_prodotto_rnf5() -> RNF5 (errore in caso di prodotto con stesso nome e categoria).
+    - .test_categorie_dinamiche_e_unita_misura() -> Creazione categorie e gestione litri/kg/pezzi.
+    - .test_impossibile_aggiungere_prodotto_senza_categoria() -> Vincolo di integrita catalogo.
+    - .test_registrazione_entrate_e_uscite() -> RF9, RF10, RF11-RF18.
+
+
+----------------------------------------------------------------------------------------------------
+FILE: tests\__init__.py
+----------------------------------------------------------------------------------------------------
+  Nessun comando, funzione o import inedito (file standard vuoto di package Python).
+
+
+====================================================================================================
+SEZIONE 5: PERSISTENZA DATI E FILE SYSTEM (cartella data/)
+====================================================================================================
+In Check la persistenza era mostrata principalmente tramite file '.csv' ('Esempio 2\data\courses.csv',
+'professors.csv', 'students.csv', ecc.) e tramite '.pkl' o '.json' generici scolastici ('Persistenza_Python\
+dati_scuola.json' e 'dati_scuola.pkl').
+In AziendaAgricola sono presenti file JSON e cartelle con schemi e ruoli del tutto assenti in Check:
+
+1. data\categories.json:
+   - File JSON contenente l'elenco delle categorie agricole (es. Oli, Vini, Frutta, Cereali).
+   - Schema con campi id e nome non presente in Check.
+
+2. data\products.json:
+   - File JSON per la persistenza del catalogo merci.
+   - Campi del modello: id, nome, categoria, quantitaDisponibile, unitaMisura (kg, litri, unita),
+     prezzoUnitario. Dati e attributi del tutto inediti rispetto a Check.
+
+3. data\users.json:
+   - File JSON di autenticazione contenente gli account registrati (es. manager 'Piersus').
+   - Campi: id, nomeUtente, password (hash crittografico SHA-256), nome, cognome, email, ruolo,
+     codiceAutorizzazione, ultimoLogin. Struttura assente in Check.
+
+4. data\login_history.json:
+   - File JSON di log degli accessi che traccia per ciascun utente la cronologia ISO dei login.
+
+5. cartella data\uploads\:
+   - Directory fisica per lo storage su disco dei file PDF allegati a supporto delle uscite contabili.
+
+
+====================================================================================================
+SEZIONE 6: CONFIGURAZIONE EDITOR E AMBIENTE (cartella .vscode/)
+====================================================================================================
+FILE: .vscode\settings.json
+----------------------------------------------------------------------------------------------------
+  Contenuto del file:
+    {
+        "python-envs.defaultEnvManager": "ms-python.python:conda",
+        "python-envs.defaultPackageManager": "ms-python.python:conda"
+    }
+  Esito del confronto con Check:
+    - IDENTICO. Lo stesso identico file di configurazione e presente in 'Check\.vscode\settings.json'
+      e 'Check\Esempio 1\.vscode\settings.json'.
+    - Pertanto in questo file non vi e alcun comando, opzione o parametro inedito rispetto a Check.
+
+
+====================================================================================================
+SEZIONE 7: FILE BINARI PRECOMPILATI (cartelle __pycache__/)
+====================================================================================================
+Nelle cartelle di cache sono presenti i file di bytecode precompilato (.pyc) generati dall'interprete
+Python durante l'esecuzione del programma:
+
+Elenco dei 30 file bytecode in AziendaAgricola:
+  - __pycache__\main.cpython-312.pyc, __pycache__\main.cpython-314.pyc
+  - app\__pycache__\__init__.cpython-312.pyc, __init__.cpython-313.pyc, __init__.cpython-314.pyc
+  - app\__pycache__\models.cpython-312.pyc, models.cpython-313.pyc, models.cpython-314.pyc
+  - app\__pycache__\repositories.cpython-312.pyc, repositories.cpython-313.pyc, repositories.cpython-314.pyc
+  - app\__pycache__\services.cpython-312.pyc, services.cpython-313.pyc, services.cpython-314.pyc
+  - app\views\__pycache__\__init__.cpython-312.pyc, __init__.cpython-313.pyc, __init__.cpython-314.pyc
+  - app\views\__pycache__\login_dialog.cpython-312.pyc, login_dialog.cpython-313.pyc, login_dialog.cpython-314.pyc
+  - app\views\__pycache__\main_window.cpython-312.pyc, main_window.cpython-313.pyc, main_window.cpython-314.pyc
+  - app\views\__pycache__\movement_view.cpython-312.pyc, movement_view.cpython-313.pyc, movement_view.cpython-314.pyc
+  - app\views\__pycache__\product_view.cpython-312.pyc, product_view.cpython-313.pyc, product_view.cpython-314.pyc
+  - app\views\__pycache__\report_view.cpython-312.pyc, report_view.cpython-313.pyc, report_view.cpython-314.pyc
+  - app\views\__pycache__\user_management_view.cpython-312.pyc, user_management_view.cpython-313.pyc, user_management_view.cpython-314.pyc
+  - tests\__pycache__\__init__.cpython-312.pyc
+  - tests\__pycache__\test_domain.cpython-312.pyc, test_domain.cpython-314.pyc
+  - tests\__pycache__\test_persistence.cpython-312.pyc, test_persistence.cpython-314.pyc
+  - tests\__pycache__\test_services.cpython-312.pyc, test_services.cpython-314.pyc
+
+Differenze tecniche rispetto a Check:
+  1. Moduli compilati: i .pyc di Check (cartella 'Check\Esempio 2\app\__pycache__') riguardano
+     esclusivamente 'controllers', 'models' e 'views' dell'esempio scolastico gestionale studenti.
+     Tutti i .pyc sopra elencati appartengono ai moduli specifici di AziendaAgricola.
+  2. Versione interprete Python: in Check erano presenti solo bytecode CPython 3.12 e CPython 3.13.
+     In AziendaAgricola sono comparsi per la prima volta anche file compilati con CPython 3.14
+     ('.cpython-314.pyc'), derivanti dall'ambiente Conda Python 3.14.
+
+
+====================================================================================================
+RIEPILOGO GENERALE SINTETICO
+====================================================================================================
+1. Componenti grafici / Widget di libreria inediti in Check (7 classi):
+   - QStatusBar, QTimer, QDateEdit, QTextEdit, QFileDialog, QDate, QAbstractItemView.
+
+2. Metodi di libreria (PyQt / Python) inediti in Check (22 metodi):
+   - Layout / Dimensionamento: .addStretch(), .setFixedSize(), .setContentsMargins(),
+                               .setSpacing(), .setObjectName(), .setMinimumHeight(),
+                               .setMinimumWidth(), .setMaximumHeight().
+   - Widget Tabelle / Liste:   .currentRow(), .setEditTriggers(), .setData().
+   - Date / Calendari:         .currentDate(), .fromString(), .toString(), .setDate(),
+                               .setCalendarPopup().
+   - Editor Testo / Finestre:  .setPlainText(), .toPlainText(), .setReadOnly(),
+                               .setTextInteractionFlags().
+   - Sistema / Timer:          .setInterval(), .setStatusBar().
+
+3. File di configurazione e dati inediti in Check:
+   - File JSON con schema aziendale: categories.json, products.json, users.json, login_history.json.
+   - Cartella archiviazione documenti contabili: data\uploads\.
+   - Bytecode compilato con interprete Python 3.14 (*.cpython-314.pyc).
+
+4. Architettura applicativa e di dominio AziendaAgricola (interamente inedita in Check):
+   - Modelli di dominio: livelloAccesso, Utente, Manager, Dipendente, CategoriaProdotto, Prodotto,
+     ProdottoAgricolo, Contatto, Azienda, Privato, Documento, TipoMovimento, TipoUscita, Movimento,
+     ReportGuadagno, Sessione.
+   - Servizi applicativi: AuthService, UserManager, ProductService, FinancialService, ReportService.
+   - Repository: DataRepository con persistenza transazionale su file JSON.
+   - Viste grafiche: LoginDialog, MainWindow, FinancialMovementView, ProductManagementView,
+     ReportView, UserManagementView.
+   - Suite di collaudo: TestDomainModels, TestPersistence, TestServices.
+
+====================================================================================================
+FINE DEL DOCUMENTO - RISULTATI.TXT
+====================================================================================================

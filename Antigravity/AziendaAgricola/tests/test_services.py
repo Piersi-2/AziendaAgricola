@@ -2,6 +2,7 @@ import unittest
 import tempfile
 import shutil
 import os
+import datetime
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
 from app.models import livelloAccesso, TipoMovimento, TipoUscita
@@ -63,6 +64,24 @@ class TestServices(unittest.TestCase):
                 "m2", "Pass1234", "A", "B", "mario@azienda.it", "456", "1990-01-01"
             )
 
+    def test_data_nascita_obbligatoria(self):
+        # Tentativo registrazione manager con data di nascita vuota fallisce
+        with self.assertRaises(ValueError):
+            self.user_manager.registra_primo_manager(
+                "m_empty", "Password123", "Mario", "Rossi", "empty_dob@azienda.it", "123", ""
+            )
+
+        # Registrazione con data nascita valida
+        self.user_manager.registra_primo_manager(
+            "m1", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "01/01/1980"
+        )
+
+        # Tentativo creazione dipendente con data di nascita vuota fallisce
+        with self.assertRaises(ValueError):
+            self.user_manager.crea_dipendente(
+                "d1", "SecretPass1", "Anna", "Bianchi", "anna@azienda.it", "456", "   "
+            )
+
     def test_impossibile_aggiungere_prodotto_senza_categoria(self):
         # Nessuna categoria ancora presente: deve sollevare ValueError
         with self.assertRaises(ValueError) as ctx:
@@ -103,6 +122,22 @@ class TestServices(unittest.TestCase):
 
         # Logout
         self.assertTrue(self.auth_service.effettuaLogout())
+        self.assertFalse(self.auth_service.is_session_valid())
+
+    def test_sessione_timeout_inattivita(self):
+        self.user_manager.registra_primo_manager(
+            "m_timeout", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
+        )
+        self.auth_service.effettuaLogin("m_timeout", "Password123")
+        self.assertEqual(self.auth_service.session_timeout_minutes, 10)
+        self.assertTrue(self.auth_service.is_session_valid())
+
+        # Simula inattività superiore a 10 minuti (es. 11 minuti)
+        past_dt = datetime.datetime.now() - datetime.timedelta(minutes=11)
+        self.auth_service._last_activity_dt = past_dt
+        self.auth_service.current_session.ultimaAttivita = past_dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        # La sessione deve essere scaduta per inattività
         self.assertFalse(self.auth_service.is_session_valid())
 
     def test_registrazione_entrate_e_uscite(self):

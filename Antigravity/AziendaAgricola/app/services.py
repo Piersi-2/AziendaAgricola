@@ -17,10 +17,11 @@ from app.repositories import DataRepository
 # ---------------------------------------------------------
 
 class AuthService:
-    def __init__(self, repo: DataRepository, session_timeout_minutes: int = 30):
+    def __init__(self, repo: DataRepository, session_timeout_minutes: int = 10):
         self.repo = repo
         self.session_timeout_minutes = session_timeout_minutes
         self.current_session: Optional[Sessione] = None
+        self._last_activity_dt: Optional[datetime.datetime] = None
 
     def effettuaLogin(self, username: str, password: str) -> Utente:
         users = self.repo.load_users()
@@ -33,28 +34,45 @@ class AuthService:
             raise ValueError("Password errata.")
 
         # Aggiorna ultimo login
-        now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        now_dt = datetime.datetime.now()
+        now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
         user.ultimoLogin = now_str
         self.repo.save_users(users)
         self.repo.record_login(user.nomeUtente)
 
         # Attiva sessione
-        self.current_session = Sessione(utente=user, timestampLogin=now_str, sessioneAttiva=True)
+        self._last_activity_dt = now_dt
+        self.current_session = Sessione(
+            utente=user,
+            timestampLogin=now_str,
+            sessioneAttiva=True,
+            ultimaAttivita=now_str
+        )
         return user
 
     def effettuaLogout(self) -> bool:
+        self._last_activity_dt = None
         if self.current_session:
             self.current_session.sessioneAttiva = False
             self.current_session = None
             return True
         return False
 
+    def update_activity(self):
+        """Aggiorna il timestamp dell'ultima attività per il calcolo del timeout di inattività."""
+        if self.current_session and self.current_session.sessioneAttiva:
+            now = datetime.datetime.now()
+            if self._last_activity_dt is None or (now - self._last_activity_dt).total_seconds() >= 2:
+                self._last_activity_dt = now
+                self.current_session.ultimaAttivita = now.strftime("%Y-%m-%d %H:%M:%S")
+
     def is_session_valid(self) -> bool:
         if not self.current_session or not self.current_session.sessioneAttiva:
             return False
         try:
-            login_dt = datetime.datetime.strptime(self.current_session.timestampLogin, "%Y-%m-%d %H:%M:%S")
-            elapsed = datetime.datetime.now() - login_dt
+            ref_str = self.current_session.ultimaAttivita or self.current_session.timestampLogin
+            last_dt = datetime.datetime.strptime(ref_str, "%Y-%m-%d %H:%M:%S")
+            elapsed = datetime.datetime.now() - last_dt
             if elapsed.total_seconds() > self.session_timeout_minutes * 60:
                 self.effettuaLogout()
                 return False
@@ -91,7 +109,7 @@ class UserManager:
         return self.crea_manager(username, password, nome, cognome, email, telefono, dataNascita)
 
     def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
-        self._valida_nuovo_utente(username, email, password)
+        self._valida_nuovo_utente(username, email, password, dataNascita)
         m = Manager(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -110,7 +128,7 @@ class UserManager:
         return m
 
     def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
-        self._valida_nuovo_utente(username, email, password)
+        self._valida_nuovo_utente(username, email, password, dataNascita)
         d = Dipendente(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -131,6 +149,9 @@ class UserManager:
         return d
 
     def modifica_profilo(self, user_id: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
+        if not dataNascita or not str(dataNascita).strip():
+            raise ValueError("La data di nascita è obbligatoria.")
+
         users = self.repo.load_users()
         u = next((x for x in users if x.id == user_id), None)
         if not u:
@@ -165,7 +186,10 @@ class UserManager:
     def get_all_users(self) -> List[Utente]:
         return self.repo.load_users()
 
-    def _valida_nuovo_utente(self, username: str, email: str, password: str):
+    def _valida_nuovo_utente(self, username: str, email: str, password: str, dataNascita: str = ""):
+        if not dataNascita or not str(dataNascita).strip():
+            raise ValueError("La data di nascita è obbligatoria.")
+
         if not Utente.valida_password(password):
             raise ValueError("La password deve contenere almeno 8 caratteri alfanumerici.")
 

@@ -1,8 +1,8 @@
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QMessageBox, QStackedWidget, QWidget, QFormLayout, QGroupBox
+    QMessageBox, QStackedWidget, QWidget, QFormLayout, QGroupBox, QDateEdit
 )
-from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt5.QtCore import pyqtSignal, Qt, QDate
 from app.services import AuthService, UserManager
 from app.models import Utente
 
@@ -75,18 +75,18 @@ class LoginDialog(QDialog):
         self.auth_service = auth_service
         self.user_manager = user_manager
         self.setWindowTitle("Azienda Agricola - Autenticazione")
-        self.setFixedSize(440, 480)
+        self.setFixedSize(440, 480) # Dimensioni della finestra di login
         self.setStyleSheet(STYLE_LOGIN)
 
         self.init_ui()
 
     def init_ui(self):
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(30, 25, 30, 25)
+        main_layout.setContentsMargins(30, 25, 30, 25)  # Imposta margini
 
         # Intestazione
         title = QLabel("Azienda Agricola")
-        title.setObjectName("TitleLabel")
+        title.setObjectName("TitleLabel") # Nome per lo stile CSS
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle = QLabel("Gestione Entrate, Uscite e Guadagno Aziendale")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -119,7 +119,7 @@ class LoginDialog(QDialog):
 
         group = QGroupBox("Accesso Utente")
         form = QFormLayout(group)
-        form.setSpacing(12)
+        form.setSpacing(12) # Spacing tra elementi layout
 
         self.username_input = QLineEdit()
         self.username_input.setPlaceholderText("Nome utente")
@@ -138,7 +138,7 @@ class LoginDialog(QDialog):
         btn_login.clicked.connect(self.handle_login)
 
         layout.addWidget(btn_login)
-        layout.addStretch()
+        layout.addStretch()  # Il pulsante "accedi" va sotto la password, senza spazi
         return widget
 
     def create_first_manager_widget(self) -> QWidget:
@@ -157,8 +157,11 @@ class LoginDialog(QDialog):
         self.m_cognome = QLineEdit()
         self.m_email = QLineEdit()
         self.m_telefono = QLineEdit()
-        self.m_data_nascita = QLineEdit()
-        self.m_data_nascita.setPlaceholderText("YYYY-MM-DD")
+        self.m_data_nascita = QDateEdit()
+        self.m_data_nascita.setCalendarPopup(True)
+        self.m_data_nascita.setDisplayFormat("dd/MM/yyyy")
+        self.m_data_nascita.setDate(QDate(2000, 1, 1))
+        self.m_data_nascita.setMaximumDate(QDate.currentDate())
 
         form.addRow("Username:*", self.m_username)
         form.addRow("Password:*", self.m_password)
@@ -166,7 +169,7 @@ class LoginDialog(QDialog):
         form.addRow("Cognome:*", self.m_cognome)
         form.addRow("Email:*", self.m_email)
         form.addRow("Telefono:", self.m_telefono)
-        form.addRow("Data Nascita:", self.m_data_nascita)
+        form.addRow("Data Nascita:*", self.m_data_nascita)
 
         layout.addWidget(group)
 
@@ -198,10 +201,10 @@ class LoginDialog(QDialog):
         cognome = self.m_cognome.text().strip()
         email = self.m_email.text().strip()
         telefono = self.m_telefono.text().strip()
-        data_nascita = self.m_data_nascita.text().strip()
+        data_nascita = self.m_data_nascita.date().toString("dd/MM/yyyy")
 
-        if not all([username, password, nome, cognome, email]):
-            QMessageBox.warning(self, "Attenzione", "Compilare tutti i campi obbligatori.")
+        if not all([username, password, nome, cognome, email, data_nascita]):
+            QMessageBox.warning(self, "Attenzione", "Compilare tutti i campi obbligatori, inclusa la data di nascita.")
             return
 
         try:
@@ -212,7 +215,7 @@ class LoginDialog(QDialog):
                 cognome=cognome,
                 email=email,
                 telefono=telefono,
-                dataNascita=data_nascita or "1990-01-01"
+                dataNascita=data_nascita
             )
             QMessageBox.information(self, "Successo", f"Profilo Manager '{manager.nomeUtente}' creato con successo! Ora puoi accedere.")
             self.stacked_widget.setCurrentWidget(self.login_widget)

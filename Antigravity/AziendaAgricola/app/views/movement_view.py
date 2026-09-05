@@ -1,13 +1,13 @@
 import os
 import uuid
 from typing import Optional
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QMessageBox, QGroupBox, QFormLayout,
     QHeaderView, QComboBox, QDialog, QFileDialog, QTabWidget, QTextEdit,
     QDateEdit, QAbstractItemView
 )
-from PyQt6.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate
 from app.services import FinancialService, ProductService
 from app.models import (
     Utente, TipoUscita, TipoMovimento, Movimento, Azienda, Privato
@@ -181,7 +181,7 @@ class FinancialMovementView(QWidget):
                 form = QFormLayout()
                 for key, val in details.items():
                     lbl_val = QLabel(str(val))
-                    lbl_val.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+                    lbl_val.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse) # Configura il tipo di interazione possibile col testo
                     lbl_val.setStyleSheet("color: #000000; font-size: 13px;")
                     form.addRow(f"<b>{key}:</b>", lbl_val)
                 
@@ -206,7 +206,7 @@ class FinancialMovementView(QWidget):
         for idx, m in enumerate(mov_list):
             table.setItem(idx, 0, QTableWidgetItem(m.idMovimento))
             try:
-                date_obj = QDate.fromString(m.dataMovimento, "yyyy-MM-dd")
+                date_obj = QDate.fromString(m.dataMovimento, "yyyy-MM-dd") # Parsing da stringa testuale
                 date_formatted = date_obj.toString("dd/MM/yyyy")
             except Exception:
                 date_formatted = m.dataMovimento
@@ -225,7 +225,7 @@ class FinancialMovementView(QWidget):
                     name = name.split("|")[0].strip()
             
             item_contact = QTableWidgetItem(name)
-            item_contact.setData(Qt.ItemDataRole.UserRole, (name, details))
+            item_contact.setData(Qt.ItemDataRole.UserRole, (name, details)) # Mostra i dettagli dietro il nome di privato o impresa
             table.setItem(idx, 3, item_contact)
 
             table.setItem(idx, 4, QTableWidgetItem(f"{m.quantita:.2f}"))
@@ -344,7 +344,7 @@ class FinancialMovementView(QWidget):
                 dt = input_data.date().toString("yyyy-MM-dd")
                 importo = float(input_importo.text().strip() or "0")
                 qta = float(input_quantita.text().strip() or "0")
-                desc = input_desc.toPlainText().strip()
+                desc = input_desc.toPlainText().strip() #toPlainText rimuove le formattazioni HTML
 
                 if len(desc) > 500:
                     QMessageBox.warning(dlg, "Attenzione", "La descrizione supera il limite di 500 caratteri.")

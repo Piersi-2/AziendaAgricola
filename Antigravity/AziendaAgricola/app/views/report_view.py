@@ -1,8 +1,8 @@
-from PyQt6.QtWidgets import (
+from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QMessageBox, QGroupBox, QComboBox, QTextEdit
 )
-from PyQt6.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate
 from app.services import ReportService
 from app.models import ReportGuadagno
 
