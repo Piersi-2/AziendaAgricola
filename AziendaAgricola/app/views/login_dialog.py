@@ -107,7 +107,7 @@ class LoginDialog(QDialog):
         self.setLayout(main_layout)
 
         # Se non esistono manager registrati, mostra la schermata di registrazione iniziale
-        if not self.user_manager.ha_manager():
+        if not self.user_manager.has_manager():
             self.stacked_widget.setCurrentWidget(self.first_manager_widget)
         else:
             self.stacked_widget.setCurrentWidget(self.login_widget)

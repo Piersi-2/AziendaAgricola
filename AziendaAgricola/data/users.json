@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "9aa69cb5",
+    "nomeUtente": "Luca",
+    "password": "123456789a",
+    "nome": "Luca",
+    "cognome": "Rossi",
+    "email": "lucarossi@gmail.com",
+    "telefono": "",
+    "dataNascita": "09/09/2005",
+    "ruolo": "MANAGER",
+    "ultimoLogin": "2026-09-11 10:49:37",
+    "statoAttivo": true,
+    "codiceAutorizzazione": "MNG-ADMIN"
+  }
+]

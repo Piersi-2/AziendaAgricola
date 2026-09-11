@@ -21,7 +21,7 @@ class TestServices(unittest.TestCase):
 
     def test_registrazione_primo_manager_e_dipendente(self):
         # Nessun utente inizialmente
-        self.assertFalse(self.user_manager.ha_manager())
+        self.assertFalse(self.user_manager.has_manager())
 
         # Registrazione primo Manager
         manager = self.user_manager.registra_primo_manager(
@@ -34,7 +34,7 @@ class TestServices(unittest.TestCase):
             dataNascita="1980-01-01"
         )
         self.assertEqual(manager.ruolo, livelloAccesso.MANAGER)
-        self.assertTrue(self.user_manager.ha_manager())
+        self.assertTrue(self.user_manager.has_manager())
 
         # Tentativo registrazione secondo primo Manager fallisce
         with self.assertRaises(ValueError):

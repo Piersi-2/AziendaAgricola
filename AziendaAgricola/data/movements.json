@@ -1,1 +1,55 @@
-[]
+[
+  {
+    "idMovimento": "MOV-ENT-d6c36214",
+    "tipo": "ENTRATA",
+    "quantita": 1.0,
+    "prezzoTotale": 12.0,
+    "dataMovimento": "2026-09-10",
+    "descrizione": "Proviamo questo miele, vah",
+    "sottoTipoEntrata": "MIELE",
+    "sottoTipoUscita": null,
+    "prodottoId": "4c680440",
+    "prodottoNome": "Miele Millefiori",
+    "contattoId": "2d986086",
+    "contattoDescrizione": "Azienda: Luciano Ligabue, P.IVA: , SDI:  | ID: 2d986086, Email: , Tel: , Indirizzo: ",
+    "documento": null,
+    "creatoreUsername": "Luca"
+  },
+  {
+    "idMovimento": "MOV-ENT-1bc6a8c4",
+    "tipo": "ENTRATA",
+    "quantita": 5.0,
+    "prezzoTotale": 60.0,
+    "dataMovimento": "2026-09-11",
+    "descrizione": "",
+    "sottoTipoEntrata": "MIELE",
+    "sottoTipoUscita": null,
+    "prodottoId": "4c680440",
+    "prodottoNome": "Miele Millefiori",
+    "contattoId": "84f9d86b",
+    "contattoDescrizione": "Azienda: Carmenati S.p.A., P.IVA: , SDI:  | ID: 84f9d86b, Email: , Tel: , Indirizzo: ",
+    "documento": {
+      "numeroDocumento": "DOC-ENT-fd8d52",
+      "enteEmettitore": "Azienda",
+      "allegatoPDF": "data\\uploads\\doc_3a129eb6_RDCS_INGEGNERIA_Elenco_insegnamenti_Allegato_2_IT24.pdf",
+      "dataCaricamento": "2026-09-11"
+    },
+    "creatoreUsername": "Luca"
+  },
+  {
+    "idMovimento": "MOV-USC-55e3da3b",
+    "tipo": "USCITA",
+    "quantita": 1.0,
+    "prezzoTotale": 20.0,
+    "dataMovimento": "2026-09-11",
+    "descrizione": "Vite trattore fuori posto",
+    "sottoTipoEntrata": null,
+    "sottoTipoUscita": "SPESE DI MANUTENZIONE",
+    "prodottoId": null,
+    "prodottoNome": null,
+    "contattoId": null,
+    "contattoDescrizione": "Lucio Meccanico",
+    "documento": null,
+    "creatoreUsername": "Luca"
+  }
+]

@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "idProdotto": "4c680440",
+    "nome": "Miele Millefiori",
+    "descrizione": "Miele Millefiori Piersigilli, buonissimo!",
+    "prezzoUnitario": 12.0,
+    "quantitaDisponibile": 0.0,
+    "class_type": "ProdottoAgricolo",
+    "tipoProdotto": "MIELE",
+    "unitaMisura": "kilogrammi"
+  }
+]

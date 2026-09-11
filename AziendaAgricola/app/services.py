@@ -25,7 +25,7 @@ class AuthService:
 
     def effettuaLogin(self, username: str, password: str) -> Utente:
         users = self.repo.load_users()
-        user = next((u for u in users if u.nomeUtente.lower() == username.lower() and u.statoAttivo), None)
+        user = next((u for u in users if u.nomeUtente.lower() == username.lower() and u.statoAttivo), None)     
 
         if not user:
             raise ValueError("Nome utente non trovato o account disattivato.")
@@ -59,10 +59,10 @@ class AuthService:
         return False
 
     def update_activity(self):
-        """Aggiorna il timestamp dell'ultima attività per il calcolo del timeout di inattività."""
-        if self.current_session and self.current_session.sessioneAttiva:
+        #   Aggiorna il timestamp dell'ultima attività. Chiamato da eventFilter()
+        if self.current_session and self.current_session.sessioneAttiva:    # Controlla che la sessione esiste e sia ancora attiva
             now = datetime.datetime.now()
-            if self._last_activity_dt is None or (now - self._last_activity_dt).total_seconds() >= 2:
+            if self._last_activity_dt is None or (now - self._last_activity_dt).total_seconds() >= 5:   # Prima condizione si ha se non esiste ancora un orario dell'ultima attività
                 self._last_activity_dt = now
                 self.current_session.ultimaAttivita = now.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -97,7 +97,8 @@ class UserManager:
     def count_users(self) -> int:
         return len(self.repo.load_users())
 
-    def ha_manager(self) -> bool:
+    # Verifica se esiste almeno un Manager registrato
+    def has_manager(self) -> bool:
         users = self.repo.load_users()
         return any(isinstance(u, Manager) for u in users)
 
@@ -111,7 +112,7 @@ class UserManager:
     def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
         self._valida_nuovo_utente(username, email, password, dataNascita)
         m = Manager(
-            id=str(uuid.uuid4())[:8],
+            id=str(uuid.uuid4())[:8],   # Genera un ID univoco di 8 caratteri
             nomeUtente=username,
             password=password,
             nome=nome,
@@ -285,12 +286,11 @@ class ProductService:
     def elimina_categoria(self, nome_categoria: str):
         nome_clean = nome_categoria.strip().upper()
         
-        # 1. Carica categorie, filtra la categoria da eliminare, salva
         categories = self.repo.load_categories()
         categories = [c for c in categories if c.nome != nome_clean]
         self.repo.save_categories(categories)
 
-        # 2. Carica prodotti, rimuovi prodotti associati alla categoria, salva
+        # Rimuove tutti i prodotti associati a questa categoria
         prods = self.repo.load_products()
         prods = [p for p in prods if getattr(p, 'tipoProdotto', '').strip().upper() != nome_clean]
         self.repo.save_products(prods)
@@ -307,9 +307,9 @@ class FinancialService:
         if not os.path.exists(source_path):
             raise FileNotFoundError(f"Il file '{source_path}' non esiste.")
 
-        dest_name = f"doc_{str(uuid.uuid4())[:8]}_{os.path.basename(source_path)}"
+        dest_name = f"doc_{str(uuid.uuid4())[:8]}_{os.path.basename(source_path)}"  # doc_ + identificativo casuale + _ + nome originale
         dest_path = os.path.join(self.repo.uploads_dir, dest_name)
-        shutil.copy2(source_path, dest_path)
+        shutil.copy2(source_path, dest_path)    # Copia il file nel dest_path mantenendo i metadati
         return dest_path
 
     def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin", quantita: float = 1.0) -> Movimento:
@@ -322,7 +322,6 @@ class FinancialService:
                 allegatoPDF=saved_pdf
             )
 
-        # Gestione contatto cliente
         contatto_id = None
         contatto_desc = cliente_tipo
         if cliente_dettagli:

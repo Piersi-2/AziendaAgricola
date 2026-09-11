@@ -18,6 +18,7 @@ from app.models import (
 class DataRepository:
     def __init__(self, data_dir: str = "data"):
         self.data_dir = data_dir
+        # os.path.join() joina due percorsi, quindi sarebbe data\users.json
         self.users_file = os.path.join(self.data_dir, "users.json")
         self.products_file = os.path.join(self.data_dir, "products.json")
         self.movements_file = os.path.join(self.data_dir, "movements.json")
@@ -25,7 +26,7 @@ class DataRepository:
         self.login_history_file = os.path.join(self.data_dir, "login_history.json")
         self.categories_file = os.path.join(self.data_dir, "categories.json")
         self.uploads_dir = os.path.join(self.data_dir, "uploads")
-
+        #crea queste cartelle se non esistono già
         self._ensure_directories()
 
     def _ensure_directories(self):
@@ -35,6 +36,8 @@ class DataRepository:
     # ---------------------------------------------------------
     # UTENTI
     # ---------------------------------------------------------
+    
+    # JSON -> Oggetti Python
     def load_users(self) -> List[Utente]:
         if not os.path.exists(self.users_file):
             return []
@@ -43,7 +46,7 @@ class DataRepository:
                 raw_list = json.load(f)
             users = []
             for d in raw_list:
-                ruolo = livelloAccesso(d.get("ruolo", "DIPENDENTE"))
+                ruolo = livelloAccesso(d.get("ruolo", "DIPENDENTE")) # "DIPENDENTE" come default se non specificato
                 if ruolo == livelloAccesso.MANAGER:
                     u = Manager(
                         id=d["id"],
@@ -82,6 +85,7 @@ class DataRepository:
             print(f"Errore caricamento utenti: {e}")
             return []
 
+    # Oggetti Python -> JSON
     def save_users(self, users: List[Utente]):
         raw_list = []
         for u in users:

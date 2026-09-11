@@ -7,18 +7,13 @@ import datetime
 # ENUMERAZIONI
 # =========================================================
 
-class livelloAccesso(str, Enum):
+class livelloAccesso(str, Enum): # str fa sì che ogni valore di Enum sia anche una stringa
     MANAGER = "MANAGER"
     DIPENDENTE = "DIPENDENTE"
 
 class TipoMovimento(str, Enum):
     ENTRATA = "ENTRATA"
     USCITA = "USCITA"
-
-@dataclass
-class CategoriaProdotto:
-    nome: str
-    unitaMisura: str  # kilogrammi, grammi, litri
 
 class TipoUscita(str, Enum):
     SPESE_DI_MANUTENZIONE = "SPESE DI MANUTENZIONE"
@@ -45,7 +40,7 @@ class Utente:
     dataNascita: str
     ruolo: livelloAccesso
     ultimoLogin: Optional[str] = None
-    statoAttivo: bool = True
+    statoAttivo: bool = True    # Per disattivare l'account senza cancellarlo
 
     @staticmethod
     def valida_password(password: str) -> bool:
@@ -55,6 +50,7 @@ class Utente:
         return password.isalnum()
 
     def modificaProfiloUtente(self, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
+        # Significa che se password è None, non viene modificata. Se è una stringa, viene validata e aggiornata.
         self.nome = nome
         self.cognome = cognome
         self.email = email
@@ -69,14 +65,14 @@ class Utente:
 class Manager(Utente):
     codiceAutorizzazione: str = "MNG-AUTH-DEFAULT"
 
-    def __post_init__(self):
+    def __post_init__(self):  # Metodo eseguuto subito dopo l'inizializzazione dell'oggetto
         self.ruolo = livelloAccesso.MANAGER
 
 @dataclass
 class Dipendente(Utente):
     dataAssunzione: str = ""
     mansione: str = ""
-    stipendioMensile: float = 0.0
+    stipendioMensile: float = 0.0  
 
     def __post_init__(self):
         self.ruolo = livelloAccesso.DIPENDENTE
@@ -84,6 +80,11 @@ class Dipendente(Utente):
 # =========================================================
 # PRODOTTI AGRICOLI
 # =========================================================
+
+@dataclass
+class CategoriaProdotto:
+    nome: str
+    unitaMisura: str 
 
 @dataclass
 class Prodotto:
@@ -94,7 +95,7 @@ class Prodotto:
     quantitaDisponibile: float = 0.0
 
     def aggiornaPrezzoListino(self, nuovoPrezzo: float):
-        if nuovoPrezzo < 0:
+        if nuovoPrezzo <= 0:
             raise ValueError("Il prezzo unitario non può essere negativo.")
         self.prezzoUnitario = nuovoPrezzo
 
@@ -106,10 +107,11 @@ class Prodotto:
 
 @dataclass
 class ProdottoAgricolo(Prodotto):
-    tipoProdotto: str = "Agricolo"  # Es: Olio, Vino, Miele, Grano, Girasoli, Uva, Olive
-    unitaMisura: str = "kg"          # Es: kg, litri, grammi
+    tipoProdotto: str = "Agricolo" 
+    unitaMisura: str = "kg"
 
-    def calcolaPrezzoScontato(self, quantita: float, percentualeSconto: float) -> float:
+# Sconto su acquisti multipli
+    def calcolaPrezzoScontato(self, quantita: float, percentualeSconto: float) -> float: 
         totale = self.calcolaPrezzoTotale(quantita)
         return totale * (1.0 - (percentualeSconto / 100.0))
 
@@ -155,7 +157,7 @@ class Privato(Contatto):
 class Documento:
     numeroDocumento: str
     enteEmettitore: str
-    allegatoPDF: str = ""  # Percorso relativo o assoluto del file PDF salvato
+    allegatoPDF: str = "" 
     dataCaricamento: str = ""
 
     def __post_init__(self):
@@ -204,9 +206,11 @@ class ReportGuadagno:
         uscite = 0.0
         for m in movimenti:
             try:
+                # Converte la string in datetime
                 dt = datetime.datetime.strptime(m.dataMovimento, "%Y-%m-%d")
                 m_anno = dt.year
             except Exception:
+                # Se la data non può essere interpretata, considera il movimento come appartenente all’anno richiesto
                 m_anno = anno
 
             if m_anno == anno:
@@ -225,6 +229,6 @@ class ReportGuadagno:
 @dataclass
 class Sessione:
     utente: Utente
-    timestampLogin: str
+    timestampLogin: str     # Orario quando utente effettua login
     sessioneAttiva: bool = True
     ultimaAttivita: Optional[str] = None
