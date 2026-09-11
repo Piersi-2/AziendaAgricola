@@ -87,20 +87,35 @@ class FinancialMovementView(QWidget):
 
         # Tabella
         table = QTableWidget()
-        table.setColumnCount(8)
-        table.setHorizontalHeaderLabels([
-            "ID Movimento", "Data", "Categoria Prodotto / Spesa", "Cliente / Fornitore",
-            "Quantità", "Importo Totale (€)", "Descrizione", "Allegato PDF"
-        ])
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
-        table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
-        table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-        table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
-        table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
-        table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
-        table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
-        table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.Stretch)
-        table.horizontalHeader().setSectionResizeMode(7, QHeaderView.ResizeMode.ResizeToContents)
+        if tipo == TipoMovimento.ENTRATA:
+            table.setColumnCount(8)
+            table.setHorizontalHeaderLabels([
+                "Data", "Prodotto", "Categoria Prodotto", "Cliente",
+                "Quantità", "Importo Totale (€)", "Descrizione", "Allegato PDF"
+            ])
+            table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(7, QHeaderView.ResizeMode.ResizeToContents)
+        else:
+            table.setColumnCount(7)
+            table.setHorizontalHeaderLabels([
+                "Data", "Categoria Spesa", "Fornitore",
+                "Quantità", "Importo Totale (€)", "Descrizione", "Allegato PDF"
+            ])
+            table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)
         
         # Disabilita modifica diretta cliccando sui campi
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -157,7 +172,9 @@ class FinancialMovementView(QWidget):
         return name, details
 
     def handle_contact_click(self, item):
-        if item.column() == 3:
+        table = item.tableWidget()
+        contact_col = 3 if (hasattr(self, 'table_entrate') and table == self.table_entrate) else 2
+        if item.column() == contact_col:
             data = item.data(Qt.ItemDataRole.UserRole)
             if data:
                 name, details = data
@@ -166,17 +183,21 @@ class FinancialMovementView(QWidget):
                     main_win.statusBar.showMessage(f"Cliente/Fornitore selezionato: {name}")
 
     def handle_table_click(self, item):
-        if item.column() == 3:
+        table = item.tableWidget()
+        contact_col = 3 if (hasattr(self, 'table_entrate') and table == self.table_entrate) else 2
+        desc_col = table.columnCount() - 2
+
+        if item.column() == contact_col:
             self.handle_contact_click(item)
-        elif item.column() == 6:
+        elif item.column() == desc_col:
             row = item.row()
-            table = item.tableWidget()
-            mov_id = table.item(row, 0).text() if table.item(row, 0) else ""
-            tipo_str = "ENTRATA" if table == self.table_entrate else "USCITA"
-            self.show_description_dialog(item.text(), mov_id=mov_id, mov_tipo=tipo_str)
+            tipo_str = "ENTRATA" if (hasattr(self, 'table_entrate') and table == self.table_entrate) else "USCITA"
+            self.show_description_dialog(item.text(), mov_tipo=tipo_str)
 
     def handle_contact_double_click(self, item):
-        if item.column() == 3:
+        table = item.tableWidget()
+        contact_col = 3 if (hasattr(self, 'table_entrate') and table == self.table_entrate) else 2
+        if item.column() == contact_col:
             data = item.data(Qt.ItemDataRole.UserRole)
             if data:
                 name, details = data
@@ -203,7 +224,7 @@ class FinancialMovementView(QWidget):
                 
                 dlg.exec()
 
-    def show_description_dialog(self, description: str, mov_id: str = "", mov_tipo: str = ""):
+    def show_description_dialog(self, description: str, mov_tipo: str = ""):
         """Finestra popup che mostra la descrizione completa del movimento selezionato."""
         dlg = QDialog(self)
         dlg.setWindowTitle("Dettagli Descrizione")
@@ -211,11 +232,6 @@ class FinancialMovementView(QWidget):
         dlg_layout = QVBoxLayout(dlg)
 
         form = QFormLayout()
-        if mov_id:
-            lbl_id = QLabel(mov_id)
-            lbl_id.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-            lbl_id.setStyleSheet("color: #000000; font-size: 13px;")
-            form.addRow("<b>ID Movimento:</b>", lbl_id)
         if mov_tipo:
             lbl_tipo = QLabel(mov_tipo)
             lbl_tipo.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
@@ -240,14 +256,16 @@ class FinancialMovementView(QWidget):
         dlg.exec()
 
     def handle_table_double_click(self, item):
-        if item.column() == 3:
+        table = item.tableWidget()
+        contact_col = 3 if (hasattr(self, 'table_entrate') and table == self.table_entrate) else 2
+        desc_col = table.columnCount() - 2
+
+        if item.column() == contact_col:
             self.handle_contact_double_click(item)
-        elif item.column() == 6:
+        elif item.column() == desc_col:
             row = item.row()
-            table = item.tableWidget()
-            mov_id = table.item(row, 0).text() if table.item(row, 0) else ""
-            tipo_str = "ENTRATA" if table == self.table_entrate else "USCITA"
-            self.show_description_dialog(item.text(), mov_id=mov_id, mov_tipo=tipo_str)
+            tipo_str = "ENTRATA" if (hasattr(self, 'table_entrate') and table == self.table_entrate) else "USCITA"
+            self.show_description_dialog(item.text(), mov_tipo=tipo_str)
 
 
     def load_tables(self):
@@ -260,17 +278,39 @@ class FinancialMovementView(QWidget):
 
     def populate_table(self, table: QTableWidget, mov_list: list):
         table.setRowCount(len(mov_list))
+        prods = self.product_service.get_all_products()
+        prod_map = {p.idProdotto: p for p in prods}
+        is_entrate = (hasattr(self, 'table_entrate') and table == self.table_entrate)
+
         for idx, m in enumerate(mov_list):
-            table.setItem(idx, 0, QTableWidgetItem(m.idMovimento))
             try:
                 date_obj = QDate.fromString(m.dataMovimento, "yyyy-MM-dd") # Parsing da stringa testuale
                 date_formatted = date_obj.toString("dd/MM/yyyy")
             except Exception:
                 date_formatted = m.dataMovimento
-            table.setItem(idx, 1, QTableWidgetItem(date_formatted))
+            item_date = QTableWidgetItem(date_formatted)
+            item_date.setData(Qt.ItemDataRole.UserRole, m.idMovimento)
+            table.setItem(idx, 0, item_date)
+
+            col = 1
+            if is_entrate:
+                p = prod_map.get(m.prodottoId) if m.prodottoId else None
+                if p:
+                    prod_str = p.getNomeConQuantita()
+                elif m.prodottoNome:
+                    prod_str = m.prodottoNome
+                else:
+                    prod_str = "-"
+                item_prod = QTableWidgetItem(prod_str)
+                item_prod.setToolTip(prod_str)
+                table.setItem(idx, col, item_prod)
+                col += 1
 
             cat = m.sottoTipoEntrata or m.sottoTipoUscita or "Generico"
-            table.setItem(idx, 2, QTableWidgetItem(cat))
+            item_cat = QTableWidgetItem(cat)
+            item_cat.setToolTip(cat)
+            table.setItem(idx, col, item_cat)
+            col += 1
 
             # Mostra solo il nome dell'azienda o del privato
             name, details = self.get_contact_name_and_details(m.contattoId)
@@ -283,19 +323,25 @@ class FinancialMovementView(QWidget):
             
             item_contact = QTableWidgetItem(name)
             item_contact.setData(Qt.ItemDataRole.UserRole, (name, details)) # Mostra i dettagli dietro il nome di privato o impresa
-            table.setItem(idx, 3, item_contact)
+            table.setItem(idx, col, item_contact)
+            col += 1
 
-            table.setItem(idx, 4, QTableWidgetItem(f"{m.quantita:.2f}"))
-            table.setItem(idx, 5, QTableWidgetItem(f"€ {m.prezzoTotale:.2f}"))
+            table.setItem(idx, col, QTableWidgetItem(f"{m.quantita:.2f}"))
+            col += 1
+
+            table.setItem(idx, col, QTableWidgetItem(f"€ {m.prezzoTotale:.2f}"))
+            col += 1
+
             item_desc = QTableWidgetItem(m.descrizione)
             item_desc.setToolTip(m.descrizione if m.descrizione else "(Nessuna descrizione)")
-            table.setItem(idx, 6, item_desc)
+            table.setItem(idx, col, item_desc)
+            col += 1
 
             pdf_status = "Presente" if (m.documento and m.documento.allegatoPDF) else "Assente"
             item_pdf = QTableWidgetItem(pdf_status)
             if m.documento and m.documento.allegatoPDF:
                 item_pdf.setData(Qt.ItemDataRole.UserRole, m.documento.allegatoPDF)
-            table.setItem(idx, 7, item_pdf)
+            table.setItem(idx, col, item_pdf)
 
     def filter_table(self, tipo: TipoMovimento, anno_str: str):
         movs = self.financial_service.get_all_movements()
@@ -335,7 +381,7 @@ class FinancialMovementView(QWidget):
             for p in prods:
                 p_cat = getattr(p, 'tipoProdotto', getattr(p, 'tipoMateriale', getattr(p, 'fornitore', 'Generico')))
                 if p_cat == selected_cat:
-                    cb_prodotto.addItem(p.nome, p.idProdotto)
+                    cb_prodotto.addItem(p.getNomeConQuantita(), p.idProdotto)
 
         cb_categoria.currentTextChanged.connect(update_entrata_prodotto_combo)
         update_entrata_prodotto_combo()
@@ -546,7 +592,7 @@ class FinancialMovementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare un movimento dalla tabella attiva.")
             return
 
-        mid = table.item(row, 0).text()
+        mid = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         movs = self.financial_service.get_all_movements()
         target = next((m for m in movs if m.idMovimento == mid), None)
         if not target:
@@ -627,10 +673,10 @@ class FinancialMovementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare un movimento da rimuovere.")
             return
 
-        mid = table.item(row, 0).text()
+        mid = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         confirm = QMessageBox.question(
             self, "Conferma Rimozione",
-            f"Sei sicuro di voler rimuovere il movimento finanziario '{mid}'?",
+            "Sei sicuro di voler rimuovere il movimento finanziario selezionato?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         if confirm == QMessageBox.StandardButton.Yes:
@@ -654,7 +700,8 @@ class FinancialMovementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare una riga dalla tabella per visualizzare il relativo allegato PDF.")
             return
 
-        pdf_item = table.item(row, 7)
+        pdf_col = table.columnCount() - 1
+        pdf_item = table.item(row, pdf_col)
         pdf_path = pdf_item.data(Qt.ItemDataRole.UserRole)
 
         if not pdf_path or not os.path.exists(pdf_path):

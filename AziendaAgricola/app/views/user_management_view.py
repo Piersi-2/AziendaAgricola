@@ -109,9 +109,9 @@ class UserManagementView(QWidget):
 
             # Tabella Utenti
             self.users_table = QTableWidget()
-            self.users_table.setColumnCount(7)
+            self.users_table.setColumnCount(6)
             self.users_table.setHorizontalHeaderLabels([
-                "ID", "Username", "Ruolo", "Nome", "Cognome", "Email", "Ultimo Login"
+                "Username", "Ruolo", "Nome", "Cognome", "Email", "Ultimo Login"
             ])
             self.users_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
             
@@ -131,13 +131,14 @@ class UserManagementView(QWidget):
         self.users_table.setRowCount(len(users))
 
         for idx, u in enumerate(users):
-            self.users_table.setItem(idx, 0, QTableWidgetItem(u.id))
-            self.users_table.setItem(idx, 1, QTableWidgetItem(u.nomeUtente))
-            self.users_table.setItem(idx, 2, QTableWidgetItem(u.ruolo.value))
-            self.users_table.setItem(idx, 3, QTableWidgetItem(u.nome))
-            self.users_table.setItem(idx, 4, QTableWidgetItem(u.cognome))
-            self.users_table.setItem(idx, 5, QTableWidgetItem(u.email))
-            self.users_table.setItem(idx, 6, QTableWidgetItem(u.ultimoLogin or "Mai connesso"))
+            item_username = QTableWidgetItem(u.nomeUtente)
+            item_username.setData(Qt.ItemDataRole.UserRole, u.id)
+            self.users_table.setItem(idx, 0, item_username)
+            self.users_table.setItem(idx, 1, QTableWidgetItem(u.ruolo.value))
+            self.users_table.setItem(idx, 2, QTableWidgetItem(u.nome))
+            self.users_table.setItem(idx, 3, QTableWidgetItem(u.cognome))
+            self.users_table.setItem(idx, 4, QTableWidgetItem(u.email))
+            self.users_table.setItem(idx, 5, QTableWidgetItem(u.ultimoLogin or "Mai connesso"))
 
     def handle_update_self(self):
         nome = self.p_nome.text().strip()
@@ -248,7 +249,7 @@ class UserManagementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare un utente dalla tabella degli utenti.")
             return
 
-        uid = self.users_table.item(row, 0).text()
+        uid = self.users_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         users = self.user_manager.get_all_users()
         target = next((u for u in users if u.id == uid), None)
         if not target:
@@ -344,8 +345,8 @@ class UserManagementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare una riga dalla tabella degli utenti.")
             return
 
-        user_id = self.users_table.item(row, 0).text()
-        username = self.users_table.item(row, 1).text()
+        user_id = self.users_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+        username = self.users_table.item(row, 0).text()
 
         confirm = QMessageBox.question(
             self, "Conferma Eliminazione",

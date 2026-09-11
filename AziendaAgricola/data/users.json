@@ -1,16 +1,1 @@
-[
-  {
-    "id": "bcec8cb4",
-    "nomeUtente": "Piersi",
-    "password": "123456789a",
-    "nome": "Gabriele",
-    "cognome": "Piersigilli",
-    "email": "gabripiersi.2@gmail.com",
-    "telefono": "",
-    "dataNascita": "24/05/2005",
-    "ruolo": "MANAGER",
-    "ultimoLogin": "2026-09-11 12:31:26",
-    "statoAttivo": true,
-    "codiceAutorizzazione": "MNG-ADMIN"
-  }
-]
+[]

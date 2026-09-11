@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 from app.services import ProductService
-from app.models import Prodotto, CategoriaProdotto
+from app.models import Prodotto, CategoriaProdotto, formatta_unita
 
 class ProductManagementView(QWidget):
     def __init__(self, product_service: ProductService, parent=None):
@@ -53,9 +53,9 @@ class ProductManagementView(QWidget):
         g_layout = QVBoxLayout(group)
 
         self.table = QTableWidget()
-        self.table.setColumnCount(6)
+        self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels([
-            "ID Prodotto", "Nome Prodotto", "Categoria / Tipo", "Quantità di Vendita", "Descrizione",
+            "Nome Prodotto", "Categoria / Tipo", "Quantità di Vendita", "Descrizione",
             "Prezzo Unitario (€)"
         ])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -72,7 +72,7 @@ class ProductManagementView(QWidget):
         main_layout.addWidget(group)
         self.load_products_table()
 
-    def show_description_dialog(self, product_id: str, nome: str, description: str):
+    def show_description_dialog(self, nome: str, description: str):
         """Finestra popup che mostra la descrizione completa del prodotto selezionato."""
         dlg = QDialog(self)
         dlg.setWindowTitle("Dettagli Descrizione Prodotto")
@@ -80,11 +80,6 @@ class ProductManagementView(QWidget):
         dlg_layout = QVBoxLayout(dlg)
 
         form = QFormLayout()
-        if product_id:
-            lbl_id = QLabel(product_id)
-            lbl_id.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-            lbl_id.setStyleSheet("color: #000000; font-size: 13px;")
-            form.addRow("<b>ID Prodotto:</b>", lbl_id)
         if nome:
             lbl_nome = QLabel(nome)
             lbl_nome.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
@@ -109,11 +104,10 @@ class ProductManagementView(QWidget):
         dlg.exec()
 
     def handle_table_click(self, item: QTableWidgetItem):
-        if item.column() == 4:  # Colonna Descrizione
+        if item.column() == 3:  # Colonna Descrizione
             row = item.row()
-            p_id = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
-            p_nome = self.table.item(row, 1).text() if self.table.item(row, 1) else ""
-            self.show_description_dialog(p_id, p_nome, item.text())
+            p_nome = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
+            self.show_description_dialog(p_nome, item.text())
 
     def load_products_table(self):
         prods = self.product_service.get_all_products()
@@ -121,20 +115,21 @@ class ProductManagementView(QWidget):
 
         for idx, p in enumerate(prods):
             tipo = getattr(p, 'tipoProdotto', 'Agricolo')
-            unita = getattr(p, 'unitaMisura', '')
+            unita = formatta_unita(getattr(p, 'unitaMisura', ''))
             q_val = getattr(p, 'quantitaVendita', 1.0)
             q_str = f"{q_val:g} {unita}".strip() if q_val else "-"
 
-            self.table.setItem(idx, 0, QTableWidgetItem(p.idProdotto))
-            self.table.setItem(idx, 1, QTableWidgetItem(p.nome))
-            self.table.setItem(idx, 2, QTableWidgetItem(tipo))
-            self.table.setItem(idx, 3, QTableWidgetItem(q_str))
+            item_nome = QTableWidgetItem(p.nome)
+            item_nome.setData(Qt.ItemDataRole.UserRole, p.idProdotto)
+            self.table.setItem(idx, 0, item_nome)
+            self.table.setItem(idx, 1, QTableWidgetItem(tipo))
+            self.table.setItem(idx, 2, QTableWidgetItem(q_str))
 
             item_desc = QTableWidgetItem(p.descrizione)
             item_desc.setToolTip(p.descrizione if p.descrizione else "(Nessuna descrizione)")
-            self.table.setItem(idx, 4, item_desc)
+            self.table.setItem(idx, 3, item_desc)
 
-            self.table.setItem(idx, 5, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
+            self.table.setItem(idx, 4, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
 
     def show_add_product_dialog(self):
         cats = self.product_service.get_all_categories()
@@ -151,6 +146,8 @@ class ProductManagementView(QWidget):
         dlg.setFixedSize(400, 300)
         layout = QVBoxLayout(dlg)
 
+        cat_unita_map = {c.nome.strip().upper(): formatta_unita(c.unitaMisura) for c in cats}
+
         form = QFormLayout()
         cb_tipo = QComboBox()
         tipi = [c.nome for c in cats]
@@ -161,9 +158,21 @@ class ProductManagementView(QWidget):
         input_desc = QLineEdit()
         input_prezzo = QLineEdit("0.0")
 
+        lbl_quantita = QLabel("Quantità di Vendita:")
+        def update_quantita_label():
+            sel_cat = cb_tipo.currentText().strip().upper()
+            u = cat_unita_map.get(sel_cat, "")
+            if u:
+                lbl_quantita.setText(f"Quantità di Vendita ({u}):")
+            else:
+                lbl_quantita.setText("Quantità di Vendita:")
+
+        cb_tipo.currentTextChanged.connect(update_quantita_label)
+        update_quantita_label()
+
         form.addRow("Tipo Prodotto / Categoria:", cb_tipo)
         form.addRow("Nome Prodotto:", input_nome)
-        form.addRow("Quantità di Vendita:", input_quantita)
+        form.addRow(lbl_quantita, input_quantita)
         form.addRow("Descrizione:", input_desc)
         form.addRow("Prezzo Unitario (€):", input_prezzo)
 
@@ -189,8 +198,11 @@ class ProductManagementView(QWidget):
                     QMessageBox.warning(dlg, "Attenzione", "La quantità di vendita deve essere maggiore di zero.")
                     return
 
+                sel_cat_obj = next((c for c in cats if c.nome.strip().upper() == tipo.strip().upper()), None)
+                unita_effettiva = sel_cat_obj.unitaMisura if sel_cat_obj else "kg"
+
                 self.product_service.aggiungi_prodotto_agricolo(
-                    nome=nome, descrizione=desc, prezzo=prezzo, unita="kg", tipo=tipo, quantita=quantita
+                    nome=nome, descrizione=desc, prezzo=prezzo, unita=unita_effettiva, tipo=tipo, quantita=quantita
                 )
 
                 QMessageBox.information(dlg, "Successo", f"Prodotto '{nome}' aggiunto con successo!")
@@ -209,7 +221,7 @@ class ProductManagementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare un prodotto dalla tabella.")
             return
 
-        pid = self.table.item(row, 0).text()
+        pid = self.table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         prods = self.product_service.get_all_products()
         target = next((p for p in prods if p.idProdotto == pid), None)
         if not target:
@@ -226,8 +238,11 @@ class ProductManagementView(QWidget):
         input_desc = QLineEdit(target.descrizione)
         input_prezzo = QLineEdit(str(target.prezzoUnitario))
 
+        u = formatta_unita(getattr(target, 'unitaMisura', ''))
+        lbl_qta_text = f"Quantità di Vendita ({u}):" if u else "Quantità di Vendita:"
+
         form.addRow("Nome Prodotto:", input_nome)
-        form.addRow("Quantità di Vendita:", input_quantita)
+        form.addRow(lbl_qta_text, input_quantita)
         form.addRow("Descrizione:", input_desc)
         form.addRow("Prezzo Unitario (€):", input_prezzo)
 
@@ -263,8 +278,8 @@ class ProductManagementView(QWidget):
             QMessageBox.warning(self, "Attenzione", "Selezionare un prodotto da eliminare.")
             return
 
-        pid = self.table.item(row, 0).text()
-        pname = self.table.item(row, 1).text()
+        pid = self.table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+        pname = self.table.item(row, 0).text()
 
         confirm = QMessageBox.question(
             self, "Conferma Eliminazione",
