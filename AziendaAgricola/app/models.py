@@ -92,7 +92,9 @@ class Prodotto:
     nome: str
     descrizione: str
     prezzoUnitario: float
-    quantitaDisponibile: float = 0.0
+    quantitaVendita: float = 0.0
+    tipoProdotto: str = "Agricolo"
+    unitaMisura: str = "kg"
 
     def aggiornaPrezzoListino(self, nuovoPrezzo: float):
         if nuovoPrezzo <= 0:
@@ -102,18 +104,13 @@ class Prodotto:
     def calcolaPrezzoTotale(self, quantita: float) -> float:
         return self.prezzoUnitario * quantita
 
-    def getDescrizioneFattura(self) -> str:
-        return f"{self.nome} - {self.descrizione} (€{self.prezzoUnitario:.2f})"
-
-@dataclass
-class ProdottoAgricolo(Prodotto):
-    tipoProdotto: str = "Agricolo" 
-    unitaMisura: str = "kg"
-
-# Sconto su acquisti multipli
+    # Sconto su acquisti multipli
     def calcolaPrezzoScontato(self, quantita: float, percentualeSconto: float) -> float: 
         totale = self.calcolaPrezzoTotale(quantita)
         return totale * (1.0 - (percentualeSconto / 100.0))
+
+    def getDescrizioneFattura(self) -> str:
+        return f"{self.nome} - {self.descrizione} (€{self.prezzoUnitario:.2f})"
 
 # =========================================================
 # CONTATTI E CLIENTI/FORNITORI

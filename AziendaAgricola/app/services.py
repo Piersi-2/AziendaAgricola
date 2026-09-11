@@ -2,10 +2,11 @@ import uuid
 import os
 import shutil
 import datetime
-from typing import List, Optional, Dict, Tuple
+import re
+from typing import List, Optional, Dict, Tuple, Any
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    Prodotto, ProdottoAgricolo,
+    Prodotto,
     Contatto, Azienda, Privato,
     Documento, Movimento, TipoMovimento, TipoUscita,
     ReportGuadagno, Sessione, CategoriaProdotto
@@ -100,19 +101,21 @@ class UserManager:
     # Verifica se esiste almeno un Manager registrato
     def has_manager(self) -> bool:
         users = self.repo.load_users()
-        return any(isinstance(u, Manager) for u in users)
+        return any(isinstance(u, Manager) or u.ruolo == livelloAccesso.MANAGER for u in users)
 
     def registra_primo_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
-        users = self.repo.load_users()
-        if any(isinstance(u, Manager) for u in users):
+        if self.has_manager():
             raise ValueError("Un Manager è già registrato nel sistema.")
 
         return self.crea_manager(username, password, nome, cognome, email, telefono, dataNascita)
 
     def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
+        if self.has_manager():
+            raise ValueError("Esiste già un profilo Manager nel sistema. Non è possibile crearne più di uno.")
         self._valida_nuovo_utente(username, email, password, dataNascita)
+        users = self.repo.load_users()
         m = Manager(
-            id=str(uuid.uuid4())[:8],   # Genera un ID univoco di 8 caratteri
+            id=str(uuid.uuid4())[:8],
             nomeUtente=username,
             password=password,
             nome=nome,
@@ -123,13 +126,13 @@ class UserManager:
             ruolo=livelloAccesso.MANAGER,
             codiceAutorizzazione=codiceAutorizzazione
         )
-        users = self.repo.load_users()
         users.append(m)
         self.repo.save_users(users)
         return m
 
     def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
         self._valida_nuovo_utente(username, email, password, dataNascita)
+        users = self.repo.load_users()
         d = Dipendente(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -144,7 +147,6 @@ class UserManager:
             mansione=mansione,
             stipendioMensile=stipendio
         )
-        users = self.repo.load_users()
         users.append(d)
         self.repo.save_users(users)
         return d
@@ -209,10 +211,10 @@ class ProductService:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str, quantita: float = 0.0) -> ProdottoAgricolo:
+    def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str, quantita: float = 1.0) -> Prodotto:
         prods = self.repo.load_products()
-        if any(p.nome.lower() == nome.lower() for p in prods):
-            raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
+        if any(p.nome.lower() == nome.lower() and float(p.quantitaVendita) == float(quantita) for p in prods):
+            raise ValueError(f"Un prodotto con nome '{nome}' e quantità {quantita:g} esiste già a catalogo.")
 
         categories = self.repo.load_categories()
         if not categories:
@@ -224,12 +226,12 @@ class ProductService:
 
         effettiva_unita = cat_match.unitaMisura
 
-        p = ProdottoAgricolo(
+        p = Prodotto(
             idProdotto=str(uuid.uuid4())[:8],
             nome=nome,
             descrizione=descrizione,
             prezzoUnitario=prezzo,
-            quantitaDisponibile=quantita,
+            quantitaVendita=quantita,
             tipoProdotto=tipo,
             unitaMisura=effettiva_unita
         )
@@ -243,15 +245,16 @@ class ProductService:
         if not p:
             raise ValueError(f"Prodotto ID '{prodotto_id}' non trovato.")
 
+        target_q = float(quantita) if quantita is not None else float(p.quantitaVendita)
         for other in prods:
-            if other.idProdotto != prodotto_id and other.nome.lower() == nome.lower():
-                raise ValueError(f"Un prodotto con nome '{nome}' è già registrato.")
+            if other.idProdotto != prodotto_id and other.nome.lower() == nome.lower() and float(other.quantitaVendita) == target_q:
+                raise ValueError(f"Un prodotto con nome '{nome}' e quantità {target_q:g} è già registrato.")
 
         p.nome = nome
         p.descrizione = descrizione
         p.aggiornaPrezzoListino(prezzo)
         if quantita is not None:
-            p.quantitaDisponibile = quantita
+            p.quantitaVendita = quantita
         self.repo.save_products(prods)
 
     def elimina_prodotto(self, prodotto_id: str):
@@ -307,12 +310,14 @@ class FinancialService:
         if not os.path.exists(source_path):
             raise FileNotFoundError(f"Il file '{source_path}' non esiste.")
 
-        dest_name = f"doc_{str(uuid.uuid4())[:8]}_{os.path.basename(source_path)}"  # doc_ + identificativo casuale + _ + nome originale
+        dest_name = f"doc_{str(uuid.uuid4())[:8]}_{os.path.basename(source_path)}"
         dest_path = os.path.join(self.repo.uploads_dir, dest_name)
         shutil.copy2(source_path, dest_path)    # Copia il file nel dest_path mantenendo i metadati
         return dest_path
 
     def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin", quantita: float = 1.0) -> Movimento:
+        mov_id = f"MOV-ENT-{str(uuid.uuid4())[:8]}"
+
         doc = None
         if pdf_path:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
@@ -357,7 +362,7 @@ class FinancialService:
         prod_nome = prod.nome if prod else None
 
         m = Movimento(
-            idMovimento=f"MOV-ENT-{str(uuid.uuid4())[:8]}",
+            idMovimento=mov_id,
             tipo=TipoMovimento.ENTRATA,
             quantita=quantita,
             prezzoTotale=importo,
@@ -378,6 +383,8 @@ class FinancialService:
         return m
 
     def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
+        mov_id = f"MOV-USC-{str(uuid.uuid4())[:8]}"
+
         doc = None
         if pdf_path:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
@@ -392,7 +399,7 @@ class FinancialService:
         prod_nome = prod.nome if prod else None
 
         m = Movimento(
-            idMovimento=f"MOV-USC-{str(uuid.uuid4())[:8]}",
+            idMovimento=mov_id,
             tipo=TipoMovimento.USCITA,
             quantita=1.0,
             prezzoTotale=importo,
@@ -419,6 +426,11 @@ class FinancialService:
 
     def get_uscite(self) -> List[Movimento]:
         return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.USCITA]
+
+    def elimina_movimento(self, movimento_id: str):
+        movs = self.repo.load_movements()
+        movs = [m for m in movs if m.idMovimento != movimento_id]
+        self.repo.save_movements(movs)
 
 # ---------------------------------------------------------
 # REPORT SERVICE - calcolo del guadagno aziendale

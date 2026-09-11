@@ -1,7 +1,7 @@
 import unittest
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    ProdottoAgricolo, Movimento, TipoMovimento, TipoUscita,
+    Prodotto, Movimento, TipoMovimento, TipoUscita,
     ReportGuadagno
 )
 
@@ -44,12 +44,12 @@ class TestDomainModels(unittest.TestCase):
             )
 
     def test_prodotto_calcoli(self):
-        p = ProdottoAgricolo(
+        p = Prodotto(
             idProdotto="P1",
             nome="Olio EVO",
             descrizione="Olio Extravergine",
             prezzoUnitario=12.0,
-            quantitaDisponibile=100.0,
+            quantitaVendita=100.0,
             tipoProdotto="Olio",
             unitaMisura="litri"
         )

@@ -5,7 +5,7 @@ import datetime
 from typing import List, Dict, Optional, Any
 from app.models import (
     Utente, Manager, Dipendente, livelloAccesso,
-    Prodotto, ProdottoAgricolo,
+    Prodotto,
     Contatto, Azienda, Privato,
     Documento, Movimento, TipoMovimento,
     CategoriaProdotto
@@ -165,12 +165,12 @@ class DataRepository:
                 raw_list = json.load(f)
             prods = []
             for d in raw_list:
-                p = ProdottoAgricolo(
+                p = Prodotto(
                     idProdotto=d["idProdotto"],
                     nome=d["nome"],
                     descrizione=d["descrizione"],
                     prezzoUnitario=float(d["prezzoUnitario"]),
-                    quantitaDisponibile=float(d.get("quantitaDisponibile", 0.0)),
+                    quantitaVendita=float(d.get("quantitaVendita", 0.0)),
                     tipoProdotto=d.get("tipoProdotto", "Agricolo"),
                     unitaMisura=d.get("unitaMisura", "kg")
                 )
@@ -188,12 +188,11 @@ class DataRepository:
                 "nome": p.nome,
                 "descrizione": p.descrizione,
                 "prezzoUnitario": p.prezzoUnitario,
-                "quantitaDisponibile": p.quantitaDisponibile,
-                "class_type": p.__class__.__name__
+                "quantitaVendita": p.quantitaVendita,
+                "class_type": "Prodotto",
+                "tipoProdotto": getattr(p, "tipoProdotto", "Agricolo"),
+                "unitaMisura": getattr(p, "unitaMisura", "kg")
             }
-            if isinstance(p, ProdottoAgricolo):
-                d["tipoProdotto"] = p.tipoProdotto
-                d["unitaMisura"] = p.unitaMisura
             raw_list.append(d)
 
         with open(self.products_file, 'w', encoding='utf-8') as f:
@@ -335,3 +334,4 @@ class DataRepository:
 
         with open(self.contacts_file, 'w', encoding='utf-8') as f:
             json.dump(raw_list, f, indent=2, ensure_ascii=False)
+

@@ -209,5 +209,200 @@ class TestServices(unittest.TestCase):
         self.assertEqual(prod.unitaMisura, "grammi")
         self.assertEqual(prod.tipoProdotto, "MIELE")
 
+    def test_singolo_manager_vincolo(self):
+        # Registra il primo manager con successo
+        m1 = self.user_manager.registra_primo_manager(
+            "boss", "Password123", "Boss", "Unico", "boss@azienda.it", "123", "1985-01-01"
+        )
+        self.assertIsNotNone(m1.id)
+        self.assertEqual(len(m1.id), 8)
+
+        # Tentativo con registra_primo_manager fallisce
+        with self.assertRaises(ValueError):
+            self.user_manager.registra_primo_manager(
+                "boss2", "Password123", "Boss2", "Due", "boss2@azienda.it", "123", "1986-01-01"
+            )
+
+        # Tentativo diretto con crea_manager fallisce anch'esso
+        with self.assertRaises(ValueError) as ctx:
+            self.user_manager.crea_manager(
+                "boss3", "Password123", "Boss3", "Tre", "boss3@azienda.it", "123", "1987-01-01"
+            )
+        self.assertIn("manager", str(ctx.exception).lower())
+
+    def test_id_randomici_e_univoci(self):
+        # 1. Test ID Utenti
+        u1 = self.user_manager.registra_primo_manager(
+            "mng1", "Password123", "M", "R", "mng1@azienda.it", "111", "1980-01-01"
+        )
+        self.assertEqual(len(u1.id), 8)
+
+        u2 = self.user_manager.crea_dipendente(
+            "dip1", "Password123", "D", "B", "dip1@azienda.it", "222", "1990-01-01"
+        )
+        self.assertEqual(len(u2.id), 8)
+        self.assertNotEqual(u1.id, u2.id)
+
+        u3 = self.user_manager.crea_dipendente(
+            "dip2", "Password123", "D2", "B2", "dip2@azienda.it", "333", "1992-02-02"
+        )
+        self.assertEqual(len(u3.id), 8)
+        self.assertNotEqual(u2.id, u3.id)
+
+        # 2. Test ID Prodotti
+        self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
+        p1 = self.product_service.aggiungi_prodotto_agricolo("Mele", "Mele rosse", 2.0, "kilogrammi", "FRUTTA")
+        self.assertEqual(len(p1.idProdotto), 8)
+
+        p2 = self.product_service.aggiungi_prodotto_agricolo("Pere", "Pere Williams", 2.5, "kilogrammi", "FRUTTA")
+        self.assertEqual(len(p2.idProdotto), 8)
+        self.assertNotEqual(p1.idProdotto, p2.idProdotto)
+
+        # 3. Test ID Contatti e Movimenti
+        m1 = self.financial_service.registra_entrata(
+            categoria_prodotto="FRUTTA",
+            prodotto_id=p1.idProdotto,
+            cliente_tipo="Privato",
+            importo=20.0,
+            data="2026-09-11",
+            descrizione="Vendita mele",
+            cliente_dettagli={"Nome": "Mario", "Cognome": "Rossi", "email": "mario@mail.it"}
+        )
+        self.assertTrue(m1.idMovimento.startswith("MOV-ENT-"))
+        self.assertEqual(len(m1.contattoId), 8)
+
+        m2 = self.financial_service.registra_entrata(
+            categoria_prodotto="FRUTTA",
+            prodotto_id=p2.idProdotto,
+            cliente_tipo="Azienda",
+            importo=50.0,
+            data="2026-09-11",
+            descrizione="Vendita pere",
+            cliente_dettagli={"ragioneSociale": "BioMarket", "email": "info@biomarket.it"}
+        )
+        self.assertTrue(m2.idMovimento.startswith("MOV-ENT-"))
+        self.assertNotEqual(m1.idMovimento, m2.idMovimento)
+        self.assertNotEqual(m1.contattoId, m2.contattoId)
+
+        m3 = self.financial_service.registra_uscita(
+            categoria_uscita="SPESE DI MANUTENZIONE",
+            prodotto_id=None,
+            importo=15.0,
+            data="2026-09-11",
+            descrizione="Riparazione cassetta"
+        )
+        self.assertTrue(m3.idMovimento.startswith("MOV-USC-"))
+        self.assertNotEqual(m1.idMovimento, m3.idMovimento)
+
+    def test_prodotto_unificato_backend(self):
+        from app.models import Prodotto
+        self.product_service.aggiungi_categoria("ORTAGGI", "kilogrammi")
+        p = self.product_service.aggiungi_prodotto_agricolo(
+            nome="Carote",
+            descrizione="Carote fresche",
+            prezzo=1.80,
+            unita="kilogrammi",
+            tipo="ORTAGGI"
+        )
+        self.assertIsInstance(p, Prodotto)
+        self.assertEqual(p.tipoProdotto, "ORTAGGI")
+        self.assertEqual(p.unitaMisura, "kilogrammi")
+        self.assertEqual(p.calcolaPrezzoScontato(10, 10), 16.20)
+
+        # Verifica ricaricamento da repo
+        loaded = self.repo.load_products()
+        self.assertEqual(len(loaded), 1)
+        self.assertIsInstance(loaded[0], Prodotto)
+        self.assertEqual(loaded[0].idProdotto, p.idProdotto)
+        self.assertEqual(loaded[0].tipoProdotto, "ORTAGGI")
+
+    def test_quantita_vendita_e_unicita_combinata(self):
+        self.product_service.aggiungi_categoria("MIELE", "kilogrammi")
+        # 1. Prodotto a quantita 0.5 kg
+        p1 = self.product_service.aggiungi_prodotto_agricolo(
+            nome="Miele Millefiori", descrizione="Vasetto piccolo", prezzo=5.0, unita="kilogrammi", tipo="MIELE", quantita=0.5
+        )
+        self.assertEqual(p1.quantitaVendita, 0.5)
+
+        # 2. Stesso nome ma quantita 1.0 kg deve essere consentito
+        p2 = self.product_service.aggiungi_prodotto_agricolo(
+            nome="Miele Millefiori", descrizione="Vasetto grande", prezzo=9.0, unita="kilogrammi", tipo="MIELE", quantita=1.0
+        )
+        self.assertEqual(p2.quantitaVendita, 1.0)
+        self.assertNotEqual(p1.idProdotto, p2.idProdotto)
+
+        # 3. Tentativo con stesso nome E stessa quantita (0.5 kg) deve fallire
+        with self.assertRaises(ValueError) as ctx:
+            self.product_service.aggiungi_prodotto_agricolo(
+                nome="Miele Millefiori", descrizione="Altro piccolo", prezzo=5.5, unita="kilogrammi", tipo="MIELE", quantita=0.5
+            )
+        self.assertIn("quantità", str(ctx.exception).lower())
+
+    def test_id_univoci_dopo_cancellazione(self):
+        # 1. Creazione e cancellazione utenti
+        m = self.user_manager.registra_primo_manager(
+            "m1", "Pass1234", "M", "R", "m1@azienda.it", "1", "1980-01-01"
+        )
+        d1 = self.user_manager.crea_dipendente(
+            "d1", "Pass1234", "D1", "B", "d1@azienda.it", "2", "1990-01-01"
+        )
+        d2 = self.user_manager.crea_dipendente(
+            "d2", "Pass1234", "D2", "B", "d2@azienda.it", "3", "1991-01-01"
+        )
+
+        # Cancella d2
+        self.user_manager.elimina_dipendente(d2.id)
+        users = self.user_manager.get_all_users()
+        self.assertEqual(len(users), 2)
+
+        # Il nuovo utente ha un proprio ID univoco
+        d3 = self.user_manager.crea_dipendente(
+            "d3", "Pass1234", "D3", "B", "d3@azienda.it", "4", "1992-01-01"
+        )
+        self.assertNotEqual(d3.id, d2.id)
+        self.assertNotEqual(d3.id, d1.id)
+
+        # 2. Creazione e cancellazione prodotti
+        self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
+        prod1 = self.product_service.aggiungi_prodotto_agricolo("Mele", "Desc", 2.0, "kilogrammi", "FRUTTA", 1.0)
+        prod2 = self.product_service.aggiungi_prodotto_agricolo("Pere", "Desc", 2.5, "kilogrammi", "FRUTTA", 1.0)
+
+        # Elimina prod2
+        self.product_service.elimina_prodotto(prod2.idProdotto)
+        prod3 = self.product_service.aggiungi_prodotto_agricolo("Banane", "Desc", 3.0, "kilogrammi", "FRUTTA", 1.0)
+        self.assertNotEqual(prod3.idProdotto, prod2.idProdotto)
+        self.assertNotEqual(prod3.idProdotto, prod1.idProdotto)
+
+        # 3. Creazione e cancellazione movimenti
+        mov1 = self.financial_service.registra_entrata(
+            categoria_prodotto="FRUTTA",
+            prodotto_id=prod1.idProdotto,
+            cliente_tipo="Privato",
+            importo=10.0,
+            data="2026-09-11",
+            descrizione="Vendita 1"
+        )
+        mov2 = self.financial_service.registra_entrata(
+            categoria_prodotto="FRUTTA",
+            prodotto_id=prod1.idProdotto,
+            cliente_tipo="Privato",
+            importo=20.0,
+            data="2026-09-11",
+            descrizione="Vendita 2"
+        )
+
+        # Elimina mov2
+        self.financial_service.elimina_movimento(mov2.idMovimento)
+        mov3 = self.financial_service.registra_uscita(
+            categoria_uscita="SPESE DI MANUTENZIONE",
+            prodotto_id=None,
+            importo=5.0,
+            data="2026-09-11",
+            descrizione="Spesa"
+        )
+        self.assertNotEqual(mov3.idMovimento, mov2.idMovimento)
+        self.assertNotEqual(mov3.idMovimento, mov1.idMovimento)
+
 if __name__ == '__main__':
     unittest.main()
+

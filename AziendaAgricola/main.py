@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt5.QtWidgets import QApplication
 from app.repositories import DataRepository
@@ -8,8 +9,10 @@ from app.views.main_window import MainWindow
 def main() -> int:
     app = QApplication(sys.argv)
 
-    # Inizializzazione Repository e Servizi
-    repo = DataRepository(data_dir="data")
+    # Inizializzazione Repository e Servizi con percorso assoluto alla cartella data
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, "data")
+    repo = DataRepository(data_dir=data_dir)
     auth_service = AuthService(repo)
     user_manager = UserManager(repo)
 

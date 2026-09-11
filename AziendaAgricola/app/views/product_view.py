@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QTableWidget, QTableWidgetItem, QMessageBox, QGroupBox, QFormLayout,
-    QHeaderView, QComboBox, QDialog, QAbstractItemView
+    QHeaderView, QComboBox, QDialog, QAbstractItemView, QTextEdit
 )
 from PyQt5.QtCore import Qt
 from app.services import ProductService
-from app.models import Prodotto, ProdottoAgricolo, CategoriaProdotto
+from app.models import Prodotto, CategoriaProdotto
 
 class ProductManagementView(QWidget):
     def __init__(self, product_service: ProductService, parent=None):
@@ -53,20 +53,67 @@ class ProductManagementView(QWidget):
         g_layout = QVBoxLayout(group)
 
         self.table = QTableWidget()
-        self.table.setColumnCount(5)
+        self.table.setColumnCount(6)
         self.table.setHorizontalHeaderLabels([
-            "ID Prodotto", "Nome Prodotto", "Categoria / Tipo", "Descrizione",
+            "ID Prodotto", "Nome Prodotto", "Categoria / Tipo", "Quantità di Vendita", "Descrizione",
             "Prezzo Unitario (€)"
         ])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         
         # Disabilita modifica diretta dei campi
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+
+        # Connetti click per visualizzazione della descrizione completa
+        self.table.itemClicked.connect(self.handle_table_click)
+        self.table.itemDoubleClicked.connect(self.handle_table_click)
         
         g_layout.addWidget(self.table)
 
         main_layout.addWidget(group)
         self.load_products_table()
+
+    def show_description_dialog(self, product_id: str, nome: str, description: str):
+        """Finestra popup che mostra la descrizione completa del prodotto selezionato."""
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Dettagli Descrizione Prodotto")
+        dlg.setFixedSize(420, 300)
+        dlg_layout = QVBoxLayout(dlg)
+
+        form = QFormLayout()
+        if product_id:
+            lbl_id = QLabel(product_id)
+            lbl_id.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            lbl_id.setStyleSheet("color: #000000; font-size: 13px;")
+            form.addRow("<b>ID Prodotto:</b>", lbl_id)
+        if nome:
+            lbl_nome = QLabel(nome)
+            lbl_nome.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            lbl_nome.setStyleSheet("color: #000000; font-size: 13px;")
+            form.addRow("<b>Nome Prodotto:</b>", lbl_nome)
+        dlg_layout.addLayout(form)
+
+        lbl_desc_title = QLabel("<b>Descrizione Completa:</b>")
+        lbl_desc_title.setStyleSheet("color: #000000; font-size: 13px; margin-top: 5px;")
+        dlg_layout.addWidget(lbl_desc_title)
+
+        txt_desc = QTextEdit()
+        txt_desc.setReadOnly(True)
+        txt_desc.setPlainText(description if description.strip() else "(Nessuna descrizione presente)")
+        txt_desc.setStyleSheet("color: #000000; font-size: 13px; background-color: #f9f9f9; border: 1px solid #cccccc; border-radius: 4px; padding: 6px;")
+        dlg_layout.addWidget(txt_desc)
+
+        btn_close = QPushButton("Chiudi")
+        btn_close.clicked.connect(dlg.accept)
+        dlg_layout.addWidget(btn_close)
+
+        dlg.exec()
+
+    def handle_table_click(self, item: QTableWidgetItem):
+        if item.column() == 4:  # Colonna Descrizione
+            row = item.row()
+            p_id = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
+            p_nome = self.table.item(row, 1).text() if self.table.item(row, 1) else ""
+            self.show_description_dialog(p_id, p_nome, item.text())
 
     def load_products_table(self):
         prods = self.product_service.get_all_products()
@@ -74,11 +121,20 @@ class ProductManagementView(QWidget):
 
         for idx, p in enumerate(prods):
             tipo = getattr(p, 'tipoProdotto', 'Agricolo')
+            unita = getattr(p, 'unitaMisura', '')
+            q_val = getattr(p, 'quantitaVendita', 1.0)
+            q_str = f"{q_val:g} {unita}".strip() if q_val else "-"
+
             self.table.setItem(idx, 0, QTableWidgetItem(p.idProdotto))
             self.table.setItem(idx, 1, QTableWidgetItem(p.nome))
             self.table.setItem(idx, 2, QTableWidgetItem(tipo))
-            self.table.setItem(idx, 3, QTableWidgetItem(p.descrizione))
-            self.table.setItem(idx, 4, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
+            self.table.setItem(idx, 3, QTableWidgetItem(q_str))
+
+            item_desc = QTableWidgetItem(p.descrizione)
+            item_desc.setToolTip(p.descrizione if p.descrizione else "(Nessuna descrizione)")
+            self.table.setItem(idx, 4, item_desc)
+
+            self.table.setItem(idx, 5, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
 
     def show_add_product_dialog(self):
         cats = self.product_service.get_all_categories()
@@ -92,7 +148,7 @@ class ProductManagementView(QWidget):
 
         dlg = QDialog(self)
         dlg.setWindowTitle("Aggiungi Nuovo Prodotto Agricolo")
-        dlg.setFixedSize(400, 260)
+        dlg.setFixedSize(400, 300)
         layout = QVBoxLayout(dlg)
 
         form = QFormLayout()
@@ -101,11 +157,13 @@ class ProductManagementView(QWidget):
         cb_tipo.addItems(tipi)
 
         input_nome = QLineEdit()
+        input_quantita = QLineEdit("1.0")
         input_desc = QLineEdit()
         input_prezzo = QLineEdit("0.0")
 
         form.addRow("Tipo Prodotto / Categoria:", cb_tipo)
-        form.addRow("Nome Prodotto (Unico):", input_nome)
+        form.addRow("Nome Prodotto:", input_nome)
+        form.addRow("Quantità di Vendita:", input_quantita)
         form.addRow("Descrizione:", input_desc)
         form.addRow("Prezzo Unitario (€):", input_prezzo)
 
@@ -122,13 +180,17 @@ class ProductManagementView(QWidget):
                 nome = input_nome.text().strip()
                 desc = input_desc.text().strip()
                 prezzo = float(input_prezzo.text().strip() or "0")
+                quantita = float(input_quantita.text().strip() or "1")
 
                 if not nome:
                     QMessageBox.warning(dlg, "Attenzione", "Inserire il nome del prodotto.")
                     return
+                if quantita <= 0:
+                    QMessageBox.warning(dlg, "Attenzione", "La quantità di vendita deve essere maggiore di zero.")
+                    return
 
                 self.product_service.aggiungi_prodotto_agricolo(
-                    nome=nome, descrizione=desc, prezzo=prezzo, unita="kg", tipo=tipo, quantita=0.0
+                    nome=nome, descrizione=desc, prezzo=prezzo, unita="kg", tipo=tipo, quantita=quantita
                 )
 
                 QMessageBox.information(dlg, "Successo", f"Prodotto '{nome}' aggiunto con successo!")
@@ -155,15 +217,17 @@ class ProductManagementView(QWidget):
 
         dlg = QDialog(self)
         dlg.setWindowTitle("Modifica Prodotto")
-        dlg.setFixedSize(380, 240)
+        dlg.setFixedSize(380, 280)
         layout = QVBoxLayout(dlg)
 
         form = QFormLayout()
         input_nome = QLineEdit(target.nome)
+        input_quantita = QLineEdit(f"{target.quantitaVendita:g}")
         input_desc = QLineEdit(target.descrizione)
         input_prezzo = QLineEdit(str(target.prezzoUnitario))
 
         form.addRow("Nome Prodotto:", input_nome)
+        form.addRow("Quantità di Vendita:", input_quantita)
         form.addRow("Descrizione:", input_desc)
         form.addRow("Prezzo Unitario (€):", input_prezzo)
 
@@ -172,12 +236,16 @@ class ProductManagementView(QWidget):
         btn_save = QPushButton("Aggiorna Prodotto")
         def update_action():
             try:
+                quantita = float(input_quantita.text().strip() or "1")
+                if quantita <= 0:
+                    QMessageBox.warning(dlg, "Attenzione", "La quantità di vendita deve essere maggiore di zero.")
+                    return
                 self.product_service.modifica_prodotto(
                     prodotto_id=pid,
                     nome=input_nome.text().strip(),
                     descrizione=input_desc.text().strip(),
                     prezzo=float(input_prezzo.text().strip()),
-                    quantita=target.quantitaDisponibile
+                    quantita=quantita
                 )
                 QMessageBox.information(dlg, "Successo", "Prodotto aggiornato!")
                 self.load_products_table()

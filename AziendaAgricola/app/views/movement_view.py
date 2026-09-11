@@ -106,8 +106,8 @@ class FinancialMovementView(QWidget):
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         # Connetti click ed doppio click per visualizzazione dettagli
-        table.itemClicked.connect(self.handle_contact_click)
-        table.itemDoubleClicked.connect(self.handle_contact_double_click)
+        table.itemClicked.connect(self.handle_table_click)
+        table.itemDoubleClicked.connect(self.handle_table_double_click)
 
         if tipo == TipoMovimento.ENTRATA:
             self.table_entrate = table
@@ -165,6 +165,16 @@ class FinancialMovementView(QWidget):
                 if hasattr(main_win, 'statusBar') and main_win.statusBar:
                     main_win.statusBar.showMessage(f"Cliente/Fornitore selezionato: {name}")
 
+    def handle_table_click(self, item):
+        if item.column() == 3:
+            self.handle_contact_click(item)
+        elif item.column() == 6:
+            row = item.row()
+            table = item.tableWidget()
+            mov_id = table.item(row, 0).text() if table.item(row, 0) else ""
+            tipo_str = "ENTRATA" if table == self.table_entrate else "USCITA"
+            self.show_description_dialog(item.text(), mov_id=mov_id, mov_tipo=tipo_str)
+
     def handle_contact_double_click(self, item):
         if item.column() == 3:
             data = item.data(Qt.ItemDataRole.UserRole)
@@ -192,6 +202,53 @@ class FinancialMovementView(QWidget):
                 dlg_layout.addWidget(btn_close)
                 
                 dlg.exec()
+
+    def show_description_dialog(self, description: str, mov_id: str = "", mov_tipo: str = ""):
+        """Finestra popup che mostra la descrizione completa del movimento selezionato."""
+        dlg = QDialog(self)
+        dlg.setWindowTitle("Dettagli Descrizione")
+        dlg.setFixedSize(420, 300)
+        dlg_layout = QVBoxLayout(dlg)
+
+        form = QFormLayout()
+        if mov_id:
+            lbl_id = QLabel(mov_id)
+            lbl_id.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            lbl_id.setStyleSheet("color: #000000; font-size: 13px;")
+            form.addRow("<b>ID Movimento:</b>", lbl_id)
+        if mov_tipo:
+            lbl_tipo = QLabel(mov_tipo)
+            lbl_tipo.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+            lbl_tipo.setStyleSheet("color: #000000; font-size: 13px;")
+            form.addRow("<b>Tipo:</b>", lbl_tipo)
+        dlg_layout.addLayout(form)
+
+        lbl_desc_title = QLabel("<b>Descrizione Completa:</b>")
+        lbl_desc_title.setStyleSheet("color: #000000; font-size: 13px; margin-top: 5px;")
+        dlg_layout.addWidget(lbl_desc_title)
+
+        txt_desc = QTextEdit()
+        txt_desc.setReadOnly(True)
+        txt_desc.setPlainText(description if description.strip() else "(Nessuna descrizione presente)")
+        txt_desc.setStyleSheet("color: #000000; font-size: 13px; background-color: #f9f9f9; border: 1px solid #cccccc; border-radius: 4px; padding: 6px;")
+        dlg_layout.addWidget(txt_desc)
+
+        btn_close = QPushButton("Chiudi")
+        btn_close.clicked.connect(dlg.accept)
+        dlg_layout.addWidget(btn_close)
+
+        dlg.exec()
+
+    def handle_table_double_click(self, item):
+        if item.column() == 3:
+            self.handle_contact_double_click(item)
+        elif item.column() == 6:
+            row = item.row()
+            table = item.tableWidget()
+            mov_id = table.item(row, 0).text() if table.item(row, 0) else ""
+            tipo_str = "ENTRATA" if table == self.table_entrate else "USCITA"
+            self.show_description_dialog(item.text(), mov_id=mov_id, mov_tipo=tipo_str)
+
 
     def load_tables(self):
         movs = self.financial_service.get_all_movements()
@@ -230,7 +287,9 @@ class FinancialMovementView(QWidget):
 
             table.setItem(idx, 4, QTableWidgetItem(f"{m.quantita:.2f}"))
             table.setItem(idx, 5, QTableWidgetItem(f"€ {m.prezzoTotale:.2f}"))
-            table.setItem(idx, 6, QTableWidgetItem(m.descrizione))
+            item_desc = QTableWidgetItem(m.descrizione)
+            item_desc.setToolTip(m.descrizione if m.descrizione else "(Nessuna descrizione)")
+            table.setItem(idx, 6, item_desc)
 
             pdf_status = "Presente" if (m.documento and m.documento.allegatoPDF) else "Assente"
             item_pdf = QTableWidgetItem(pdf_status)
@@ -576,9 +635,7 @@ class FinancialMovementView(QWidget):
         )
         if confirm == QMessageBox.StandardButton.Yes:
             try:
-                movs = self.financial_service.get_all_movements()
-                updated_movs = [m for m in movs if m.idMovimento != mid]
-                self.financial_service.repo.save_movements(updated_movs)
+                self.financial_service.elimina_movimento(mid)
                 
                 QMessageBox.information(self, "Successo", "Movimento rimosso con successo.")
                 self.load_tables()
