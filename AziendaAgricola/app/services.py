@@ -26,7 +26,7 @@ class AuthService:
 
     def effettuaLogin(self, username: str, password: str) -> Utente:
         users = self.repo.load_users()
-        user = next((u for u in users if u.nomeUtente.lower() == username.lower() and u.statoAttivo), None)     
+        user = next((u for u in users if u.nomeUtente.lower() == username.lower()), None)     
 
         if not user:
             raise ValueError("Nome utente non trovato o account disattivato.")
@@ -95,9 +95,6 @@ class UserManager:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def count_users(self) -> int:
-        return len(self.repo.load_users())
-
     # Verifica se esiste almeno un Manager registrato
     def has_manager(self) -> bool:
         users = self.repo.load_users()
@@ -143,9 +140,6 @@ class UserManager:
             telefono=telefono,
             dataNascita=dataNascita,
             ruolo=livelloAccesso.DIPENDENTE,
-            dataAssunzione=dataAssunzione or datetime.date.today().isoformat(),
-            mansione=mansione,
-            stipendioMensile=stipendio
         )
         users.append(d)
         self.repo.save_users(users)
@@ -266,7 +260,7 @@ class ProductService:
         if not nome_clean:
             raise ValueError("Il nome della categoria non può essere vuoto.")
 
-        unita_valide = ["kilogrammi", "grammi", "litri"]
+        unita_valide = ["kg", "g", "l", "kilogrammi", "grammi", "litri"]
         if unita not in unita_valide:
             raise ValueError(f"Unità di misura non valida. Scegliere tra: {', '.join(unita_valide)}.")
 
@@ -319,7 +313,6 @@ class FinancialService:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
             doc = Documento(
                 numeroDocumento=f"DOC-ENT-{str(uuid.uuid4())[:6]}",
-                enteEmettitore=cliente_tipo,
                 allegatoPDF=saved_pdf
             )
 
@@ -332,20 +325,14 @@ class FinancialService:
                 c = Azienda(
                     idContatto=c_id,
                     email=cliente_dettagli.get("email", ""),
-                    telefono=cliente_dettagli.get("telefono", ""),
-                    indirizzo=cliente_dettagli.get("indirizzo", ""),
                     ragioneSociale=cliente_dettagli.get("ragioneSociale", ""),
-                    partitaIVA=cliente_dettagli.get("partitaIVA", ""),
-                    codiceDestinatarioSDI=cliente_dettagli.get("codiceDestinatarioSDI", "")
+                    partitaIVA=cliente_dettagli.get("partitaIVA", "")
                 )
             else:
                 c = Privato(
                     idContatto=c_id,
                     email=cliente_dettagli.get("email", ""),
-                    telefono=cliente_dettagli.get("telefono", ""),
-                    indirizzo=cliente_dettagli.get("indirizzo", ""),
                     Nome=cliente_dettagli.get("Nome", ""),
-                    Cognome=cliente_dettagli.get("Cognome", ""),
                     codiceFiscale=cliente_dettagli.get("codiceFiscale", "")
                 )
             contacts.append(c)
@@ -370,7 +357,6 @@ class FinancialService:
             contattoId=contatto_id,
             contattoDescrizione=contatto_desc,
             documento=doc,
-            creatoreUsername=username
         )
 
         movs = self.repo.load_movements()
@@ -386,7 +372,6 @@ class FinancialService:
             saved_pdf = self.salva_allegato_pdf(pdf_path)
             doc = Documento(
                 numeroDocumento=f"DOC-USC-{str(uuid.uuid4())[:6]}",
-                enteEmettitore=fornitore_note or "Fornitore",
                 allegatoPDF=saved_pdf
             )
 
@@ -406,7 +391,6 @@ class FinancialService:
             prodottoNome=prod_nome,
             contattoDescrizione=fornitore_note,
             documento=doc,
-            creatoreUsername=username
         )
 
         movs = self.repo.load_movements()
@@ -416,9 +400,6 @@ class FinancialService:
 
     def get_all_movements(self) -> List[Movimento]:
         return self.repo.load_movements()
-
-    def get_entrate(self) -> List[Movimento]:
-        return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.ENTRATA]
 
     def get_uscite(self) -> List[Movimento]:
         return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.USCITA]

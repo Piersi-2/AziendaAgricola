@@ -53,18 +53,21 @@ class ProductManagementView(QWidget):
         g_layout = QVBoxLayout(group)
 
         self.table = QTableWidget()
-        self.table.setColumnCount(4)
+        self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels([
-            "Nome Prodotto", "Categoria / Tipo", "Descrizione", "Prezzo Unitario"
+            "Nome Prodotto", "Categoria / Tipo", "Unità di Misura", "Descrizione", "Prezzo Unitario"
         ])
-        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
+        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.Stretch)
+        self.table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
         
         # Disabilita modifica diretta dei campi
         self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
-        # Connetti click per visualizzazione della descrizione completa
-        self.table.itemClicked.connect(self.handle_table_click)
-        self.table.itemDoubleClicked.connect(self.handle_table_click)
+        self.table.itemDoubleClicked.connect(self.handle_table_double_click)
         
         g_layout.addWidget(self.table)
 
@@ -101,8 +104,8 @@ class ProductManagementView(QWidget):
 
         dlg.exec()
 
-    def handle_table_click(self, item: QTableWidgetItem):
-        if item.column() == 2: 
+    def handle_table_double_click(self, item: QTableWidgetItem):
+        if item.column() == 3:
             row = item.row()
             p_nome = self.table.item(row, 0).text() if self.table.item(row, 0) else ""
             self.show_description_dialog(p_nome, item.text())
@@ -110,19 +113,10 @@ class ProductManagementView(QWidget):
     def load_products_table(self):
         prods = self.product_service.get_all_products()
         cats = self.product_service.get_all_categories()
-
-        # Determina l'unità di misura da mostrare nell'intestazione
-        unita_set = {formatta_unita(c.unitaMisura) for c in cats if getattr(c, 'unitaMisura', None)}
-        if len(unita_set) == 1:
-            u_header = list(unita_set)[0]
-            header_prezzo = f"Prezzo Unitario ({u_header})"
-        elif len(unita_set) > 1:
-            header_prezzo = "Prezzo Unitario (UdM)"
-        else:
-            header_prezzo = "Prezzo Unitario"
+        cat_map = {c.nome.strip().upper(): c for c in cats}
 
         self.table.setHorizontalHeaderLabels([
-            "Nome Prodotto", "Categoria / Tipo", "Descrizione", header_prezzo
+            "Nome Prodotto", "Categoria / Tipo", "Unità di Misura", "Descrizione", "Prezzo Unitario"
         ])
         self.table.setRowCount(len(prods))
 
@@ -136,13 +130,19 @@ class ProductManagementView(QWidget):
             tipo = getattr(p, 'tipoProdotto', 'Agricolo')
             self.table.setItem(idx, 1, QTableWidgetItem(tipo))
 
+            # Unità di misura della categoria
+            cat_obj = cat_map.get((tipo or "").strip().upper())
+            unita = cat_obj.unitaMisura if (cat_obj and getattr(cat_obj, 'unitaMisura', None)) else (getattr(p, 'unitaMisura', '') or "-")
+            unita_fmt = formatta_unita(unita) if unita and unita != "-" else "-"
+            self.table.setItem(idx, 2, QTableWidgetItem(unita_fmt))
+
             # Descrizione
             item_desc = QTableWidgetItem(p.descrizione)
             item_desc.setToolTip(p.descrizione if p.descrizione else "(Nessuna descrizione)")
-            self.table.setItem(idx, 2, item_desc)
+            self.table.setItem(idx, 3, item_desc)
 
             # Prezzo
-            self.table.setItem(idx, 3, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
+            self.table.setItem(idx, 4, QTableWidgetItem(f"€ {p.prezzoUnitario:.2f}"))
 
     # ---------------------------------------------------------
     # DIALOG REGISTRAZIONE PRODOTTO
@@ -172,18 +172,6 @@ class ProductManagementView(QWidget):
         input_prezzo = QLineEdit("0.0")
 
         lbl_prezzo = QLabel("Prezzo Unitario:")
-
-        def update_prezzo_label():
-            sel_cat = cb_tipo.currentText().strip().upper()
-            c_obj = next((c for c in cats if c.nome.strip().upper() == sel_cat), None)
-            u = formatta_unita(c_obj.unitaMisura) if (c_obj and getattr(c_obj, 'unitaMisura', None)) else ""
-            if u:
-                lbl_prezzo.setText(f"Prezzo Unitario ({u}):")
-            else:
-                lbl_prezzo.setText("Prezzo Unitario:")
-
-        cb_tipo.currentTextChanged.connect(update_prezzo_label)
-        update_prezzo_label()
 
         form.addRow("Tipo Prodotto / Categoria:", cb_tipo)
         form.addRow("Nome Prodotto:", input_nome)
@@ -250,8 +238,7 @@ class ProductManagementView(QWidget):
         input_desc = QLineEdit(target.descrizione)
         input_prezzo = QLineEdit(str(target.prezzoUnitario))
 
-        u = formatta_unita(getattr(target, 'unitaMisura', ''))
-        lbl_prezzo = f"Prezzo Unitario ({u}):" if u else "Prezzo Unitario:"
+        lbl_prezzo = "Prezzo Unitario:"
 
         form.addRow("Nome Prodotto:", input_nome)
         form.addRow("Descrizione:", input_desc)
@@ -315,7 +302,7 @@ class ProductManagementView(QWidget):
         form = QFormLayout()
         input_nome = QLineEdit()
         cb_unita = QComboBox()
-        cb_unita.addItems(["kilogrammi", "grammi", "litri"])
+        cb_unita.addItems(["kg", "g", "l"])
 
         form.addRow("Nome Categoria:", input_nome)
         form.addRow("Unità di Misura:", cb_unita)

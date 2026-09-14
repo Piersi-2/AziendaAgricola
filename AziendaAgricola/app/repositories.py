@@ -187,7 +187,6 @@ class DataRepository:
                 "nome": p.nome,
                 "descrizione": p.descrizione,
                 "prezzoUnitario": p.prezzoUnitario,
-                "class_type": "Prodotto",
                 "tipoProdotto": getattr(p, "tipoProdotto", "Agricolo"),
                 "unitaMisura": getattr(p, "unitaMisura", "kg")
             }
@@ -212,7 +211,6 @@ class DataRepository:
                     doc_dict = d["documento"]
                     doc = Documento(
                         numeroDocumento=doc_dict["numeroDocumento"],
-                        enteEmettitore=doc_dict["enteEmettitore"],
                         allegatoPDF=doc_dict.get("allegatoPDF", ""),
                         dataCaricamento=doc_dict.get("dataCaricamento", "")
                     )
@@ -231,7 +229,6 @@ class DataRepository:
                     contattoId=d.get("contattoId"),
                     contattoDescrizione=d.get("contattoDescrizione"),
                     documento=doc,
-                    creatoreUsername=d.get("creatoreUsername", "admin")
                 )
                 movs.append(m)
             return movs
@@ -246,7 +243,6 @@ class DataRepository:
             if m.documento:
                 doc_dict = {
                     "numeroDocumento": m.documento.numeroDocumento,
-                    "enteEmettitore": m.documento.enteEmettitore,
                     "allegatoPDF": m.documento.allegatoPDF,
                     "dataCaricamento": m.documento.dataCaricamento
                 }
@@ -265,7 +261,6 @@ class DataRepository:
                 "contattoId": m.contattoId,
                 "contattoDescrizione": m.contattoDescrizione,
                 "documento": doc_dict,
-                "creatoreUsername": m.creatoreUsername
             }
             raw_list.append(d)
 
@@ -287,21 +282,15 @@ class DataRepository:
                 if ctype == "Azienda":
                     c = Azienda(
                         idContatto=d["idContatto"],
-                        email=d["email"],
-                        telefono=d["telefono"],
-                        indirizzo=d["indirizzo"],
+                        email=d.get("email", ""),
                         ragioneSociale=d.get("ragioneSociale", ""),
-                        partitaIVA=d.get("partitaIVA", ""),
-                        codiceDestinatarioSDI=d.get("codiceDestinatarioSDI", "")
+                        partitaIVA=d.get("partitaIVA", "")
                     )
                 else:
                     c = Privato(
                         idContatto=d["idContatto"],
-                        email=d["email"],
-                        telefono=d["telefono"],
-                        indirizzo=d["indirizzo"],
+                        email=d.get("email", ""),
                         Nome=d.get("Nome", ""),
-                        Cognome=d.get("Cognome", ""),
                         codiceFiscale=d.get("codiceFiscale", "")
                     )
                 contacts.append(c)
@@ -316,17 +305,13 @@ class DataRepository:
             d = {
                 "idContatto": c.idContatto,
                 "email": c.email,
-                "telefono": c.telefono,
-                "indirizzo": c.indirizzo,
                 "class_type": c.__class__.__name__
             }
             if isinstance(c, Azienda):
                 d["ragioneSociale"] = c.ragioneSociale
                 d["partitaIVA"] = c.partitaIVA
-                d["codiceDestinatarioSDI"] = c.codiceDestinatarioSDI
             elif isinstance(c, Privato):
                 d["Nome"] = c.Nome
-                d["Cognome"] = c.Cognome
                 d["codiceFiscale"] = c.codiceFiscale
             raw_list.append(d)
 

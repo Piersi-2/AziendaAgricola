@@ -159,6 +159,9 @@ class MainWindow(QMainWindow):
         # Connetti segnale per aggiornamento del nome in header_box
         self.user_view.profile_updated.connect(self.update_user_header)
 
+        # Aggiorna i dati quando l'utente cambia tab (es. nuovi prodotti visibili nei filtri movimenti)
+        self.tabs.currentChanged.connect(self.on_tab_changed)
+
         main_layout.addWidget(self.tabs)
         self.setCentralWidget(central)
 
@@ -167,6 +170,14 @@ class MainWindow(QMainWindow):
         self.setStatusBar(self.statusBar)
         self.statusBar.setStyleSheet("background-color: #f2f2f2; color: #000000; border-top: 1px solid #dcdcdc;")
         self.statusBar.showMessage(f"Sessione attiva per l'utente {self.current_user.nomeUtente} | Ultimo Login: {self.current_user.ultimoLogin or 'Oggi'}")
+
+    # Aggiorna i filtri quando si cambia tabs
+    def on_tab_changed(self, index: int):
+        widget = self.tabs.widget(index)
+        if widget == self.movement_view:
+            self.movement_view.load_tables()
+        elif widget == self.product_view:
+            self.product_view.load_products_table()
 
     def update_user_header(self):
         self.lbl_user_info.setText(f"Utente collegato: <b>{self.current_user.nome} {self.current_user.cognome}</b> ({self.current_user.ruolo.value})")

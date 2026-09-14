@@ -1,18 +1,1 @@
-[
-  {
-    "idMovimento": "MOV-ENT-7b579615",
-    "tipo": "ENTRATA",
-    "quantita": 1.0,
-    "prezzoTotale": 12.0,
-    "dataMovimento": "2026-09-13",
-    "descrizione": "",
-    "sottoTipoEntrata": "MIELE",
-    "sottoTipoUscita": null,
-    "prodottoId": "cfb6afb4",
-    "prodottoNome": "Miele millefiori",
-    "contattoId": "4241e0b2",
-    "contattoDescrizione": "Azienda: , P.IVA: , SDI:  | ID: 4241e0b2, Email: , Tel: , Indirizzo: ",
-    "documento": null,
-    "creatoreUsername": "Luca"
-  }
-]
+[]

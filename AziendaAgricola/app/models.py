@@ -112,12 +112,14 @@ class Prodotto:
         return f"{self.nome} - {self.descrizione} (€{self.prezzoUnitario:.2f})"
 
 def formatta_unita(unita: str) -> str:
-    u = (unita or "").strip().lower()
-    if u in ("kilogrammi"):
+    if not unita:
+        return ""
+    u = unita.strip().lower()
+    if u in ("kilogrammi", "kg"):
         return "kg"
-    if u in ("grammi"):
+    if u in ("grammi", "g"):
         return "g"
-    if u in ("litri"):
+    if u in ("litri", "l"):
         return "l"
     return unita.strip()
 
@@ -128,32 +130,28 @@ def formatta_unita(unita: str) -> str:
 @dataclass
 class Contatto:
     idContatto: str
-    email: str
-    telefono: str
-    indirizzo: str
+    email: str = ""
 
     def getDatiFatturazione(self) -> str:
-        return f"ID: {self.idContatto}, Email: {self.email}, Tel: {self.telefono}, Indirizzo: {self.indirizzo}"
+        return f"ID: {self.idContatto}, Email: {self.email}"
 
 @dataclass
 class Azienda(Contatto):
     ragioneSociale: str = ""
     partitaIVA: str = ""
-    codiceDestinatarioSDI: str = ""
 
     def getDatiFatturazione(self) -> str:
         base = super().getDatiFatturazione()
-        return f"Azienda: {self.ragioneSociale}, P.IVA: {self.partitaIVA}, SDI: {self.codiceDestinatarioSDI} | {base}"
+        return f"Azienda: {self.ragioneSociale}, P.IVA: {self.partitaIVA} | {base}"
 
 @dataclass
 class Privato(Contatto):
     Nome: str = ""
-    Cognome: str = ""
     codiceFiscale: str = ""
 
     def getDatiFatturazione(self) -> str:
         base = super().getDatiFatturazione()
-        return f"Privato: {self.Nome} {self.Cognome}, CF: {self.codiceFiscale} | {base}"
+        return f"Privato: {self.Nome}, CF: {self.codiceFiscale} | {base}"
 
 # =========================================================
 # ALLEGATI E DOCUMENTI
@@ -162,7 +160,6 @@ class Privato(Contatto):
 @dataclass
 class Documento:
     numeroDocumento: str
-    enteEmettitore: str
     allegatoPDF: str = "" 
     dataCaricamento: str = ""
 
@@ -189,7 +186,6 @@ class Movimento:
     contattoId: Optional[str] = None
     contattoDescrizione: Optional[str] = None
     documento: Optional[Documento] = None
-    creatoreUsername: str = "admin"
 
     def __post_init__(self):
         if len(self.descrizione) > 500:

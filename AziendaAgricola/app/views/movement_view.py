@@ -66,17 +66,31 @@ class FinancialMovementView(QWidget):
         widget = QWidget()
         layout = QVBoxLayout(widget)
 
-        # Filtro per Anno e Categoria
+        # Barra dei filtri: Anno, Prodotto e Tipo Cliente (quest'ultimo solo per Entrate)
         filter_bar = QHBoxLayout()
-        filter_bar.addWidget(QLabel("Filtra per Anno:"))
         cb_anno = QComboBox()
         cb_anno.addItem("Tutti gli anni")
         current_year = QDate.currentDate().year()
         # Consenti il bilancio/movimenti per gli ultimi 20 anni
         for y in range(current_year, current_year - 20, -1):
             cb_anno.addItem(str(y))
-
         filter_bar.addWidget(cb_anno)
+
+        cb_prodotto = QComboBox()
+        cb_prodotto.addItem("Tutti i prodotti", None)
+        prods = self.product_service.get_all_products()
+        for p in prods:
+            cb_prodotto.addItem(p.nome, p.idProdotto)
+        filter_bar.addWidget(cb_prodotto)
+
+        cb_cliente_tipo = None
+        if tipo == TipoMovimento.ENTRATA:
+            cb_cliente_tipo = QComboBox()
+            cb_cliente_tipo.addItem("Tutti i clienti")
+            cb_cliente_tipo.addItem("Azienda")
+            cb_cliente_tipo.addItem("Privato")
+            filter_bar.addWidget(cb_cliente_tipo)
+
         filter_bar.addStretch()
 
         btn_view_doc = QPushButton("Visualizza Allegato PDF")
@@ -88,10 +102,10 @@ class FinancialMovementView(QWidget):
         # Tabella
         table = QTableWidget()
         if tipo == TipoMovimento.ENTRATA:
-            table.setColumnCount(8)
+            table.setColumnCount(9)
             table.setHorizontalHeaderLabels([
                 "Data", "Prodotto", "Categoria Prodotto", "Cliente",
-                "Quantità", "Importo Totale (€)", "Descrizione", "Allegato PDF"
+                "Quantità", "Unità di Misura", "Importo Totale (€)", "Descrizione", "Allegato PDF"
             ])
             # Interactive: permette di modificare la larghezza.
             # ResizeToContents: adatta la larghezza della colonna al contenuto.
@@ -103,37 +117,42 @@ class FinancialMovementView(QWidget):
             table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
             table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
             table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.Stretch)
-            table.horizontalHeader().setSectionResizeMode(7, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(7, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(8, QHeaderView.ResizeMode.ResizeToContents)
         else:
-            table.setColumnCount(7)
+            table.setColumnCount(6)
             table.setHorizontalHeaderLabels([
                 "Data", "Categoria Spesa", "Fornitore",
-                "Quantità", "Importo Totale (€)", "Descrizione", "Allegato PDF"
+                "Importo Totale (€)", "Descrizione", "Allegato PDF"
             ])
             table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
             table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
             table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
             table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
             table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)
-            table.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeMode.ResizeToContents)
         
-        # Disabilita modifica diretta cliccando sui campi
         table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
-        # Connetti click ed doppio click per visualizzazione dettagli
-        table.itemClicked.connect(self.handle_table_click)
         table.itemDoubleClicked.connect(self.handle_table_double_click)
 
-        # Mostra la tabella relativamente all'anno selezionato
         if tipo == TipoMovimento.ENTRATA:
             self.table_entrate = table
-            cb_anno.currentTextChanged.connect(lambda: self.filter_table(TipoMovimento.ENTRATA, cb_anno.currentText()))
+            self.cb_anno_entrate = cb_anno
+            self.cb_prod_entrate = cb_prodotto
+            self.cb_cliente_entrate = cb_cliente_tipo
+            cb_anno.currentTextChanged.connect(lambda: self.filter_table(TipoMovimento.ENTRATA))
+            cb_prodotto.currentIndexChanged.connect(lambda: self.filter_table(TipoMovimento.ENTRATA))
+            if cb_cliente_tipo:
+                cb_cliente_tipo.currentTextChanged.connect(lambda: self.filter_table(TipoMovimento.ENTRATA))
         else:
             self.table_uscite = table
-            cb_anno.currentTextChanged.connect(lambda: self.filter_table(TipoMovimento.USCITA, cb_anno.currentText()))
+            self.cb_anno_uscite = cb_anno
+            self.cb_prod_uscite = cb_prodotto
+            cb_anno.currentTextChanged.connect(lambda: self.filter_table(TipoMovimento.USCITA))
+            cb_prodotto.currentIndexChanged.connect(lambda: self.filter_table(TipoMovimento.USCITA))
 
         layout.addWidget(table)
         return widget
@@ -153,21 +172,15 @@ class FinancialMovementView(QWidget):
                 "Tipo": "Azienda",
                 "Ragione Sociale": c.ragioneSociale,
                 "Partita IVA": c.partitaIVA,
-                "SDI": c.codiceDestinatarioSDI,
-                "Email": c.email,
-                "Telefono": c.telefono,
-                "Indirizzo": c.indirizzo
+                "Email": c.email
             }
         elif isinstance(c, Privato):
-            name = f"{c.Nome} {c.Cognome}"
+            name = c.Nome
             details = {
                 "Tipo": "Privato",
                 "Nome": c.Nome,
-                "Cognome": c.Cognome,
                 "Codice Fiscale": c.codiceFiscale,
-                "Email": c.email,
-                "Telefono": c.telefono,
-                "Indirizzo": c.indirizzo
+                "Email": c.email
             }
         else:
             name = "-"
@@ -189,14 +202,8 @@ class FinancialMovementView(QWidget):
     def handle_table_click(self, item):
         table = item.tableWidget()
         contact_col = 3 if (hasattr(self, 'table_entrate') and table == self.table_entrate) else 2
-        desc_col = table.columnCount() - 2
-
         if item.column() == contact_col:
             self.handle_contact_click(item)
-        elif item.column() == desc_col:
-            row = item.row()
-            tipo_str = "ENTRATA" if (hasattr(self, 'table_entrate') and table == self.table_entrate) else "USCITA"
-            self.show_description_dialog(item.text(), mov_tipo=tipo_str)
 
     def handle_contact_double_click(self, item):
         table = item.tableWidget()
@@ -229,7 +236,6 @@ class FinancialMovementView(QWidget):
                 dlg.exec()
 
     def show_description_dialog(self, description: str, mov_tipo: str = ""):
-        """Finestra popup che mostra la descrizione completa del movimento selezionato."""
         dlg = QDialog(self)
         dlg.setWindowTitle("Dettagli Descrizione")
         dlg.setFixedSize(420, 300)
@@ -272,18 +278,35 @@ class FinancialMovementView(QWidget):
             self.show_description_dialog(item.text(), mov_tipo=tipo_str)
 
 
-    def load_tables(self):
-        movs = self.financial_service.get_all_movements()
-        entrate = [m for m in movs if m.tipo == TipoMovimento.ENTRATA]
-        uscite = [m for m in movs if m.tipo == TipoMovimento.USCITA]
+    def update_product_filter_combos(self):
+        prods = self.product_service.get_all_products()
+        for cb in (getattr(self, 'cb_prod_entrate', None), getattr(self, 'cb_prod_uscite', None)):
+            if not cb:
+                continue
+            curr_text = cb.currentText()
+            cb.blockSignals(True)
+            cb.clear()
+            cb.addItem("Tutti i prodotti", None)
+            for p in prods:
+                cb.addItem(p.nome, p.idProdotto)
+            idx = cb.findText(curr_text)
+            if idx >= 0:
+                cb.setCurrentIndex(idx)
+            else:
+                cb.setCurrentIndex(0)
+            cb.blockSignals(False)
 
-        self.populate_table(self.table_entrate, entrate)
-        self.populate_table(self.table_uscite, uscite)
+    def load_tables(self):
+        self.update_product_filter_combos()
+        self.filter_table(TipoMovimento.ENTRATA)
+        self.filter_table(TipoMovimento.USCITA)
 
     def populate_table(self, table: QTableWidget, mov_list: list):
         table.setRowCount(len(mov_list))
         prods = self.product_service.get_all_products()
         prod_map = {p.idProdotto: p for p in prods} # Crea un dizionario id - prodotto
+        cats = self.product_service.get_all_categories()
+        cat_map = {c.nome.strip().upper(): c for c in cats}
         is_entrate = (hasattr(self, 'table_entrate') and table == self.table_entrate)   # True se la tabella è delle entrate
 
         for idx, m in enumerate(mov_list):  # idx numero di riga, m movimento
@@ -333,9 +356,22 @@ class FinancialMovementView(QWidget):
             table.setItem(idx, col, item_contact)
             col += 1
 
-            # Quantità (entrate e uscite)
-            table.setItem(idx, col, QTableWidgetItem(f"{m.quantita:.2f}"))
-            col += 1
+            # Quantità e unità di misura (entrate)
+            if is_entrate:
+                table.setItem(idx, col, QTableWidgetItem(f"{m.quantita:.2f}"))
+                col += 1
+
+                cat_name = (m.sottoTipoEntrata or "").strip().upper()
+                c_obj = cat_map.get(cat_name)
+                unita = c_obj.unitaMisura if (c_obj and getattr(c_obj, 'unitaMisura', None)) else ""
+                if not unita and m.prodottoId:
+                    prod_obj = prod_map.get(m.prodottoId)
+                    if prod_obj and getattr(prod_obj, 'unitaMisura', None):
+                        unita = prod_obj.unitaMisura
+                unita_fmt = formatta_unita(unita) if unita else "-"
+                item_unita = QTableWidgetItem(unita_fmt)
+                table.setItem(idx, col, item_unita)
+                col += 1
 
             # Prezzo totale (entrate e uscite)
             table.setItem(idx, col, QTableWidgetItem(f"€ {m.prezzoTotale:.2f}"))
@@ -354,17 +390,69 @@ class FinancialMovementView(QWidget):
                 item_pdf.setData(Qt.ItemDataRole.UserRole, m.documento.allegatoPDF)
             table.setItem(idx, col, item_pdf)
 
-    def filter_table(self, tipo: TipoMovimento, anno_str: str):
+    def filter_table(self, tipo: TipoMovimento):
         movs = self.financial_service.get_all_movements()
         target_movs = [m for m in movs if m.tipo == tipo]
-
-        if anno_str != "Tutti gli anni":
-            target_movs = [m for m in target_movs if m.dataMovimento.startswith(anno_str)]
+        prods = self.product_service.get_all_products()
+        prod_map = {p.idProdotto: p for p in prods}
 
         if tipo == TipoMovimento.ENTRATA:
-            self.populate_table(self.table_entrate, target_movs)
+            cb_anno = getattr(self, 'cb_anno_entrate', None)
+            cb_prod = getattr(self, 'cb_prod_entrate', None)
+            cb_cli = getattr(self, 'cb_cliente_entrate', None)
+            table = getattr(self, 'table_entrate', None)
         else:
-            self.populate_table(self.table_uscite, target_movs)
+            cb_anno = getattr(self, 'cb_anno_uscite', None)
+            cb_prod = getattr(self, 'cb_prod_uscite', None)
+            cb_cli = None
+            table = getattr(self, 'table_uscite', None)
+
+        if not table:
+            return
+
+        # Filtro per Anno
+        if cb_anno:
+            anno_str = cb_anno.currentText()
+            if anno_str != "Tutti gli anni":
+                target_movs = [m for m in target_movs if m.dataMovimento.startswith(anno_str)]
+
+        # Filtro per Prodotto
+        if cb_prod:
+            prod_name = cb_prod.currentText()
+            prod_id = cb_prod.currentData()
+            if prod_name != "Tutti i prodotti":
+                def match_prod(m):
+                    if prod_id and m.prodottoId == prod_id:
+                        return True
+                    if m.prodottoNome and m.prodottoNome.strip().lower() == prod_name.strip().lower():
+                        return True
+                    if m.prodottoId and m.prodottoId in prod_map and prod_map[m.prodottoId].nome.strip().lower() == prod_name.strip().lower():
+                        return True
+                    return False
+                target_movs = [m for m in target_movs if match_prod(m)]
+
+        # Filtro per Tipo Cliente (solo Entrate)
+        if tipo == TipoMovimento.ENTRATA and cb_cli:
+            cli_tipo = cb_cli.currentText()
+            if cli_tipo in ("Azienda", "Privato"):
+                contacts = self.financial_service.repo.load_contacts()
+                contact_map = {c.idContatto: c for c in contacts}
+                def match_client(m):
+                    c = contact_map.get(m.contattoId) if m.contattoId else None
+                    if c:
+                        if cli_tipo == "Azienda":
+                            return isinstance(c, Azienda)
+                        elif cli_tipo == "Privato":
+                            return isinstance(c, Privato)
+                    desc = m.contattoDescrizione or ""
+                    if cli_tipo == "Azienda":
+                        return "Azienda" in desc
+                    elif cli_tipo == "Privato":
+                        return "Privato" in desc
+                    return False
+                target_movs = [m for m in target_movs if match_client(m)]
+
+        self.populate_table(table, target_movs)
 
     # ---------------------------------------------------------
     # DIALOG REGISTRAZIONE ENTRATA
@@ -383,42 +471,18 @@ class FinancialMovementView(QWidget):
 
         cb_prodotto = QComboBox()
 
-        lbl_quantita = QLabel("Quantità:")
-
-        def update_quantita_label():
-            u = ""
-            prod_id = cb_prodotto.currentData() # Recupera l'ID del prodotto
-            if prod_id:
-                prods = self.product_service.get_all_products()
-                prod = next((p for p in prods if p.idProdotto == prod_id), None)
-                if prod and getattr(prod, 'unitaMisura', None):
-                    u = formatta_unita(prod.unitaMisura)
-            if not u:
-                selected_cat = cb_categoria.currentText().strip().upper()
-                all_cats = self.product_service.get_all_categories()
-                cat_obj = next((c for c in all_cats if c.nome.strip().upper() == selected_cat), None)
-                if cat_obj and getattr(cat_obj, 'unitaMisura', None):
-                    u = formatta_unita(cat_obj.unitaMisura)
-            if u:
-                lbl_quantita.setText(f"Quantità ({u}):")
-            else:
-                lbl_quantita.setText("Quantità:")
-
         def update_entrata_prodotto_combo():
             cb_prodotto.clear()
             selected_cat = cb_categoria.currentText()
             if not selected_cat:
-                update_quantita_label()
                 return
             prods = self.product_service.get_all_products()
             for p in prods:
                 p_cat = getattr(p, 'tipoProdotto', 'Generico')
                 if p_cat == selected_cat:
                     cb_prodotto.addItem(p.nome, p.idProdotto)
-            update_quantita_label()
 
         cb_categoria.currentTextChanged.connect(update_entrata_prodotto_combo)
-        cb_prodotto.currentIndexChanged.connect(lambda _: update_quantita_label())
         update_entrata_prodotto_combo()
 
         cb_cliente_tipo = QComboBox()
@@ -457,10 +521,10 @@ class FinancialMovementView(QWidget):
         form.addRow("Tipo Cliente:", cb_cliente_tipo)
         form.addRow("Data Vendita:", input_data)
         form.addRow("Importo Totale (€):", input_importo)
-        form.addRow(lbl_quantita, input_quantita)
+        form.addRow("Quantità:", input_quantita)
         form.addRow("Nome Cliente / Ragione Soc.:", input_c_nome)
         form.addRow("P.IVA / Codice Fiscale:", input_c_piva_cf)
-        form.addRow("Email / Telefono:", input_c_email)
+        form.addRow("Email:", input_c_email)
         form.addRow("Descrizione (max 500 char):", input_desc)
         form.addRow(btn_attach_pdf, lbl_pdf_name)
 
@@ -650,24 +714,10 @@ class FinancialMovementView(QWidget):
         input_desc = QTextEdit(target.descrizione)
         input_desc.setMaximumHeight(80)
 
-        lbl_qta_text = "Quantità:"
-        if target.tipo == TipoMovimento.ENTRATA:
-            u = ""
-            if target.prodottoId:
-                p = next((x for x in self.product_service.get_all_products() if x.idProdotto == target.prodottoId), None)
-                if p and getattr(p, 'unitaMisura', None):
-                    u = formatta_unita(p.unitaMisura)
-            if not u and target.sottoTipoEntrata:
-                all_cats = self.product_service.get_all_categories()
-                c_obj = next((c for c in all_cats if c.nome.strip().upper() == target.sottoTipoEntrata.strip().upper()), None)
-                if c_obj and getattr(c_obj, 'unitaMisura', None):
-                    u = formatta_unita(c_obj.unitaMisura)
-            if u:
-                lbl_qta_text = f"Quantità ({u}):"
-
         form.addRow("Data Movimento:", input_data)
         form.addRow("Importo Totale (€):", input_importo)
-        form.addRow(lbl_qta_text, input_quantita)
+        if target.tipo == TipoMovimento.ENTRATA:
+            form.addRow("Quantità:", input_quantita)
         form.addRow("Descrizione (max 500 char):", input_desc)
 
         layout.addLayout(form)

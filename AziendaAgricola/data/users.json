@@ -1,16 +1,1 @@
-[
-  {
-    "id": "671885f3",
-    "nomeUtente": "Luca",
-    "password": "123456789a",
-    "nome": "Luca",
-    "cognome": "Rossi",
-    "email": "gabragabra@gabra.it",
-    "telefono": "",
-    "dataNascita": "01/01/2000",
-    "ruolo": "MANAGER",
-    "ultimoLogin": "2026-09-14 11:57:00",
-    "statoAttivo": true,
-    "codiceAutorizzazione": "MNG-ADMIN"
-  }
-]
+[]
