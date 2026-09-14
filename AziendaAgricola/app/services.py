@@ -211,10 +211,10 @@ class ProductService:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str, quantita: float = 1.0) -> Prodotto:
+    def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str) -> Prodotto:
         prods = self.repo.load_products()
-        if any(p.nome.lower() == nome.lower() and float(p.quantitaVendita) == float(quantita) for p in prods):
-            raise ValueError(f"Un prodotto con nome '{nome}' e quantità {quantita:g} esiste già a catalogo.")
+        if any(p.nome.lower() == nome.lower() for p in prods):
+            raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
 
         categories = self.repo.load_categories()
         if not categories:
@@ -231,7 +231,6 @@ class ProductService:
             nome=nome,
             descrizione=descrizione,
             prezzoUnitario=prezzo,
-            quantitaVendita=quantita,
             tipoProdotto=tipo,
             unitaMisura=effettiva_unita
         )
@@ -239,22 +238,19 @@ class ProductService:
         self.repo.save_products(prods)
         return p
 
-    def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float, quantita: Optional[float] = None):
+    def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float):
         prods = self.repo.load_products()
         p = next((x for x in prods if x.idProdotto == prodotto_id), None)
         if not p:
             raise ValueError(f"Prodotto ID '{prodotto_id}' non trovato.")
 
-        target_q = float(quantita) if quantita is not None else float(p.quantitaVendita)
         for other in prods:
-            if other.idProdotto != prodotto_id and other.nome.lower() == nome.lower() and float(other.quantitaVendita) == target_q:
-                raise ValueError(f"Un prodotto con nome '{nome}' e quantità {target_q:g} è già registrato.")
+            if other.idProdotto != prodotto_id and other.nome.lower() == nome.lower():
+                raise ValueError(f"Un prodotto con nome '{nome}' è già registrato.")
 
         p.nome = nome
         p.descrizione = descrizione
         p.aggiornaPrezzoListino(prezzo)
-        if quantita is not None:
-            p.quantitaVendita = quantita
         self.repo.save_products(prods)
 
     def elimina_prodotto(self, prodotto_id: str):

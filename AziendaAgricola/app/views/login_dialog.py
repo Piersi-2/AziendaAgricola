@@ -6,7 +6,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QDate
 from app.services import AuthService, UserManager
 from app.models import Utente
 
-# Palette di base pulita e minimale - Nero su Bianco
+# Definisce le regole di stile
 STYLE_LOGIN = """
 QDialog {
     background-color: #ffffff;
@@ -68,10 +68,10 @@ QGroupBox {
 """
 
 class LoginDialog(QDialog):
-    login_success = pyqtSignal(object)  # Emette l'oggetto Utente autenticato
+    login_success = pyqtSignal(object)  # Crea il segnale PyQt per l'accesso (di default deve essere attributo)
 
     def __init__(self, auth_service: AuthService, user_manager: UserManager, parent=None):
-        super().__init__(parent)
+        super().__init__(parent)    # Inizializza tutti gli attributi di QDialog
         self.auth_service = auth_service
         self.user_manager = user_manager
         self.setWindowTitle("Azienda Agricola - Autenticazione")
@@ -84,9 +84,9 @@ class LoginDialog(QDialog):
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(30, 25, 30, 25)  # Imposta margini
 
-        # Intestazione
+        ## Intestazione
         title = QLabel("Azienda Agricola")
-        title.setObjectName("TitleLabel") # Nome per lo stile CSS
+        title.setObjectName("TitleLabel") # Nome per lo stile QSS
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         subtitle = QLabel("Gestione Entrate, Uscite e Guadagno Aziendale")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -95,8 +95,8 @@ class LoginDialog(QDialog):
         main_layout.addWidget(title)
         main_layout.addWidget(subtitle)
 
-        # Stack per passare tra Login e Registrazione Primo Manager
-        self.stacked_widget = QStackedWidget()
+        ## Stack per passare tra Login e Registrazione Primo Manager
+        self.stacked_widget = QStackedWidget()  # Contenitore a pagine sovrapposte, una per login e una per first_manager
         self.login_widget = self.create_login_widget()
         self.first_manager_widget = self.create_first_manager_widget()
 
@@ -104,9 +104,9 @@ class LoginDialog(QDialog):
         self.stacked_widget.addWidget(self.first_manager_widget)
 
         main_layout.addWidget(self.stacked_widget)
-        self.setLayout(main_layout)
+        self.setLayout(main_layout)     # Va a mostrare il main_layout
 
-        # Se non esistono manager registrati, mostra la schermata di registrazione iniziale
+        ## Se non esistono manager registrati, mostra la schermata di registrazione iniziale
         if not self.user_manager.has_manager():
             self.stacked_widget.setCurrentWidget(self.first_manager_widget)
         else:
@@ -118,7 +118,7 @@ class LoginDialog(QDialog):
         layout.setContentsMargins(0, 0, 0, 0)
 
         group = QGroupBox("Accesso Utente")
-        form = QFormLayout(group)
+        form = QFormLayout(group)   # Crea layout a due colonne, una etichetta e una input
         form.setSpacing(12) # Spacing tra elementi layout
 
         self.username_input = QLineEdit()
@@ -126,7 +126,7 @@ class LoginDialog(QDialog):
 
         self.password_input = QLineEdit()
         self.password_input.setPlaceholderText("Password")
-        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        self.password_input.setEchoMode(QLineEdit.EchoMode.Password)    # Nasconde ciò che viene scritto
 
         form.addRow("Username:", self.username_input)
         form.addRow("Password:", self.password_input)
@@ -134,8 +134,8 @@ class LoginDialog(QDialog):
         layout.addWidget(group)
 
         # Bottoni
-        btn_login = QPushButton("Accedi")
-        btn_login.clicked.connect(self.handle_login)
+        btn_login = QPushButton("Accedi")   # Emette .clicked se premuto
+        btn_login.clicked.connect(self.handle_login)    # se .clicked, .connect(self.handle_login)
 
         layout.addWidget(btn_login)
         layout.addStretch()  # Il pulsante "accedi" va sotto la password, senza spazi
@@ -153,14 +153,14 @@ class LoginDialog(QDialog):
         self.m_username = QLineEdit()
         self.m_password = QLineEdit()
         self.m_password.setEchoMode(QLineEdit.EchoMode.Password)
-        self.m_nome = QLineEdit()
+        self.m_nome = QLineEdit()    
         self.m_cognome = QLineEdit()
         self.m_email = QLineEdit()
         self.m_telefono = QLineEdit()
         self.m_data_nascita = QDateEdit()
         self.m_data_nascita.setCalendarPopup(True)
         self.m_data_nascita.setDisplayFormat("dd/MM/yyyy")
-        self.m_data_nascita.setDate(QDate(2000, 1, 1))
+        self.m_data_nascita.setDate(QDate.currentDate())
         self.m_data_nascita.setMaximumDate(QDate.currentDate())
 
         form.addRow("Username:*", self.m_username)
@@ -189,7 +189,7 @@ class LoginDialog(QDialog):
 
         try:
             user = self.auth_service.effettuaLogin(username, password)
-            self.login_success.emit(user)
+            self.login_success.emit(user)   # Emette segnalazione di successo login
             self.accept()
         except Exception as e:
             QMessageBox.critical(self, "Errore Autenticazione", str(e))
@@ -204,7 +204,7 @@ class LoginDialog(QDialog):
         data_nascita = self.m_data_nascita.date().toString("dd/MM/yyyy")
 
         if not all([username, password, nome, cognome, email, data_nascita]):
-            QMessageBox.warning(self, "Attenzione", "Compilare tutti i campi obbligatori, inclusa la data di nascita.")
+            QMessageBox.warning(self, "Attenzione", "Compilare tutti i campi obbligatori")
             return
 
         try:

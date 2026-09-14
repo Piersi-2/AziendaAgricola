@@ -23,7 +23,7 @@ class TestPersistence(unittest.TestCase):
         )
         self.product_service.aggiungi_categoria("MIELE", "grammi")
         prod = self.product_service.aggiungi_prodotto_agricolo(
-            "Miele Acacia", "Miele biologico", 8.5, "grammi", "MIELE", 50.0
+            "Miele Acacia", "Miele biologico", 8.5, "grammi", "MIELE"
         )
         self.financial_service.registra_entrata(
             "MIELE", prod.idProdotto, "Privato", 425.0, "2026-07-22", "Vendita miele"

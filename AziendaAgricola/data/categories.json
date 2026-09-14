@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "nome": "MIELE",
+    "unitaMisura": "kilogrammi"
+  },
+  {
+    "nome": "VINO",
+    "unitaMisura": "litri"
+  }
+]

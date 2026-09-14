@@ -36,14 +36,13 @@ class UserManagementView(QWidget):
         self.p_nascita.setDisplayFormat("dd/MM/yyyy")
         self.p_nascita.setMaximumDate(QDate.currentDate())
         d_self = QDate.fromString(self.current_user.dataNascita, "dd/MM/yyyy")
-        if not d_self.isValid():
-            d_self = QDate.fromString(self.current_user.dataNascita, "yyyy-MM-dd")
         self.p_nascita.setDate(d_self if d_self.isValid() else QDate(2000, 1, 1))
 
         # Evita la selezione manuale del testo e apre direttamente il calendario al click
         self.p_nascita.lineEdit().setReadOnly(True)
         self.p_nascita.lineEdit().setCursor(Qt.PointingHandCursor)
 
+        # Fa aprire il calendario anche se si clicca sul testo (simula click finto sulla freccia)
         def open_nascita_calendar():
             if not self.p_nascita.calendarWidget().isVisible():
                 opt = QStyleOptionComboBox()
@@ -79,12 +78,14 @@ class UserManagementView(QWidget):
 
         main_layout.addWidget(profile_box)
 
+        # ---------------------------------------------------------
         # Se Manager: Gestione Dipendenti e Cronologia Login
+        # ---------------------------------------------------------
+
         if isinstance(self.current_user, Manager):
             manager_box = QGroupBox("Gestione Utenti e Dipendenti (Riservato Manager)")
             m_layout = QVBoxLayout(manager_box)
 
-            # Bottoni per azioni
             top_bar = QHBoxLayout()
             btn_add_user = QPushButton("+ Crea Nuovo Profilo Dipendente")
             btn_add_user.clicked.connect(self.show_create_user_dialog)
@@ -107,7 +108,6 @@ class UserManagementView(QWidget):
             top_bar.addWidget(btn_login_hist)
             m_layout.addLayout(top_bar)
 
-            # Tabella Utenti
             self.users_table = QTableWidget()
             self.users_table.setColumnCount(6)
             self.users_table.setHorizontalHeaderLabels([
@@ -115,7 +115,6 @@ class UserManagementView(QWidget):
             ])
             self.users_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
             
-            # Disabilita modifica diretta dei campi
             self.users_table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
             
             m_layout.addWidget(self.users_table)
@@ -130,7 +129,7 @@ class UserManagementView(QWidget):
         users = self.user_manager.get_all_users()
         self.users_table.setRowCount(len(users))
 
-        for idx, u in enumerate(users):
+        for idx, u in enumerate(users):     # idx numero di riga, u utenti
             item_username = QTableWidgetItem(u.nomeUtente)
             item_username.setData(Qt.ItemDataRole.UserRole, u.id)
             self.users_table.setItem(idx, 0, item_username)
@@ -140,6 +139,7 @@ class UserManagementView(QWidget):
             self.users_table.setItem(idx, 4, QTableWidgetItem(u.email))
             self.users_table.setItem(idx, 5, QTableWidgetItem(u.ultimoLogin or "Mai connesso"))
 
+    # Salva modifiche profilo
     def handle_update_self(self):
         nome = self.p_nome.text().strip()
         cognome = self.p_cognome.text().strip()
@@ -163,7 +163,6 @@ class UserManagementView(QWidget):
                 password=pwd
             )
             
-            # Aggiorna i dati in memoria dell'utente connesso
             self.current_user.nome = nome
             self.current_user.cognome = cognome
             self.current_user.email = email
@@ -179,6 +178,7 @@ class UserManagementView(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Errore Aggiornamento", str(e))
 
+    # Crea dipendente
     def show_create_user_dialog(self):
         dlg = QDialog(self)
         dlg.setWindowTitle("Crea Nuovo Profilo Utente")
@@ -243,6 +243,7 @@ class UserManagementView(QWidget):
         layout.addWidget(btn)
         dlg.exec()
 
+    # Modifica profilo
     def show_edit_user_dialog(self):
         row = self.users_table.currentRow()
         if row < 0:
@@ -339,6 +340,7 @@ class UserManagementView(QWidget):
         layout.addWidget(btn)
         dlg.exec()
 
+    # Elimina dipendente
     def handle_delete_user(self):
         row = self.users_table.currentRow()
         if row < 0:
@@ -361,9 +363,10 @@ class UserManagementView(QWidget):
             except Exception as e:
                 QMessageBox.critical(self, "Errore", str(e))
 
+    # Visualizza cronologia login
     def show_login_history_dialog(self):
         dlg = QDialog(self)
-        dlg.setWindowTitle("Cronologia Login Utenti (Manager View)")
+        dlg.setWindowTitle("Cronologia Login Utenti")
         dlg.resize(500, 400)
         layout = QVBoxLayout(dlg)
 
@@ -371,7 +374,7 @@ class UserManagementView(QWidget):
         txt = QTextEdit()
         txt.setReadOnly(True)
 
-        log_str = "========================================\nCRONOLOGIA LOGIN E ULTIME SESSIONI\n========================================\n\n"
+        log_str = "=====================================\nCRONOLOGIA LOGIN E ULTIME SESSIONI\n=====================================\n\n"
         for uname, logins in hist.items():
             log_str += f"Utente: {uname}\n"
             for l in reversed(logins[-10:]):  # Ultimi 10 login

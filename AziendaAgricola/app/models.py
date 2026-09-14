@@ -92,7 +92,6 @@ class Prodotto:
     nome: str
     descrizione: str
     prezzoUnitario: float
-    quantitaVendita: float = 0.0
     tipoProdotto: str = "Agricolo"
     unitaMisura: str = "kg"
 
@@ -111,14 +110,6 @@ class Prodotto:
 
     def getDescrizioneFattura(self) -> str:
         return f"{self.nome} - {self.descrizione} (€{self.prezzoUnitario:.2f})"
-
-    def getNomeConQuantita(self) -> str:
-        if self.quantitaVendita and self.quantitaVendita > 0:
-            q_str = f"{self.quantitaVendita:g}"
-            u = formatta_unita(self.unitaMisura)
-            u_suffix = u if u in ("kg", "g", "l") else (f" {u}" if u else "")
-            return f"{self.nome} ({q_str}{u_suffix})"
-        return self.nome
 
 def formatta_unita(unita: str) -> str:
     u = (unita or "").strip().lower()

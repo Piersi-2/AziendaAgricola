@@ -316,27 +316,19 @@ class TestServices(unittest.TestCase):
         self.assertEqual(loaded[0].idProdotto, p.idProdotto)
         self.assertEqual(loaded[0].tipoProdotto, "ORTAGGI")
 
-    def test_quantita_vendita_e_unicita_combinata(self):
+    def test_unicita_nome_prodotto(self):
         self.product_service.aggiungi_categoria("MIELE", "kilogrammi")
-        # 1. Prodotto a quantita 0.5 kg
         p1 = self.product_service.aggiungi_prodotto_agricolo(
-            nome="Miele Millefiori", descrizione="Vasetto piccolo", prezzo=5.0, unita="kilogrammi", tipo="MIELE", quantita=0.5
+            nome="Miele Millefiori", descrizione="Vasetto", prezzo=5.0, unita="kilogrammi", tipo="MIELE"
         )
-        self.assertEqual(p1.quantitaVendita, 0.5)
+        self.assertEqual(p1.nome, "Miele Millefiori")
 
-        # 2. Stesso nome ma quantita 1.0 kg deve essere consentito
-        p2 = self.product_service.aggiungi_prodotto_agricolo(
-            nome="Miele Millefiori", descrizione="Vasetto grande", prezzo=9.0, unita="kilogrammi", tipo="MIELE", quantita=1.0
-        )
-        self.assertEqual(p2.quantitaVendita, 1.0)
-        self.assertNotEqual(p1.idProdotto, p2.idProdotto)
-
-        # 3. Tentativo con stesso nome E stessa quantita (0.5 kg) deve fallire
+        # Tentativo con stesso nome deve fallire
         with self.assertRaises(ValueError) as ctx:
             self.product_service.aggiungi_prodotto_agricolo(
-                nome="Miele Millefiori", descrizione="Altro piccolo", prezzo=5.5, unita="kilogrammi", tipo="MIELE", quantita=0.5
+                nome="Miele Millefiori", descrizione="Altro vasetto", prezzo=6.0, unita="kilogrammi", tipo="MIELE"
             )
-        self.assertIn("quantità", str(ctx.exception).lower())
+        self.assertIn("esiste già", str(ctx.exception).lower())
 
     def test_id_univoci_dopo_cancellazione(self):
         # 1. Creazione e cancellazione utenti
@@ -364,12 +356,12 @@ class TestServices(unittest.TestCase):
 
         # 2. Creazione e cancellazione prodotti
         self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
-        prod1 = self.product_service.aggiungi_prodotto_agricolo("Mele", "Desc", 2.0, "kilogrammi", "FRUTTA", 1.0)
-        prod2 = self.product_service.aggiungi_prodotto_agricolo("Pere", "Desc", 2.5, "kilogrammi", "FRUTTA", 1.0)
+        prod1 = self.product_service.aggiungi_prodotto_agricolo("Mele", "Desc", 2.0, "kilogrammi", "FRUTTA")
+        prod2 = self.product_service.aggiungi_prodotto_agricolo("Pere", "Desc", 2.5, "kilogrammi", "FRUTTA")
 
         # Elimina prod2
         self.product_service.elimina_prodotto(prod2.idProdotto)
-        prod3 = self.product_service.aggiungi_prodotto_agricolo("Banane", "Desc", 3.0, "kilogrammi", "FRUTTA", 1.0)
+        prod3 = self.product_service.aggiungi_prodotto_agricolo("Banane", "Desc", 3.0, "kilogrammi", "FRUTTA")
         self.assertNotEqual(prod3.idProdotto, prod2.idProdotto)
         self.assertNotEqual(prod3.idProdotto, prod1.idProdotto)
 

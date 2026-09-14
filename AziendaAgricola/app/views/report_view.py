@@ -16,9 +16,6 @@ class ReportView(QWidget):
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(15, 15, 15, 15)
 
-        # ---------------------------------------------------------
-        # GUADAGNO AZIENDALE
-        # ---------------------------------------------------------
         report_group = QGroupBox("Guadagno Aziendale Annuo")
         r_layout = QVBoxLayout(report_group)
 
@@ -66,11 +63,8 @@ class ReportView(QWidget):
             if rep.margineNetto >= 0:
                 res_text += "\n  ESITO: Bilancio in Utile (+) "
             else:
-                res_text += "\n  ESITO: Bilancio in Disavanzo / Perdita (-) "
+                res_text += "\n  ESITO: Bilancio in Perdita (-) "
             res_text += "\n=================================================="
             self.report_display.setPlainText(res_text)
         except Exception as e:
             QMessageBox.critical(self, "Errore", str(e))
-
-# Alias per retrocompatibilita
-ReportAndBackupView = ReportView

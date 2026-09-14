@@ -170,7 +170,6 @@ class DataRepository:
                     nome=d["nome"],
                     descrizione=d["descrizione"],
                     prezzoUnitario=float(d["prezzoUnitario"]),
-                    quantitaVendita=float(d.get("quantitaVendita", 0.0)),
                     tipoProdotto=d.get("tipoProdotto", "Agricolo"),
                     unitaMisura=d.get("unitaMisura", "kg")
                 )
@@ -188,7 +187,6 @@ class DataRepository:
                 "nome": p.nome,
                 "descrizione": p.descrizione,
                 "prezzoUnitario": p.prezzoUnitario,
-                "quantitaVendita": p.quantitaVendita,
                 "class_type": "Prodotto",
                 "tipoProdotto": getattr(p, "tipoProdotto", "Agricolo"),
                 "unitaMisura": getattr(p, "unitaMisura", "kg")

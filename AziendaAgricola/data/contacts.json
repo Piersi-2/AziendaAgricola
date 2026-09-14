@@ -1,1 +1,62 @@
-[]
+[
+  {
+    "idContatto": "8eb905e4",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "",
+    "partitaIVA": "",
+    "codiceDestinatarioSDI": ""
+  },
+  {
+    "idContatto": "725031e2",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "",
+    "partitaIVA": "",
+    "codiceDestinatarioSDI": ""
+  },
+  {
+    "idContatto": "77564024",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "Luca Rossi",
+    "partitaIVA": "PRSGRL05E24A271R",
+    "codiceDestinatarioSDI": ""
+  },
+  {
+    "idContatto": "22d0f3d7",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "Andrea",
+    "partitaIVA": "",
+    "codiceDestinatarioSDI": ""
+  },
+  {
+    "idContatto": "b627d71f",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "",
+    "partitaIVA": "",
+    "codiceDestinatarioSDI": ""
+  },
+  {
+    "idContatto": "4241e0b2",
+    "email": "",
+    "telefono": "",
+    "indirizzo": "",
+    "class_type": "Azienda",
+    "ragioneSociale": "",
+    "partitaIVA": "",
+    "codiceDestinatarioSDI": ""
+  }
+]

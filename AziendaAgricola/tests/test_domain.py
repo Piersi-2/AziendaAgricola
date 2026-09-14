@@ -49,7 +49,6 @@ class TestDomainModels(unittest.TestCase):
             nome="Olio EVO",
             descrizione="Olio Extravergine",
             prezzoUnitario=12.0,
-            quantitaVendita=100.0,
             tipoProdotto="Olio",
             unitaMisura="litri"
         )

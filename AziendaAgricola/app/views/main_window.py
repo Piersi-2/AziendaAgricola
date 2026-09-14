@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-    QTabWidget, QMessageBox, QStatusBar, QDateEdit #QStatusBar aggiunge barra sotto
+    QTabWidget, QMessageBox, QStatusBar, QDateEdit
 )
-from PyQt5.QtCore import QTimer, Qt, QEvent #QTimer aggiunge timer per scadenza sessione
+from PyQt5.QtCore import QTimer, Qt, QEvent 
 from app.models import Utente, livelloAccesso
 from app.repositories import DataRepository
 from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
@@ -179,11 +179,12 @@ class MainWindow(QMainWindow):
         self.session_timer.timeout.connect(self.check_session_status)
         self.session_timer.start()
 
-        # Installa il filtro eventi sull'applicazione per intercettare l'interazione utente e resettare l'inattività
+        # Installa un filtro affinchè ogni cosa (if app) venga prima intercettata da eventFilter prima di avvenire
         app = QApplication.instance()
         if app:
             app.installEventFilter(self)
 
+    # Metodo per installEventFilter
     def eventFilter(self, watched, event):
         if event.type() in (
             QEvent.MouseMove,
@@ -194,14 +195,15 @@ class MainWindow(QMainWindow):
             self.auth_service.update_activity()
 
         # Disabilita la modifica della data tramite rotellina del mouse sui QDateEdit
-        if event.type() == QEvent.Wheel:
-            parent = getattr(watched, 'parent', lambda: None)()
+        if event.type() == QEvent.Wheel:       # Parent e widget sono due pezzi che compongono QDateEdit
+            parent = getattr(watched, 'parent', lambda: None)() # () esegue la funzione trovata. Se watched ha il metodo .parent, lo esegue. Altrimenti, restituisce None.
             if isinstance(watched, QDateEdit) or isinstance(parent, QDateEdit):
                 event.ignore()
                 return True
 
         return super().eventFilter(watched, event)
 
+    # Chiude eventFilter quando viene chiusa la finestra
     def closeEvent(self, event):
         app = QApplication.instance()
         if app:
