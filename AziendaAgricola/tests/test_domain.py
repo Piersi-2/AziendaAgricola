@@ -48,6 +48,7 @@ class TestDomainModels(unittest.TestCase):
             )
 
     def test_prodotto_calcoli(self):
+        """Verifica il calcolo del prezzo totale moltiplicando il prezzo unitario per la quantità."""
         p = Prodotto(
             idProdotto="P1",
             nome="Olio EVO",
@@ -57,9 +58,9 @@ class TestDomainModels(unittest.TestCase):
             unitaMisura="litri"
         )
         self.assertEqual(p.calcolaPrezzoTotale(5), 60.0)
-        self.assertEqual(p.calcolaPrezzoScontato(5, 10), 54.0)
 
-    def test_report_guadagno_rf22(self):
+    def test_report_guadagno_rf29(self):
+        """RF29: Verifica la generazione del report annuale calcolando entrate, uscite e margine netto."""
         movs = [
             Movimento("M1", TipoMovimento.ENTRATA, 10, 500.0, "2026-05-10", "Vendita olio"),
             Movimento("M2", TipoMovimento.ENTRATA, 5, 200.0, "2026-06-15", "Vendita vino"),

@@ -17,9 +17,10 @@ class TestPersistence(unittest.TestCase):
         self.financial_service = FinancialService(self.repo)
 
     def tearDown(self):
-        shutil.rmtree(self.temp_dir)
+        shutil.rmtree(self.temp_dir)    # Cancella la cartella dove vengono eseguiti i test, alla fine
 
     def test_json_persistence(self):
+        """Verifica la persistenza e il corretto ricaricamento dei dati su file JSON tramite DataRepository."""
         # 1. Popola dati
         self.user_manager.registra_primo_manager(
             "m1", "Pass1234", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"

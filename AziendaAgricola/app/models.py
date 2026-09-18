@@ -103,14 +103,6 @@ class Prodotto:
     def calcolaPrezzoTotale(self, quantita: float) -> float:
         return self.prezzoUnitario * quantita
 
-    # Sconto su acquisti multipli
-    def calcolaPrezzoScontato(self, quantita: float, percentualeSconto: float) -> float: 
-        totale = self.calcolaPrezzoTotale(quantita)
-        return totale * (1.0 - (percentualeSconto / 100.0))
-
-    def getDescrizioneFattura(self) -> str:
-        return f"{self.nome} - {self.descrizione} (€{self.prezzoUnitario:.2f})"
-
 def formatta_unita(unita: str) -> str:
     if not unita:
         return ""

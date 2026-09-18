@@ -18,7 +18,6 @@ from app.views.user_management_view import UserManagementView
 from app.views.report_view import ReportView
 from app.views.login_dialog import LoginDialog
 
-# Inizializza QApplication headless per i test dei widget PyQt5
 app = QApplication.instance()
 if not app:
     app = QApplication([])
@@ -34,7 +33,6 @@ class TestViews(unittest.TestCase):
         self.financial_service = FinancialService(self.repo)
         self.report_service = ReportService(self.repo)
 
-        # Crea un manager di test
         self.manager_user = self.user_manager.registra_primo_manager(
             username="admin",
             password="Password123",
@@ -45,7 +43,6 @@ class TestViews(unittest.TestCase):
             dataNascita="1985-01-01"
         )
 
-        # Crea un dipendente di test
         self.dipendente_user = self.user_manager.crea_dipendente(
             username="dip1",
             password="Password123",
@@ -60,7 +57,7 @@ class TestViews(unittest.TestCase):
         shutil.rmtree(self.temp_dir)
 
     # -------------------------------------------------------------
-    # 1. Test Vista Prodotti (ProductManagementView)
+    # 1. Test Vista Prodotti
     # -------------------------------------------------------------
     def test_product_view_columns_and_headers(self):
         """Verifica le 5 colonne e le intestazioni della vista Catalogo Prodotti."""
@@ -71,12 +68,9 @@ class TestViews(unittest.TestCase):
             "Nome Prodotto", "Categoria / Tipo", "Unità di Misura", "Descrizione", "Prezzo Unitario"
         ]
         self.assertEqual(headers, expected_headers)
-        self.assertNotIn("(kg)", headers[4])
-        self.assertNotIn("(UdM)", headers[4])
-        self.assertEqual(headers[4], "Prezzo Unitario")
 
     # -------------------------------------------------------------
-    # 2. Test Vista Movimenti Finanziari (FinancialMovementView)
+    # 2. Test Vista Movimenti Finanziari
     # -------------------------------------------------------------
     def test_entrate_table_columns(self):
         """Verifica le 9 colonne della tabella Entrate (inclusa UdM tra Quantità e Importo)."""
@@ -98,7 +92,6 @@ class TestViews(unittest.TestCase):
             "Data", "Categoria Spesa", "Fornitore", "Importo Totale (€)", "Descrizione", "Allegato PDF"
         ]
         self.assertEqual(headers, expected_headers)
-        self.assertNotIn("Quantità", headers)
 
     def test_movement_view_filters(self):
         """Verifica la configurazione dei filtri in Entrate e Uscite."""
@@ -117,7 +110,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(client_options, ["Tutti i clienti", "Azienda", "Privato"])
 
     # -------------------------------------------------------------
-    # 3. Test Finestra Principale (MainWindow) e Ruoli
+    # 3. Test Finestra Principale e Ruoli
     # -------------------------------------------------------------
     def test_main_window_tabs_for_manager(self):
         """Il Manager deve avere accesso a 4 tab, incluso Guadagno Aziendale."""
@@ -146,7 +139,7 @@ class TestViews(unittest.TestCase):
         self.assertNotIn("Guadagno Aziendale", tab_titles)
 
     # -------------------------------------------------------------
-    # 4. Test Vista Gestione Utenti (UserManagementView)
+    # 4. Test Vista Gestione Utenti
     # -------------------------------------------------------------
     def test_user_management_view_permissions(self):
         """Il Manager vede la tabella utenti aziendali, il Dipendente solo il proprio profilo."""
@@ -161,7 +154,7 @@ class TestViews(unittest.TestCase):
         self.assertFalse(hasattr(view_dip, "users_table"))
 
     # -------------------------------------------------------------
-    # 5. Test Vista Report Guadagno (ReportView)
+    # 5. Test Vista Report Guadagno
     # -------------------------------------------------------------
     def test_report_view_elements(self):
         """Verifica la presenza del selettore anno e del pannello di visualizzazione report."""
@@ -174,7 +167,7 @@ class TestViews(unittest.TestCase):
         self.assertIn("REPORT GUADAGNO AZIENDALE", view.report_display.toPlainText())
 
     # -------------------------------------------------------------
-    # 6. Test Dialog di Autenticazione (LoginDialog)
+    # 6. Test Dialog di Autenticazione
     # -------------------------------------------------------------
     def test_login_dialog_modes(self):
         """Verifica che con manager registrato si apra la schermata di login normale."""
