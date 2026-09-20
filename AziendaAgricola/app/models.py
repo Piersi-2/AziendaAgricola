@@ -180,6 +180,7 @@ class Movimento:
     documento: Optional[Documento] = None
 
     def __post_init__(self):
+        """erroreLunghezzaDescrizione()"""
         if len(self.descrizione) > 500:
             raise ValueError("La descrizione del movimento non può superare i 500 caratteri.")
 

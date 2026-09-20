@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": "1da75955",
+    "nomeUtente": "Luca",
+    "password": "123456789a",
+    "nome": "Luca",
+    "cognome": "Rossi",
+    "email": "sjaijs@siwhinwsinw.com",
+    "telefono": "",
+    "dataNascita": "14/07/2026",
+    "ruolo": "MANAGER",
+    "ultimoLogin": "2026-09-20 19:21:19",
+    "statoAttivo": true,
+    "codiceAutorizzazione": "MNG-ADMIN"
+  }
+]
