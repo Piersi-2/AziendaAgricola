@@ -305,7 +305,7 @@ class FinancialService:
         shutil.copy2(source_path, dest_path)    # Copia il file nel dest_path mantenendo i metadati
         return dest_path
 
-    def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, username: str = "admin", quantita: float = 1.0) -> Movimento:
+    def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, quantita: float = 1.0) -> Movimento:
         mov_id = f"MOV-ENT-{str(uuid.uuid4())[:8]}"
 
         doc = None
@@ -364,7 +364,7 @@ class FinancialService:
         self.repo.save_movements(movs)
         return m
 
-    def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None, username: str = "admin") -> Movimento:
+    def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None) -> Movimento:
         mov_id = f"MOV-USC-{str(uuid.uuid4())[:8]}"
 
         doc = None

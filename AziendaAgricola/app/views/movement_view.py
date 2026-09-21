@@ -567,8 +567,7 @@ class FinancialMovementView(QWidget):
                     data=dt,
                     descrizione=desc,
                     cliente_dettagli=c_details,
-                    pdf_path=self.selected_pdf_entrata or None,
-                    username=self.current_user.nomeUtente
+                    pdf_path=self.selected_pdf_entrata or None
                 )
 
                 QMessageBox.information(dlg, "Successo", "Entrata registrata con successo!")
@@ -657,8 +656,7 @@ class FinancialMovementView(QWidget):
                     data=dt,
                     descrizione=desc,
                     fornitore_note=forn,
-                    pdf_path=self.selected_pdf_uscita or None,
-                    username=self.current_user.nomeUtente
+                    pdf_path=self.selected_pdf_uscita or None
                 )
 
                 QMessageBox.information(dlg, "Successo", "Uscita registrata con successo!")
