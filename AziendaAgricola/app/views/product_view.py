@@ -4,11 +4,11 @@ from PyQt5.QtWidgets import (
     QHeaderView, QComboBox, QDialog, QAbstractItemView, QTextEdit
 )
 from PyQt5.QtCore import Qt
-from app.services import ProductService
+from app.services import GestioneProdotto
 from app.models import Prodotto, CategoriaProdotto, formatta_unita
 
 class ProductManagementView(QWidget):
-    def __init__(self, product_service: ProductService, parent=None):
+    def __init__(self, product_service: GestioneProdotto, parent=None):
         super().__init__(parent)
         self.product_service = product_service
         self.init_ui()

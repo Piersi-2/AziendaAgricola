@@ -88,10 +88,10 @@ class AuthService:
         return history
 
 # ---------------------------------------------------------
-# USER MANAGER - gestisce utenti e manager
+# GESTIONE UTENTE - gestisce utenti e manager
 # ---------------------------------------------------------
 
-class UserManager:
+class GestioneUtente:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -198,10 +198,10 @@ class UserManager:
             raise ValueError(f"L'indirizzo email '{email}' è già associato a un account.")
 
 # ---------------------------------------------------------
-# PRODUCT SERVICE - gestisce catalogo prodotti agricoli e categorie
+# GESTIONE PRODOTTO - gestisce catalogo prodotti agricoli e categorie
 # ---------------------------------------------------------
 
-class ProductService:
+class GestioneProdotto:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -289,10 +289,10 @@ class ProductService:
         self.repo.save_products(prods)
 
 # ---------------------------------------------------------
-# FINANCIAL SERVICE - gestisce transazioni e registri finanziari
+# GESTIONE MOVIMENTO - gestisce transazioni e registri finanziari
 # ---------------------------------------------------------
 
-class FinancialService:
+class GestioneMovimento:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -410,10 +410,10 @@ class FinancialService:
         self.repo.save_movements(movs)
 
 # ---------------------------------------------------------
-# REPORT SERVICE - calcolo del guadagno aziendale
+# GESTIONE REPORT - calcolo del guadagno aziendale
 # ---------------------------------------------------------
 
-class ReportService:
+class GestioneReport:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 

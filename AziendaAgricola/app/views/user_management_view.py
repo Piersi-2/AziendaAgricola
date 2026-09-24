@@ -6,13 +6,13 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt, pyqtSignal, QDate, QObject, QEvent, QPoint
 from PyQt5.QtGui import QMouseEvent
-from app.services import UserManager, AuthService
+from app.services import GestioneUtente, AuthService
 from app.models import Utente, Manager, Dipendente, livelloAccesso
 
 class UserManagementView(QWidget):
     profile_updated = pyqtSignal()  # Segnale per notificare modifiche al proprio profilo
 
-    def __init__(self, current_user: Utente, user_manager: UserManager, auth_service: AuthService, parent=None):
+    def __init__(self, current_user: Utente, user_manager: GestioneUtente, auth_service: AuthService, parent=None):
         super().__init__(parent)
         self.current_user = current_user
         self.user_manager = user_manager

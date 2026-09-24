@@ -8,13 +8,13 @@ from PyQt5.QtWidgets import (
     QDateEdit, QAbstractItemView
 )
 from PyQt5.QtCore import Qt, QDate
-from app.services import FinancialService, ProductService
+from app.services import GestioneMovimento, GestioneProdotto
 from app.models import (
     Utente, TipoUscita, TipoMovimento, Movimento, Azienda, Privato, formatta_unita
 )
 
 class FinancialMovementView(QWidget):
-    def __init__(self, financial_service: FinancialService, product_service: ProductService, current_user: Utente, parent=None):
+    def __init__(self, financial_service: GestioneMovimento, product_service: GestioneProdotto, current_user: Utente, parent=None):
         super().__init__(parent)
         self.financial_service = financial_service
         self.product_service = product_service

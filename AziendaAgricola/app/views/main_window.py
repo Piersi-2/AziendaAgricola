@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import QTimer, Qt, QEvent 
 from app.models import Utente, livelloAccesso
 from app.repositories import DataRepository
-from app.services import AuthService, UserManager, ProductService, FinancialService, ReportService
+from app.services import AuthService, GestioneUtente, GestioneProdotto, GestioneMovimento, GestioneReport
 from app.views.user_management_view import UserManagementView
 from app.views.product_view import ProductManagementView
 from app.views.movement_view import FinancialMovementView
@@ -103,10 +103,10 @@ class MainWindow(QMainWindow):
         self.auth_service = auth_service
 
         # Servizi
-        self.user_manager = UserManager(repo)
-        self.product_service = ProductService(repo)
-        self.financial_service = FinancialService(repo)
-        self.report_service = ReportService(repo)
+        self.user_manager = GestioneUtente(repo)
+        self.product_service = GestioneProdotto(repo)
+        self.financial_service = GestioneMovimento(repo)
+        self.report_service = GestioneReport(repo)
 
         self.setWindowTitle(f"Azienda Agricola - Gestione Integrata [{current_user.nomeUtente} ({current_user.ruolo.value})]")
         self.resize(1100, 720)

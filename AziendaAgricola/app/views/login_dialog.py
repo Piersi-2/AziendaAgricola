@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (
     QMessageBox, QStackedWidget, QWidget, QFormLayout, QGroupBox, QDateEdit
 )
 from PyQt5.QtCore import pyqtSignal, Qt, QDate
-from app.services import AuthService, UserManager
+from app.services import AuthService, GestioneUtente
 from app.models import Utente
 
 # Definisce le regole di stile
@@ -70,7 +70,7 @@ QGroupBox {
 class LoginDialog(QDialog):
     login_success = pyqtSignal(object)  # Crea il segnale PyQt per l'accesso (di default deve essere attributo)
 
-    def __init__(self, auth_service: AuthService, user_manager: UserManager, parent=None):
+    def __init__(self, auth_service: AuthService, user_manager: GestioneUtente, parent=None):
         super().__init__(parent)    # Inizializza tutti gli attributi di QDialog
         self.auth_service = auth_service
         self.user_manager = user_manager

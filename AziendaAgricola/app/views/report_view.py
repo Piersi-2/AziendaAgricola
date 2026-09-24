@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import (
     QMessageBox, QGroupBox, QComboBox, QTextEdit
 )
 from PyQt5.QtCore import Qt, QDate
-from app.services import ReportService
+from app.services import GestioneReport
 from app.models import ReportGuadagno
 
 class ReportView(QWidget):
-    def __init__(self, report_service: ReportService, repo=None, parent=None):
+    def __init__(self, report_service: GestioneReport, repo=None, parent=None):
         super().__init__(parent)
         self.report_service = report_service
         self.init_ui()
