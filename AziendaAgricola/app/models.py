@@ -42,13 +42,6 @@ class Utente:
     ultimoLogin: Optional[str] = None
     statoAttivo: bool = True    # Per disattivare l'account senza cancellarlo
 
-    @staticmethod
-    def valida_password(password: str) -> bool:
-        """La password deve contenere almeno 8 caratteri alfanumerici."""
-        if not password or len(password) < 8:
-            return False
-        return password.isalnum()
-
     def modificaProfiloUtente(self, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
         # Significa che se password è None, non viene modificata. Se è una stringa, viene validata e aggiornata.
         self.nome = nome
@@ -57,7 +50,7 @@ class Utente:
         self.telefono = telefono
         self.dataNascita = dataNascita
         if password:
-            if not self.valida_password(password):
+            if not password or len(password) < 8 or not password.isalnum():
                 raise ValueError("La nuova password deve contenere almeno 8 caratteri alfanumerici.")
             self.password = password
 
@@ -78,7 +71,7 @@ class Dipendente(Utente):
         self.ruolo = livelloAccesso.DIPENDENTE
 
 # =========================================================
-# PRODOTTI AGRICOLI
+# PRODOTTI E CATEGORIE
 # =========================================================
 
 @dataclass
@@ -92,7 +85,7 @@ class Prodotto:
     nome: str
     descrizione: str
     prezzoUnitario: float
-    tipoProdotto: str = "Agricolo"
+    categoria: str = ""
     unitaMisura: str = "kg"
 
     def aggiornaPrezzoListino(self, nuovoPrezzo: float):

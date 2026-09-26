@@ -22,11 +22,11 @@ class TestPersistence(unittest.TestCase):
     def test_json_persistence(self):
         """Verifica la persistenza e il corretto ricaricamento dei dati su file JSON tramite DataRepository."""
         # 1. Popola dati
-        self.user_manager.registra_primo_manager(
+        self.user_manager.crea_manager(
             "m1", "Pass1234", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
         self.product_service.aggiungi_categoria("MIELE", "grammi")
-        prod = self.product_service.aggiungi_prodotto_agricolo(
+        prod = self.product_service.aggiungi_prodotto(
             "Miele Acacia", "Miele biologico", 8.5, "grammi", "MIELE"
         )
         self.financial_service.registra_entrata(
@@ -36,10 +36,10 @@ class TestPersistence(unittest.TestCase):
         # 2. Crea una nuova istanza di DataRepository che legge dalla stessa cartella
         repo_reload = DataRepository(data_dir=self.temp_dir)
 
-        users = repo_reload.load_users()
-        categories = repo_reload.load_categories()
-        products = repo_reload.load_products()
-        movements = repo_reload.load_movements()
+        users = repo_reload.caricaUtenti()
+        categories = repo_reload.caricaCategorie()
+        products = repo_reload.caricaProdotti()
+        movements = repo_reload.caricaMovimenti()
 
         self.assertEqual(len(users), 1)
         self.assertEqual(users[0].nomeUtente, "m1")

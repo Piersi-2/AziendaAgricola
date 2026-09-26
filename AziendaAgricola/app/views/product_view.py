@@ -126,8 +126,8 @@ class ProductManagementView(QWidget):
             item_nome.setData(Qt.ItemDataRole.UserRole, p.idProdotto)
             self.table.setItem(idx, 0, item_nome)
 
-            # Tipo prodotto
-            tipo = getattr(p, 'tipoProdotto', 'Agricolo')
+            # Categoria prodotto
+            tipo = p.categoria
             self.table.setItem(idx, 1, QTableWidgetItem(tipo))
 
             # Unità di misura della categoria
@@ -199,7 +199,7 @@ class ProductManagementView(QWidget):
                 sel_cat_obj = next((c for c in cats if c.nome.strip().upper() == tipo.strip().upper()), None)
                 unita_effettiva = sel_cat_obj.unitaMisura if sel_cat_obj else "kg"
 
-                self.product_service.aggiungi_prodotto_agricolo(
+                self.product_service.aggiungi_prodotto(
                     nome=nome, descrizione=desc, prezzo=prezzo, unita=unita_effettiva, tipo=tipo
                 )
 

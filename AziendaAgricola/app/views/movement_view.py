@@ -161,7 +161,7 @@ class FinancialMovementView(QWidget):
         if not contatto_id:
             return "-", {}
         
-        contacts = self.financial_service.repo.load_contacts()
+        contacts = self.financial_service.repo.caricaContatti()
         c = next((x for x in contacts if x.idContatto == contatto_id), None)
         if not c:
             return "-", {}
@@ -435,7 +435,7 @@ class FinancialMovementView(QWidget):
         if tipo == TipoMovimento.ENTRATA and cb_cli:
             cli_tipo = cb_cli.currentText()
             if cli_tipo in ("Azienda", "Privato"):
-                contacts = self.financial_service.repo.load_contacts()
+                contacts = self.financial_service.repo.caricaContatti()
                 contact_map = {c.idContatto: c for c in contacts}
                 def match_client(m):
                     c = contact_map.get(m.contattoId) if m.contattoId else None
@@ -478,7 +478,7 @@ class FinancialMovementView(QWidget):
                 return
             prods = self.product_service.get_all_products()
             for p in prods:
-                p_cat = getattr(p, 'tipoProdotto', 'Generico')
+                p_cat = p.categoria
                 if p_cat == selected_cat:
                     cb_prodotto.addItem(p.nome, p.idProdotto)
 
@@ -739,7 +739,7 @@ class FinancialMovementView(QWidget):
                 target.descrizione = desc
 
                 # Salva su database
-                self.financial_service.repo.save_movements(movs)
+                self.financial_service.repo.salvaMovimenti(movs)
 
                 QMessageBox.information(dlg, "Successo", "Movimento modificato con successo!")
                 self.load_tables()

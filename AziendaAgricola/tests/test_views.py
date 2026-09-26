@@ -33,7 +33,7 @@ class TestViews(unittest.TestCase):
         self.financial_service = GestioneMovimento(self.repo)
         self.report_service = GestioneReport(self.repo)
 
-        self.manager_user = self.user_manager.registra_primo_manager(
+        self.manager_user = self.user_manager.crea_manager(
             username="admin",
             password="Password123",
             nome="Admin",

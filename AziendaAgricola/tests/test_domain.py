@@ -11,16 +11,24 @@ from app.models import (
 
 class TestDomainModels(unittest.TestCase):
     def test_valida_password_rnf3(self):
-        """RNF3: Validazione password >= 8 caratteri alfanumerici."""
-        self.assertTrue(Utente.valida_password("Pass1234"))
-        self.assertTrue(Utente.valida_password("abcdefgh1"))
+        """RNF3: Validazione password >= 8 caratteri alfanumerici tramite modificaProfiloUtente."""
+        u = Utente("1", "user", "Pass1234", "N", "C", "e@a.it", "123", "1990-01-01", livelloAccesso.DIPENDENTE)
 
-        # Troppo corta (< 8)
-        self.assertFalse(Utente.valida_password("Pass1"))
+        # Valide
+        u.modificaProfiloUtente("N", "C", "e@a.it", "123", "1990-01-01", "NewPass123")
+        self.assertEqual(u.password, "NewPass123")
+        u.modificaProfiloUtente("N", "C", "e@a.it", "123", "1990-01-01", "abcdefgh1")
+        self.assertEqual(u.password, "abcdefgh1")
 
-        # Caratteri non alfanumerici (!, ?, @)
-        self.assertFalse(Utente.valida_password("Password123!"))
-        self.assertFalse(Utente.valida_password("Pass 1234"))
+        # Non valide: troppo corta (< 8)
+        with self.assertRaises(ValueError):
+            u.modificaProfiloUtente("N", "C", "e@a.it", "123", "1990-01-01", "Pass1")
+
+        # Non valide: caratteri non alfanumerici (!, ?, @, spazi)
+        with self.assertRaises(ValueError):
+            u.modificaProfiloUtente("N", "C", "e@a.it", "123", "1990-01-01", "Password123!")
+        with self.assertRaises(ValueError):
+            u.modificaProfiloUtente("N", "C", "e@a.it", "123", "1990-01-01", "Pass 1234")
 
     def test_movimento_descrizione_limit_rnf8(self):
         """RNF8: Descrizione del movimento <= 500 caratteri."""
@@ -54,7 +62,7 @@ class TestDomainModels(unittest.TestCase):
             nome="Olio EVO",
             descrizione="Olio Extravergine",
             prezzoUnitario=12.0,
-            tipoProdotto="Olio",
+            categoria="Olio",
             unitaMisura="litri"
         )
         self.assertEqual(p.calcolaPrezzoTotale(5), 60.0)

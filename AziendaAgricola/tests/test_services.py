@@ -25,10 +25,10 @@ class TestServices(unittest.TestCase):
     def test_registrazione_primo_manager_e_dipendente(self):
         """Verifica la registrazione iniziale del primo Manager, il blocco di un secondo Manager e la creazione di Dipendenti."""
         # Nessun utente inizialmente
-        self.assertFalse(self.user_manager.has_manager())
+        self.assertFalse(self.user_manager.presenzaManager())
 
         # Registrazione primo Manager
-        manager = self.user_manager.registra_primo_manager(
+        manager = self.user_manager.crea_manager(
             username="manager1",
             password="Password123",
             nome="Mario",
@@ -38,11 +38,11 @@ class TestServices(unittest.TestCase):
             dataNascita="1980-01-01"
         )
         self.assertEqual(manager.ruolo, livelloAccesso.MANAGER)
-        self.assertTrue(self.user_manager.has_manager())
+        self.assertTrue(self.user_manager.presenzaManager())
 
         # Tentativo registrazione secondo primo Manager fallisce
         with self.assertRaises(ValueError):
-            self.user_manager.registra_primo_manager(
+            self.user_manager.crea_manager(
                 "manager2", "Password123", "Luigi", "Verdi", "luigi@azienda.it", "123", "1990-01-01"
             )
 
@@ -60,7 +60,7 @@ class TestServices(unittest.TestCase):
 
     def test_unicita_email_rnf4(self):
         """RNF4: Verifica il vincolo di unicità dell'indirizzo email tra tutti gli utenti registrati."""
-        self.user_manager.registra_primo_manager(
+        self.user_manager.crea_manager(
             "m1", "Pass1234", "M", "R", "mario@azienda.it", "123", "1980-01-01"
         )
 
@@ -73,12 +73,12 @@ class TestServices(unittest.TestCase):
         """Verifica che la data di nascita sia un campo obbligatorio per qualsiasi profilo utente."""
         # Tentativo registrazione manager con data di nascita vuota fallisce
         with self.assertRaises(ValueError):
-            self.user_manager.registra_primo_manager(
+            self.user_manager.crea_manager(
                 "m_empty", "Password123", "Mario", "Rossi", "empty_dob@azienda.it", "123", ""
             )
 
         # Registrazione con data nascita valida
-        self.user_manager.registra_primo_manager(
+        self.user_manager.crea_manager(
             "m1", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "01/01/1980"
         )
 
@@ -92,7 +92,7 @@ class TestServices(unittest.TestCase):
         """Verifica che non sia possibile aggiungere un prodotto senza una categoria valida o preesistente."""
         # Nessuna categoria ancora presente: deve sollevare ValueError
         with self.assertRaises(ValueError) as ctx:
-            self.product_service.aggiungi_prodotto_agricolo(
+            self.product_service.aggiungi_prodotto(
                 nome="Mele Golden", descrizione="Frutta fresca", prezzo=1.5, unita="kilogrammi", tipo="FRUTTA"
             )
         self.assertIn("categoria", str(ctx.exception).lower())
@@ -100,7 +100,7 @@ class TestServices(unittest.TestCase):
         # Anche con categorie esistenti, se si specifica una categoria non registrata, deve fallire
         self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
         with self.assertRaises(ValueError) as ctx2:
-            self.product_service.aggiungi_prodotto_agricolo(
+            self.product_service.aggiungi_prodotto(
                 nome="Mele Golden", descrizione="Frutta fresca", prezzo=1.5, unita="litri", tipo="NON_ESISTE"
             )
         self.assertIn("non esiste", str(ctx2.exception).lower())
@@ -113,20 +113,20 @@ class TestServices(unittest.TestCase):
             self.product_service.aggiungi_categoria("VINO", "litri")
 
         # 2. Test unicità prodotto (RNF5)
-        p1 = self.product_service.aggiungi_prodotto_agricolo(
+        p1 = self.product_service.aggiungi_prodotto(
             nome="Vino Chianti", descrizione="Rosso DOCG", prezzo=15.0, unita="litri", tipo="VINO"
         )
         self.assertIsNotNone(p1)
 
         # Duplicato deve sollevare errore
         with self.assertRaises(ValueError):
-            self.product_service.aggiungi_prodotto_agricolo(
+            self.product_service.aggiungi_prodotto(
                 nome="Vino Chianti", descrizione="Altro", prezzo=20.0, unita="litri", tipo="VINO"
             )
 
     def test_login_logout(self):
         """Verifica il ciclo di vita dell'autenticazione (login, validità sessione e logout)."""
-        self.user_manager.registra_primo_manager(
+        self.user_manager.crea_manager(
             "manager1", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
 
@@ -140,7 +140,7 @@ class TestServices(unittest.TestCase):
 
     def test_sessione_timeout_inattivita(self):
         """Verifica l'invalidazione automatica della sessione utente dopo il timeout di inattività (10 minuti)."""
-        self.user_manager.registra_primo_manager(
+        self.user_manager.crea_manager(
             "m_timeout", "Password123", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
         self.auth_service.effettuaLogin("m_timeout", "Password123")
@@ -159,7 +159,7 @@ class TestServices(unittest.TestCase):
         """Verifica la corretta registrazione e persistenza di movimenti finanziari di entrata e di uscita."""
         # Registra categoria e prodotto prima
         cat = self.product_service.aggiungi_categoria("OLIO", "litri")
-        prod = self.product_service.aggiungi_prodotto_agricolo(
+        prod = self.product_service.aggiungi_prodotto(
             nome="Olio di Oliva",
             descrizione="Extravergine",
             prezzo=12.0,
@@ -216,7 +216,7 @@ class TestServices(unittest.TestCase):
         miele_cat = next((c for c in cats if c.nome == "MIELE"), None)
         self.assertIsNotNone(miele_cat)
         
-        prod = self.product_service.aggiungi_prodotto_agricolo(
+        prod = self.product_service.aggiungi_prodotto(
             nome="Miele Millefiori",
             descrizione="Vasetto 500g",
             prezzo=6.50,
@@ -224,12 +224,12 @@ class TestServices(unittest.TestCase):
             tipo="MIELE"
         )
         self.assertEqual(prod.unitaMisura, "grammi")
-        self.assertEqual(prod.tipoProdotto, "MIELE")
+        self.assertEqual(prod.categoria, "MIELE")
 
     def test_singolo_manager_vincolo(self):
         """Verifica che sia impossibile creare più di un profilo Manager nel sistema."""
         # Registra il primo manager con successo
-        m1 = self.user_manager.registra_primo_manager(
+        m1 = self.user_manager.crea_manager(
             "boss", "Password123", "Boss", "Unico", "boss@azienda.it", "123", "1985-01-01"
         )
         self.assertIsNotNone(m1.id)
@@ -237,7 +237,7 @@ class TestServices(unittest.TestCase):
 
         # Tentativo di registrazione secondo manager fallisce
         with self.assertRaises(ValueError):
-            self.user_manager.registra_primo_manager(
+            self.user_manager.crea_manager(
                 "boss2", "Password123", "Boss2", "Due", "boss2@azienda.it", "123", "1986-01-01"
             )
 
@@ -252,7 +252,7 @@ class TestServices(unittest.TestCase):
         """Verifica la corretta creazione e persistenza del modello unificato Prodotto con unità di misura."""
         from app.models import Prodotto
         self.product_service.aggiungi_categoria("ORTAGGI", "kilogrammi")
-        p = self.product_service.aggiungi_prodotto_agricolo(
+        p = self.product_service.aggiungi_prodotto(
             nome="Carote",
             descrizione="Carote fresche",
             prezzo=1.80,
@@ -260,27 +260,27 @@ class TestServices(unittest.TestCase):
             tipo="ORTAGGI"
         )
         self.assertIsInstance(p, Prodotto)
-        self.assertEqual(p.tipoProdotto, "ORTAGGI")
+        self.assertEqual(p.categoria, "ORTAGGI")
         self.assertEqual(p.unitaMisura, "kilogrammi")
 
         # Verifica ricaricamento da repo
-        loaded = self.repo.load_products()
+        loaded = self.repo.caricaProdotti()
         self.assertEqual(len(loaded), 1)
         self.assertIsInstance(loaded[0], Prodotto)
         self.assertEqual(loaded[0].idProdotto, p.idProdotto)
-        self.assertEqual(loaded[0].tipoProdotto, "ORTAGGI")
+        self.assertEqual(loaded[0].categoria, "ORTAGGI")
 
     def test_unicita_nome_prodotto(self):
         """Verifica il blocco della creazione di due prodotti aventi lo stesso nome."""
         self.product_service.aggiungi_categoria("MIELE", "kilogrammi")
-        p1 = self.product_service.aggiungi_prodotto_agricolo(
+        p1 = self.product_service.aggiungi_prodotto(
             nome="Miele Millefiori", descrizione="Vasetto", prezzo=5.0, unita="kilogrammi", tipo="MIELE"
         )
         self.assertEqual(p1.nome, "Miele Millefiori")
 
         # Tentativo con stesso nome deve fallire
         with self.assertRaises(ValueError) as ctx:
-            self.product_service.aggiungi_prodotto_agricolo(
+            self.product_service.aggiungi_prodotto(
                 nome="Miele Millefiori", descrizione="Altro vasetto", prezzo=6.0, unita="kilogrammi", tipo="MIELE"
             )
         self.assertIn("esiste già", str(ctx.exception).lower())
@@ -288,7 +288,7 @@ class TestServices(unittest.TestCase):
     def test_id_univoci_dopo_cancellazione(self):
         """Verifica che dopo l'eliminazione di entità i nuovi identificativi generati rimangano univoci."""
         # 1. Creazione e cancellazione utenti
-        m = self.user_manager.registra_primo_manager(
+        m = self.user_manager.crea_manager(
             "m1", "Pass1234", "M", "R", "m1@azienda.it", "1", "1980-01-01"
         )
         d1 = self.user_manager.crea_dipendente(
@@ -310,12 +310,12 @@ class TestServices(unittest.TestCase):
 
         # 2. Creazione e cancellazione prodotti
         self.product_service.aggiungi_categoria("FRUTTA", "kilogrammi")
-        prod1 = self.product_service.aggiungi_prodotto_agricolo("Mele", "Desc", 2.0, "kilogrammi", "FRUTTA")
-        prod2 = self.product_service.aggiungi_prodotto_agricolo("Pere", "Desc", 2.5, "kilogrammi", "FRUTTA")
+        prod1 = self.product_service.aggiungi_prodotto("Mele", "Desc", 2.0, "kilogrammi", "FRUTTA")
+        prod2 = self.product_service.aggiungi_prodotto("Pere", "Desc", 2.5, "kilogrammi", "FRUTTA")
 
         # Elimina prod2
         self.product_service.elimina_prodotto(prod2.idProdotto)
-        prod3 = self.product_service.aggiungi_prodotto_agricolo("Banane", "Desc", 3.0, "kilogrammi", "FRUTTA")
+        prod3 = self.product_service.aggiungi_prodotto("Banane", "Desc", 3.0, "kilogrammi", "FRUTTA")
         self.assertNotEqual(prod3.idProdotto, prod2.idProdotto)
         self.assertNotEqual(prod3.idProdotto, prod1.idProdotto)
 

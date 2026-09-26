@@ -4,7 +4,7 @@
     "nome": "acacia",
     "descrizione": "tante api",
     "prezzoUnitario": 20.0,
-    "tipoProdotto": "MIELE",
+    "categoria": "MIELE",
     "unitaMisura": "kg"
   }
 ]

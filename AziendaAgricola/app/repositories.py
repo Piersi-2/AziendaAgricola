@@ -38,7 +38,7 @@ class DataRepository:
     # ---------------------------------------------------------
     
     # JSON -> Oggetti Python
-    def load_users(self) -> List[Utente]:
+    def caricaUtenti(self) -> List[Utente]:
         if not os.path.exists(self.users_file):
             return []
         try:
@@ -86,7 +86,7 @@ class DataRepository:
             return []
 
     # Oggetti Python -> JSON
-    def save_users(self, users: List[Utente]):
+    def salvaUtenti(self, users: List[Utente]):
         raw_list = []
         for u in users:
             d = {
@@ -116,8 +116,8 @@ class DataRepository:
     # ---------------------------------------------------------
     # CRONOLOGIA LOGIN
     # ---------------------------------------------------------
-    def record_login(self, username: str):
-        history = self.load_login_history()
+    def cronologiaLogin(self, username: str):
+        history = self.caricaCronologiaLogin()
         now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if username not in history:
             history[username] = []
@@ -126,7 +126,7 @@ class DataRepository:
         with open(self.login_history_file, 'w', encoding='utf-8') as f:
             json.dump(history, f, indent=2, ensure_ascii=False)
 
-    def load_login_history(self) -> Dict[str, List[str]]:
+    def caricaCronologiaLogin(self) -> Dict[str, List[str]]:
         if not os.path.exists(self.login_history_file):
             return {}
         try:
@@ -138,7 +138,7 @@ class DataRepository:
     # ---------------------------------------------------------
     # CATEGORIE PRODOTTO
     # ---------------------------------------------------------
-    def load_categories(self) -> List[CategoriaProdotto]:
+    def caricaCategorie(self) -> List[CategoriaProdotto]:
         if not os.path.exists(self.categories_file):
             return []
         try:
@@ -149,7 +149,7 @@ class DataRepository:
             print(f"Errore caricamento categorie: {e}")
             return []
 
-    def save_categories(self, categories: List[CategoriaProdotto]):
+    def salvaCategorie(self, categories: List[CategoriaProdotto]):
         raw_list = [{"nome": c.nome, "unitaMisura": c.unitaMisura} for c in categories]
         with open(self.categories_file, 'w', encoding='utf-8') as f:
             json.dump(raw_list, f, indent=2, ensure_ascii=False)
@@ -157,7 +157,7 @@ class DataRepository:
     # ---------------------------------------------------------
     # PRODOTTI
     # ---------------------------------------------------------
-    def load_products(self) -> List[Prodotto]:
+    def caricaProdotti(self) -> List[Prodotto]:
         if not os.path.exists(self.products_file):
             return []
         try:
@@ -170,7 +170,7 @@ class DataRepository:
                     nome=d["nome"],
                     descrizione=d["descrizione"],
                     prezzoUnitario=float(d["prezzoUnitario"]),
-                    tipoProdotto=d.get("tipoProdotto", "Agricolo"),
+                    categoria=d.get("categoria", ""),
                     unitaMisura=d.get("unitaMisura", "kg")
                 )
                 prods.append(p)
@@ -179,7 +179,7 @@ class DataRepository:
             print(f"Errore caricamento prodotti: {e}")
             return []
 
-    def save_products(self, products: List[Prodotto]):
+    def salvaProdotti(self, products: List[Prodotto]):
         raw_list = []
         for p in products:
             d = {
@@ -187,7 +187,7 @@ class DataRepository:
                 "nome": p.nome,
                 "descrizione": p.descrizione,
                 "prezzoUnitario": p.prezzoUnitario,
-                "tipoProdotto": getattr(p, "tipoProdotto", "Agricolo"),
+                "categoria": p.categoria,
                 "unitaMisura": getattr(p, "unitaMisura", "kg")
             }
             raw_list.append(d)
@@ -198,7 +198,7 @@ class DataRepository:
     # ---------------------------------------------------------
     # MOVIMENTI FINANZIARI
     # ---------------------------------------------------------
-    def load_movements(self) -> List[Movimento]:
+    def caricaMovimenti(self) -> List[Movimento]:
         if not os.path.exists(self.movements_file):
             return []
         try:
@@ -236,7 +236,7 @@ class DataRepository:
             print(f"Errore caricamento movimenti: {e}")
             return []
 
-    def save_movements(self, movements: List[Movimento]):
+    def salvaMovimenti(self, movements: List[Movimento]):
         raw_list = []
         for m in movements:
             doc_dict = None
@@ -270,7 +270,7 @@ class DataRepository:
     # ---------------------------------------------------------
     # CONTATTI (Aziende e Privati)
     # ---------------------------------------------------------
-    def load_contacts(self) -> List[Contatto]:
+    def caricaContatti(self) -> List[Contatto]:
         if not os.path.exists(self.contacts_file):
             return []
         try:
@@ -299,7 +299,7 @@ class DataRepository:
             print(f"Errore caricamento contatti: {e}")
             return []
 
-    def save_contacts(self, contacts: List[Contatto]):
+    def salvaContatti(self, contacts: List[Contatto]):
         raw_list = []
         for c in contacts:
             d = {

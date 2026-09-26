@@ -25,7 +25,7 @@ class AuthService:
         self._last_activity_dt: Optional[datetime.datetime] = None
 
     def effettuaLogin(self, username: str, password: str) -> Utente:
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         user = next((u for u in users if u.nomeUtente.lower() == username.lower()), None)     
 
         if not user:
@@ -38,8 +38,8 @@ class AuthService:
         now_dt = datetime.datetime.now()
         now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
         user.ultimoLogin = now_str
-        self.repo.save_users(users)
-        self.repo.record_login(user.nomeUtente)
+        self.repo.salvaUtenti(users)
+        self.repo.cronologiaLogin(user.nomeUtente)
 
         # Attiva sessione
         self._last_activity_dt = now_dt
@@ -82,7 +82,7 @@ class AuthService:
         return True
 
     def get_login_history(self, username: Optional[str] = None) -> Dict[str, List[str]]:
-        history = self.repo.load_login_history()
+        history = self.repo.caricaCronologiaLogin()
         if username:
             return {username: history.get(username, [])}
         return history
@@ -96,21 +96,15 @@ class GestioneUtente:
         self.repo = repo
 
     # Verifica se esiste almeno un Manager registrato
-    def has_manager(self) -> bool:
-        users = self.repo.load_users()
+    def presenzaManager(self) -> bool:
+        users = self.repo.caricaUtenti()
         return any(isinstance(u, Manager) or u.ruolo == livelloAccesso.MANAGER for u in users)
 
-    def registra_primo_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
-        if self.has_manager():
-            raise ValueError("Un Manager è già registrato nel sistema.")
-
-        return self.crea_manager(username, password, nome, cognome, email, telefono, dataNascita)
-
     def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
-        if self.has_manager():
+        if self.presenzaManager():
             raise ValueError("Esiste già un profilo Manager nel sistema. Non è possibile crearne più di uno.")
         self._valida_nuovo_utente(username, email, password, dataNascita)
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         m = Manager(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -124,12 +118,12 @@ class GestioneUtente:
             codiceAutorizzazione=codiceAutorizzazione
         )
         users.append(m)
-        self.repo.save_users(users)
+        self.repo.salvaUtenti(users)
         return m
 
     def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
         self._valida_nuovo_utente(username, email, password, dataNascita)
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         d = Dipendente(
             id=str(uuid.uuid4())[:8],
             nomeUtente=username,
@@ -142,14 +136,14 @@ class GestioneUtente:
             ruolo=livelloAccesso.DIPENDENTE,
         )
         users.append(d)
-        self.repo.save_users(users)
+        self.repo.salvaUtenti(users)
         return d
 
     def modifica_profilo(self, user_id: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
         if not dataNascita or not str(dataNascita).strip():
             raise ValueError("La data di nascita è obbligatoria.")
 
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         u = next((x for x in users if x.id == user_id), None)
         if not u:
             raise ValueError(f"Utente con ID '{user_id}' non trovato.")
@@ -166,10 +160,10 @@ class GestioneUtente:
             dataNascita=dataNascita,
             password=password
         )
-        self.repo.save_users(users)
+        self.repo.salvaUtenti(users)
 
     def elimina_dipendente(self, user_id: str):
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         target = next((x for x in users if x.id == user_id), None)
         if not target:
             raise ValueError("Profilo utente non trovato.")
@@ -178,19 +172,19 @@ class GestioneUtente:
             raise ValueError("Non è possibile eliminare un profilo Manager da questa procedura.")
 
         users = [x for x in users if x.id != user_id]
-        self.repo.save_users(users)
+        self.repo.salvaUtenti(users)
 
     def get_all_users(self) -> List[Utente]:
-        return self.repo.load_users()
+        return self.repo.caricaUtenti()
 
     def _valida_nuovo_utente(self, username: str, email: str, password: str, dataNascita: str = ""):
         if not dataNascita or not str(dataNascita).strip():
             raise ValueError("La data di nascita è obbligatoria.")
 
-        if not Utente.valida_password(password):
+        if not password or len(password) < 8 or not password.isalnum():
             raise ValueError("La password deve contenere almeno 8 caratteri alfanumerici.")
 
-        users = self.repo.load_users()
+        users = self.repo.caricaUtenti()
         if any(u.nomeUtente.lower() == username.lower() for u in users):
             raise ValueError(f"Il nome utente '{username}' è già occupato.")
 
@@ -205,12 +199,12 @@ class GestioneProdotto:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def aggiungi_prodotto_agricolo(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str) -> Prodotto:
-        prods = self.repo.load_products()
+    def aggiungi_prodotto(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str) -> Prodotto:
+        prods = self.repo.caricaProdotti()
         if any(p.nome.lower() == nome.lower() for p in prods):
             raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
 
-        categories = self.repo.load_categories()
+        categories = self.repo.caricaCategorie()
         if not categories:
             raise ValueError("Impossibile aggiungere un prodotto se prima non è stata inserita una categoria.")
 
@@ -225,15 +219,15 @@ class GestioneProdotto:
             nome=nome,
             descrizione=descrizione,
             prezzoUnitario=prezzo,
-            tipoProdotto=tipo,
+            categoria=tipo,
             unitaMisura=effettiva_unita
         )
         prods.append(p)
-        self.repo.save_products(prods)
+        self.repo.salvaProdotti(prods)
         return p
 
     def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float):
-        prods = self.repo.load_products()
+        prods = self.repo.caricaProdotti()
         p = next((x for x in prods if x.idProdotto == prodotto_id), None)
         if not p:
             raise ValueError(f"Prodotto ID '{prodotto_id}' non trovato.")
@@ -245,15 +239,15 @@ class GestioneProdotto:
         p.nome = nome
         p.descrizione = descrizione
         p.aggiornaPrezzoListino(prezzo)
-        self.repo.save_products(prods)
+        self.repo.salvaProdotti(prods)
 
     def elimina_prodotto(self, prodotto_id: str):
-        prods = self.repo.load_products()
+        prods = self.repo.caricaProdotti()
         prods = [p for p in prods if p.idProdotto != prodotto_id]
-        self.repo.save_products(prods)
+        self.repo.salvaProdotti(prods)
 
     def get_all_products(self) -> List[Prodotto]:
-        return self.repo.load_products()
+        return self.repo.caricaProdotti()
 
     def aggiungi_categoria(self, nome: str, unita: str) -> CategoriaProdotto:
         nome_clean = nome.strip().upper()
@@ -264,29 +258,29 @@ class GestioneProdotto:
         if unita not in unita_valide:
             raise ValueError(f"Unità di misura non valida. Scegliere tra: {', '.join(unita_valide)}.")
 
-        categories = self.repo.load_categories()
+        categories = self.repo.caricaCategorie()
         if any(c.nome == nome_clean for c in categories):
             raise ValueError(f"La categoria '{nome_clean}' esiste già.")
 
         cat = CategoriaProdotto(nome=nome_clean, unitaMisura=unita)
         categories.append(cat)
-        self.repo.save_categories(categories)
+        self.repo.salvaCategorie(categories)
         return cat
 
     def get_all_categories(self) -> List[CategoriaProdotto]:
-        return self.repo.load_categories()
+        return self.repo.caricaCategorie()
 
     def elimina_categoria(self, nome_categoria: str):
         nome_clean = nome_categoria.strip().upper()
         
-        categories = self.repo.load_categories()
+        categories = self.repo.caricaCategorie()
         categories = [c for c in categories if c.nome != nome_clean]
-        self.repo.save_categories(categories)
+        self.repo.salvaCategorie(categories)
 
         # Rimuove tutti i prodotti associati a questa categoria
-        prods = self.repo.load_products()
-        prods = [p for p in prods if getattr(p, 'tipoProdotto', '').strip().upper() != nome_clean]
-        self.repo.save_products(prods)
+        prods = self.repo.caricaProdotti()
+        prods = [p for p in prods if p.categoria.strip().upper() != nome_clean]
+        self.repo.salvaProdotti(prods)
 
 # ---------------------------------------------------------
 # GESTIONE MOVIMENTO - gestisce transazioni e registri finanziari
@@ -319,7 +313,7 @@ class GestioneMovimento:
         contatto_id = None
         contatto_desc = cliente_tipo
         if cliente_dettagli:
-            contacts = self.repo.load_contacts()
+            contacts = self.repo.caricaContatti()
             c_id = str(uuid.uuid4())[:8]
             if cliente_tipo == "Azienda":
                 c = Azienda(
@@ -336,11 +330,11 @@ class GestioneMovimento:
                     codiceFiscale=cliente_dettagli.get("codiceFiscale", "")
                 )
             contacts.append(c)
-            self.repo.save_contacts(contacts)
+            self.repo.salvaContatti(contacts)
             contatto_id = c_id
             contatto_desc = c.getDatiFatturazione()
 
-        prods = self.repo.load_products()
+        prods = self.repo.caricaProdotti()
         prod = next((x for x in prods if x.idProdotto == prodotto_id), None)
         prod_nome = prod.nome if prod else None
 
@@ -359,9 +353,9 @@ class GestioneMovimento:
             documento=doc,
         )
 
-        movs = self.repo.load_movements()
+        movs = self.repo.caricaMovimenti()
         movs.append(m)
-        self.repo.save_movements(movs)
+        self.repo.salvaMovimenti(movs)
         return m
 
     def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None) -> Movimento:
@@ -375,7 +369,7 @@ class GestioneMovimento:
                 allegatoPDF=saved_pdf
             )
 
-        prods = self.repo.load_products()
+        prods = self.repo.caricaProdotti()
         prod = next((x for x in prods if x.idProdotto == prodotto_id), None)
         prod_nome = prod.nome if prod else None
 
@@ -393,21 +387,21 @@ class GestioneMovimento:
             documento=doc,
         )
 
-        movs = self.repo.load_movements()
+        movs = self.repo.caricaMovimenti()
         movs.append(m)
-        self.repo.save_movements(movs)
+        self.repo.salvaMovimenti(movs)
         return m
 
     def get_all_movements(self) -> List[Movimento]:
-        return self.repo.load_movements()
+        return self.repo.caricaMovimenti()
 
     def get_uscite(self) -> List[Movimento]:
-        return [m for m in self.repo.load_movements() if m.tipo == TipoMovimento.USCITA]
+        return [m for m in self.repo.caricaMovimenti() if m.tipo == TipoMovimento.USCITA]
 
     def elimina_movimento(self, movimento_id: str):
-        movs = self.repo.load_movements()
+        movs = self.repo.caricaMovimenti()
         movs = [m for m in movs if m.idMovimento != movimento_id]
-        self.repo.save_movements(movs)
+        self.repo.salvaMovimenti(movs)
 
 # ---------------------------------------------------------
 # GESTIONE REPORT - calcolo del guadagno aziendale
@@ -418,5 +412,5 @@ class GestioneReport:
         self.repo = repo
 
     def calcola_guadagno_aziendale(self, anno: int) -> ReportGuadagno:
-        movs = self.repo.load_movements()
+        movs = self.repo.caricaMovimenti()
         return ReportGuadagno.genera(anno, movs)
