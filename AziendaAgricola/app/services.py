@@ -100,7 +100,7 @@ class GestoreUtenti:
         users = self.repo.caricaUtenti()
         return any(isinstance(u, Manager) or u.ruolo == livelloAccesso.MANAGER for u in users)
 
-    def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, codiceAutorizzazione: str = "MNG-ADMIN") -> Manager:
+    def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
         if self.presenzaManager():
             raise ValueError("Esiste già un profilo Manager nel sistema. Non è possibile crearne più di uno.")
         self._valida_nuovo_utente(username, email, password, dataNascita)
@@ -114,8 +114,7 @@ class GestoreUtenti:
             email=email,
             telefono=telefono,
             dataNascita=dataNascita,
-            ruolo=livelloAccesso.MANAGER,
-            codiceAutorizzazione=codiceAutorizzazione
+            ruolo=livelloAccesso.MANAGER
         )
         users.append(m)
         self.repo.salvaUtenti(users)

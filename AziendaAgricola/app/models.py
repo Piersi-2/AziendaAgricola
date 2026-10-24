@@ -56,9 +56,7 @@ class Utente:
 
 @dataclass
 class Manager(Utente):
-    codiceAutorizzazione: str = "MNG-AUTH-DEFAULT"
-
-    def __post_init__(self):  # Metodo eseguuto subito dopo l'inizializzazione dell'oggetto
+    def __post_init__(self):  # Metodo eseguito subito dopo l'inizializzazione dell'oggetto
         self.ruolo = livelloAccesso.MANAGER
 
 @dataclass

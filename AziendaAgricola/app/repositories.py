@@ -59,8 +59,7 @@ class DataRepository:
                         dataNascita=d["dataNascita"],
                         ruolo=ruolo,
                         ultimoLogin=d.get("ultimoLogin"),
-                        statoAttivo=d.get("statoAttivo", True),
-                        codiceAutorizzazione=d.get("codiceAutorizzazione", "MNG-AUTH-DEFAULT")
+                        statoAttivo=d.get("statoAttivo", True)
                     )
                 else:
                     u = Dipendente(
@@ -102,9 +101,7 @@ class DataRepository:
                 "ultimoLogin": u.ultimoLogin,
                 "statoAttivo": u.statoAttivo
             }
-            if isinstance(u, Manager):
-                d["codiceAutorizzazione"] = u.codiceAutorizzazione
-            elif isinstance(u, Dipendente):
+            if isinstance(u, Dipendente):
                 d["dataAssunzione"] = u.dataAssunzione
                 d["mansione"] = u.mansione
                 d["stipendioMensile"] = u.stipendioMensile
