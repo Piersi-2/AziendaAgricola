@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import QTimer, Qt, QEvent 
 from app.models import Utente, livelloAccesso
 from app.repositories import DataRepository
-from app.services import AuthService, GestioneUtente, GestioneProdotto, GestioneMovimento, GestioneReport
+from app.services import Autenticatore, GestoreUtenti, GestoreProdotti, GestoreMovimenti, GestoreReport
 from app.views.user_management_view import UserManagementView
 from app.views.product_view import ProductManagementView
 from app.views.movement_view import FinancialMovementView
@@ -96,17 +96,17 @@ QGroupBox::title {
 """
 
 class MainWindow(QMainWindow):
-    def __init__(self, current_user: Utente, repo: DataRepository, auth_service: AuthService, parent=None):
+    def __init__(self, current_user: Utente, repo: DataRepository, auth_service: Autenticatore, parent=None):
         super().__init__(parent)
         self.current_user = current_user
         self.repo = repo
         self.auth_service = auth_service
 
         # Servizi
-        self.user_manager = GestioneUtente(repo)
-        self.product_service = GestioneProdotto(repo)
-        self.financial_service = GestioneMovimento(repo)
-        self.report_service = GestioneReport(repo)
+        self.user_manager = GestoreUtenti(repo)
+        self.product_service = GestoreProdotti(repo)
+        self.financial_service = GestoreMovimenti(repo)
+        self.report_service = GestoreReport(repo)
 
         self.setWindowTitle(f"Azienda Agricola - Gestione Integrata [{current_user.nomeUtente} ({current_user.ruolo.value})]")
         self.resize(1100, 720)
@@ -203,7 +203,7 @@ class MainWindow(QMainWindow):
             QEvent.KeyPress,
             QEvent.Wheel,
         ):
-            self.auth_service.update_activity()
+            self.auth_service.aggiornaAttivita()
 
         # Disabilita la modifica della data tramite rotellina del mouse sui QDateEdit
         if event.type() == QEvent.Wheel:       # Parent e widget sono due pezzi che compongono QDateEdit
@@ -222,7 +222,7 @@ class MainWindow(QMainWindow):
         super().closeEvent(event)
 
     def check_session_status(self):
-        if not self.auth_service.is_session_valid():
+        if not self.auth_service.verificaSessione():
             self.session_timer.stop()
             QMessageBox.warning(self, "Sessione Scaduta", "La sessione di lavoro è scaduta per inattività. Verrai disconnesso.")
             self.close()

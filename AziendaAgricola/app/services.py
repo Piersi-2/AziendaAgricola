@@ -14,10 +14,10 @@ from app.models import (
 from app.repositories import DataRepository
 
 # ---------------------------------------------------------
-# AUTHSERVICE - gestisce autenticazione, autorizzazione, sessioni e log accessi
+# AUTENTICATORE - gestisce autenticazione, autorizzazione, sessioni e log accessi
 # ---------------------------------------------------------
 
-class AuthService:
+class Autenticatore:
     def __init__(self, repo: DataRepository, session_timeout_minutes: int = 10):
         self.repo = repo
         self.session_timeout_minutes = session_timeout_minutes
@@ -59,7 +59,7 @@ class AuthService:
             return True
         return False
 
-    def update_activity(self):
+    def aggiornaAttivita(self):
         #   Aggiorna il timestamp dell'ultima attività. Chiamato da eventFilter()
         if self.current_session and self.current_session.sessioneAttiva:    # Controlla che la sessione esiste e sia ancora attiva
             now = datetime.datetime.now()
@@ -67,7 +67,7 @@ class AuthService:
                 self._last_activity_dt = now
                 self.current_session.ultimaAttivita = now.strftime("%Y-%m-%d %H:%M:%S")
 
-    def is_session_valid(self) -> bool:
+    def verificaSessione(self) -> bool:
         if not self.current_session or not self.current_session.sessioneAttiva:
             return False
         try:
@@ -81,17 +81,17 @@ class AuthService:
             pass
         return True
 
-    def get_login_history(self, username: Optional[str] = None) -> Dict[str, List[str]]:
+    def cronologiaLogin(self, username: Optional[str] = None) -> Dict[str, List[str]]:
         history = self.repo.caricaCronologiaLogin()
         if username:
             return {username: history.get(username, [])}
         return history
 
 # ---------------------------------------------------------
-# GESTIONE UTENTE - gestisce utenti e manager
+# GESTORE UTENTI - gestisce utenti e manager
 # ---------------------------------------------------------
 
-class GestioneUtente:
+class GestoreUtenti:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -192,10 +192,10 @@ class GestioneUtente:
             raise ValueError(f"L'indirizzo email '{email}' è già associato a un account.")
 
 # ---------------------------------------------------------
-# GESTIONE PRODOTTO - gestisce catalogo prodotti agricoli e categorie
+# GESTORE PRODOTTI - gestisce catalogo prodotti agricoli e categorie
 # ---------------------------------------------------------
 
-class GestioneProdotto:
+class GestoreProdotti:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -283,10 +283,10 @@ class GestioneProdotto:
         self.repo.salvaProdotti(prods)
 
 # ---------------------------------------------------------
-# GESTIONE MOVIMENTO - gestisce transazioni e registri finanziari
+# GESTORE MOVIMENTI - gestisce transazioni e registri finanziari
 # ---------------------------------------------------------
 
-class GestioneMovimento:
+class GestoreMovimenti:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
@@ -404,13 +404,13 @@ class GestioneMovimento:
         self.repo.salvaMovimenti(movs)
 
 # ---------------------------------------------------------
-# GESTIONE REPORT - calcolo del guadagno aziendale
+# GESTORE REPORT - calcolo del guadagno aziendale
 # ---------------------------------------------------------
 
-class GestioneReport:
+class GestoreReport:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def calcola_guadagno_aziendale(self, anno: int) -> ReportGuadagno:
+    def calcolaGuadagnoAziendale(self, anno: int) -> ReportGuadagno:
         movs = self.repo.caricaMovimenti()
         return ReportGuadagno.genera(anno, movs)

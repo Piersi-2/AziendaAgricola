@@ -6,15 +6,15 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.repositories import DataRepository
-from app.services import GestioneUtente, GestioneProdotto, GestioneMovimento
+from app.services import GestoreUtenti, GestoreProdotti, GestoreMovimenti
 
 class TestPersistence(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.repo = DataRepository(data_dir=self.temp_dir)
-        self.user_manager = GestioneUtente(self.repo)
-        self.product_service = GestioneProdotto(self.repo)
-        self.financial_service = GestioneMovimento(self.repo)
+        self.user_manager = GestoreUtenti(self.repo)
+        self.product_service = GestoreProdotti(self.repo)
+        self.financial_service = GestoreMovimenti(self.repo)
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)    # Cancella la cartella dove vengono eseguiti i test, alla fine

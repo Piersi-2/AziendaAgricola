@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QDate
 
 from app.repositories import DataRepository
-from app.services import AuthService, GestioneUtente, GestioneProdotto, GestioneMovimento, GestioneReport
+from app.services import Autenticatore, GestoreUtenti, GestoreProdotti, GestoreMovimenti, GestoreReport
 from app.models import Manager, Dipendente, livelloAccesso
 from app.views.main_window import MainWindow
 from app.views.product_view import ProductManagementView
@@ -27,11 +27,11 @@ class TestViews(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.repo = DataRepository(data_dir=self.temp_dir)
-        self.auth_service = AuthService(self.repo)
-        self.user_manager = GestioneUtente(self.repo)
-        self.product_service = GestioneProdotto(self.repo)
-        self.financial_service = GestioneMovimento(self.repo)
-        self.report_service = GestioneReport(self.repo)
+        self.auth_service = Autenticatore(self.repo)
+        self.user_manager = GestoreUtenti(self.repo)
+        self.product_service = GestoreProdotti(self.repo)
+        self.financial_service = GestoreMovimenti(self.repo)
+        self.report_service = GestoreReport(self.repo)
 
         self.manager_user = self.user_manager.crea_manager(
             username="admin",
@@ -178,8 +178,8 @@ class TestViews(unittest.TestCase):
         empty_dir = tempfile.mkdtemp()
         try:
             empty_repo = DataRepository(data_dir=empty_dir)
-            empty_um = GestioneUtente(empty_repo)
-            empty_auth = AuthService(empty_repo)
+            empty_um = GestoreUtenti(empty_repo)
+            empty_auth = Autenticatore(empty_repo)
             dialog_first = LoginDialog(empty_auth, empty_um)
             self.assertEqual(dialog_first.stacked_widget.currentWidget(), dialog_first.first_manager_widget)
         finally:

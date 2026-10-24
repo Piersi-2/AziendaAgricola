@@ -1,16 +1,2 @@
 [
-  {
-    "id": "1da75955",
-    "nomeUtente": "Luca",
-    "password": "123456789a",
-    "nome": "Luca",
-    "cognome": "Rossi",
-    "email": "sjaijs@siwhinwsinw.com",
-    "telefono": "",
-    "dataNascita": "14/07/2026",
-    "ruolo": "MANAGER",
-    "ultimoLogin": "2026-09-26 16:49:11",
-    "statoAttivo": true,
-    "codiceAutorizzazione": "MNG-ADMIN"
-  }
 ]

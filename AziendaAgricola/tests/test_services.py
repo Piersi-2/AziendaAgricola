@@ -7,17 +7,17 @@ import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.repositories import DataRepository
-from app.services import AuthService, GestioneUtente, GestioneProdotto, GestioneMovimento, GestioneReport
+from app.services import Autenticatore, GestoreUtenti, GestoreProdotti, GestoreMovimenti, GestoreReport
 from app.models import livelloAccesso, TipoMovimento, TipoUscita
 
 class TestServices(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.mkdtemp()
         self.repo = DataRepository(data_dir=self.temp_dir)
-        self.auth_service = AuthService(self.repo)
-        self.user_manager = GestioneUtente(self.repo)
-        self.product_service = GestioneProdotto(self.repo)
-        self.financial_service = GestioneMovimento(self.repo)
+        self.auth_service = Autenticatore(self.repo)
+        self.user_manager = GestoreUtenti(self.repo)
+        self.product_service = GestoreProdotti(self.repo)
+        self.financial_service = GestoreMovimenti(self.repo)
 
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
@@ -132,11 +132,11 @@ class TestServices(unittest.TestCase):
 
         user = self.auth_service.effettuaLogin("manager1", "Password123")
         self.assertIsNotNone(user)
-        self.assertTrue(self.auth_service.is_session_valid())
+        self.assertTrue(self.auth_service.verificaSessione())
 
         # Logout
         self.assertTrue(self.auth_service.effettuaLogout())
-        self.assertFalse(self.auth_service.is_session_valid())
+        self.assertFalse(self.auth_service.verificaSessione())
 
     def test_sessione_timeout_inattivita(self):
         """Verifica l'invalidazione automatica della sessione utente dopo il timeout di inattività (10 minuti)."""
@@ -145,7 +145,7 @@ class TestServices(unittest.TestCase):
         )
         self.auth_service.effettuaLogin("m_timeout", "Password123")
         self.assertEqual(self.auth_service.session_timeout_minutes, 10)
-        self.assertTrue(self.auth_service.is_session_valid())
+        self.assertTrue(self.auth_service.verificaSessione())
 
         # Simula inattività superiore a 10 minuti (es. 11 minuti)
         past_dt = datetime.datetime.now() - datetime.timedelta(minutes=11)
@@ -153,7 +153,7 @@ class TestServices(unittest.TestCase):
         self.auth_service.current_session.ultimaAttivita = past_dt.strftime("%Y-%m-%d %H:%M:%S")
 
         # La sessione deve essere scaduta per inattività
-        self.assertFalse(self.auth_service.is_session_valid())
+        self.assertFalse(self.auth_service.verificaSessione())
 
     def test_registrazione_entrate_e_uscite(self):
         """Verifica la corretta registrazione e persistenza di movimenti finanziari di entrata e di uscita."""

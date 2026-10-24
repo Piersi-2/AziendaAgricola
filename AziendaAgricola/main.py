@@ -2,7 +2,7 @@ import os
 import sys
 from PyQt5.QtWidgets import QApplication
 from app.repositories import DataRepository
-from app.services import AuthService, GestioneUtente
+from app.services import Autenticatore, GestoreUtenti
 from app.views.login_dialog import LoginDialog
 from app.views.main_window import MainWindow
 
@@ -13,8 +13,8 @@ def main() -> int:
     base_dir = os.path.dirname(os.path.abspath(__file__))   #__file__ è il file corrente main.py
     data_dir = os.path.join(base_dir, "data")
     repo = DataRepository(data_dir=data_dir)        # 1) Nome del parametro in DataRepository(), 2) Nome della variabile in main()
-    auth_service = AuthService(repo)
-    user_manager = GestioneUtente(repo)
+    auth_service = Autenticatore(repo)
+    user_manager = GestoreUtenti(repo)
 
     # Finestra di Login / Registrazione iniziale
     login_dialog = LoginDialog(auth_service, user_manager)
