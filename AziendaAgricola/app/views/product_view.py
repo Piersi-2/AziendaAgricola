@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 from app.services import GestoreProdotti
-from app.models import Prodotto, CategoriaProdotto, formatta_unita
+from app.models import Prodotto, CategoriaProdotto
 
 class ProductManagementView(QWidget):
     def __init__(self, product_service: GestoreProdotti, parent=None):
@@ -111,8 +111,8 @@ class ProductManagementView(QWidget):
             self.show_description_dialog(p_nome, item.text())
 
     def load_products_table(self):
-        prods = self.product_service.get_all_products()
-        cats = self.product_service.get_all_categories()
+        prods = self.product_service.getAllProducts()
+        cats = self.product_service.getAllCategories()
         cat_map = {c.nome.strip().upper(): c for c in cats}
 
         self.table.setHorizontalHeaderLabels([
@@ -133,8 +133,7 @@ class ProductManagementView(QWidget):
             # Unità di misura della categoria
             cat_obj = cat_map.get((tipo or "").strip().upper())
             unita = cat_obj.unitaMisura if (cat_obj and getattr(cat_obj, 'unitaMisura', None)) else (getattr(p, 'unitaMisura', '') or "-")
-            unita_fmt = formatta_unita(unita) if unita and unita != "-" else "-"
-            self.table.setItem(idx, 2, QTableWidgetItem(unita_fmt))
+            self.table.setItem(idx, 2, QTableWidgetItem(unita))
 
             # Descrizione
             item_desc = QTableWidgetItem(p.descrizione)
@@ -148,7 +147,7 @@ class ProductManagementView(QWidget):
     # DIALOG REGISTRAZIONE PRODOTTO
     # ---------------------------------------------------------
     def show_add_product_dialog(self):
-        cats = self.product_service.get_all_categories()
+        cats = self.product_service.getAllCategories()
         if not cats:
             QMessageBox.warning(
                 self,
@@ -199,7 +198,7 @@ class ProductManagementView(QWidget):
                 sel_cat_obj = next((c for c in cats if c.nome.strip().upper() == tipo.strip().upper()), None)
                 unita_effettiva = sel_cat_obj.unitaMisura if sel_cat_obj else "kg"
 
-                self.product_service.aggiungi_prodotto(
+                self.product_service.aggiungiProdotto(
                     nome=nome, descrizione=desc, prezzo=prezzo, unita=unita_effettiva, tipo=tipo
                 )
 
@@ -223,7 +222,7 @@ class ProductManagementView(QWidget):
             return
 
         pid = self.table.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        prods = self.product_service.get_all_products()
+        prods = self.product_service.getAllProducts()
         target = next((p for p in prods if p.idProdotto == pid), None)
         if not target:
             return
@@ -249,7 +248,7 @@ class ProductManagementView(QWidget):
         btn_save = QPushButton("Aggiorna Prodotto")
         def update_action():
             try:
-                self.product_service.modifica_prodotto(
+                self.product_service.modificaProdotto(
                     prodotto_id=pid,
                     nome=input_nome.text().strip(),
                     descrizione=input_desc.text().strip(),
@@ -284,7 +283,7 @@ class ProductManagementView(QWidget):
         )
         if confirm == QMessageBox.StandardButton.Yes:
             try:
-                self.product_service.elimina_prodotto(pid)
+                self.product_service.eliminaProdotto(pid)
                 QMessageBox.information(self, "Successo", "Prodotto eliminato.")
                 self.load_products_table()
             except Exception as e:
@@ -319,7 +318,7 @@ class ProductManagementView(QWidget):
                     QMessageBox.warning(dlg, "Attenzione", "Inserire il nome della categoria.")
                     return
 
-                self.product_service.aggiungi_categoria(nome=nome, unita=unita)
+                self.product_service.aggiungiCategoria(nome=nome, unita=unita)
                 self.load_products_table()
                 QMessageBox.information(dlg, "Successo", f"Categoria '{nome}' aggiunta con successo!")
                 dlg.accept()
@@ -341,7 +340,7 @@ class ProductManagementView(QWidget):
 
         form = QFormLayout()
         cb_cat = QComboBox()
-        cats = [c.nome for c in self.product_service.get_all_categories()]
+        cats = [c.nome for c in self.product_service.getAllCategories()]
         cb_cat.addItems(cats)
 
         form.addRow("Seleziona Categoria:", cb_cat)
@@ -363,7 +362,7 @@ class ProductManagementView(QWidget):
             )
             if confirm == QMessageBox.StandardButton.Yes:
                 try:
-                    self.product_service.elimina_categoria(cat_name)
+                    self.product_service.eliminaCategoria(cat_name)
                     QMessageBox.information(dlg, "Successo", f"Categoria '{cat_name}' e prodotti associati eliminati.")
                     self.load_products_table()
                     dlg.accept()

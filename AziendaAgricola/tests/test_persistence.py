@@ -22,14 +22,14 @@ class TestPersistence(unittest.TestCase):
     def test_json_persistence(self):
         """Verifica la persistenza e il corretto ricaricamento dei dati su file JSON tramite DataRepository."""
         # 1. Popola dati
-        self.user_manager.crea_manager(
+        self.user_manager.creaManager(
             "m1", "Pass1234", "Mario", "Rossi", "mario@azienda.it", "123", "1980-01-01"
         )
-        self.product_service.aggiungi_categoria("MIELE", "grammi")
-        prod = self.product_service.aggiungi_prodotto(
+        self.product_service.aggiungiCategoria("MIELE", "grammi")
+        prod = self.product_service.aggiungiProdotto(
             "Miele Acacia", "Miele biologico", 8.5, "grammi", "MIELE"
         )
-        self.financial_service.registra_entrata(
+        self.financial_service.registraEntrata(
             "MIELE", prod.idProdotto, "Privato", 425.0, "2026-07-22", "Vendita miele"
         )
 

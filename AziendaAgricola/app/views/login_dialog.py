@@ -208,7 +208,7 @@ class LoginDialog(QDialog):
             return
 
         try:
-            manager = self.user_manager.crea_manager(
+            manager = self.user_manager.creaManager(
                 username=username,
                 password=password,
                 nome=nome,

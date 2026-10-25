@@ -128,7 +128,8 @@ class DataRepository:
             return {}
         try:
             with open(self.login_history_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
+                return data if isinstance(data, dict) else {}
         except Exception:
             return {}
 

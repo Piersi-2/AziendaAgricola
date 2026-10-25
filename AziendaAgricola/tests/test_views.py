@@ -10,7 +10,7 @@ from PyQt5.QtCore import QDate
 
 from app.repositories import DataRepository
 from app.services import Autenticatore, GestoreUtenti, GestoreProdotti, GestoreMovimenti, GestoreReport
-from app.models import Manager, Dipendente, livelloAccesso
+from app.models import Manager, Dipendente, livelloAccesso, TipoUscita
 from app.views.main_window import MainWindow
 from app.views.product_view import ProductManagementView
 from app.views.movement_view import FinancialMovementView
@@ -33,7 +33,7 @@ class TestViews(unittest.TestCase):
         self.financial_service = GestoreMovimenti(self.repo)
         self.report_service = GestoreReport(self.repo)
 
-        self.manager_user = self.user_manager.crea_manager(
+        self.manager_user = self.user_manager.creaManager(
             username="admin",
             password="Password123",
             nome="Admin",
@@ -43,7 +43,7 @@ class TestViews(unittest.TestCase):
             dataNascita="1985-01-01"
         )
 
-        self.dipendente_user = self.user_manager.crea_dipendente(
+        self.dipendente_user = self.user_manager.creaDipendente(
             username="dip1",
             password="Password123",
             nome="Mario",
@@ -97,11 +97,18 @@ class TestViews(unittest.TestCase):
         """Verifica la configurazione dei filtri in Entrate e Uscite."""
         view = FinancialMovementView(self.financial_service, self.product_service, self.manager_user)
 
-        # Filtro prodotto presente in entrambe le sezioni
+        # Filtro prodotto presente SOLO in Entrate
         self.assertTrue(hasattr(view, "cb_prod_entrate"))
-        self.assertTrue(hasattr(view, "cb_prod_uscite"))
+        self.assertFalse(hasattr(view, "cb_prod_uscite"))
         self.assertEqual(view.cb_prod_entrate.itemText(0), "Tutti i prodotti")
-        self.assertEqual(view.cb_prod_uscite.itemText(0), "Tutti i prodotti")
+
+        # Filtro tipo di spesa presente SOLO in Uscite
+        self.assertTrue(hasattr(view, "cb_spesa_uscite"))
+        self.assertFalse(hasattr(view, "cb_spesa_entrate"))
+        self.assertEqual(view.cb_spesa_uscite.itemText(0), "Tutti i tipi di spesa")
+        spese_options = [view.cb_spesa_uscite.itemText(i) for i in range(1, view.cb_spesa_uscite.count())]
+        expected_spese = [e.value for e in TipoUscita]
+        self.assertEqual(spese_options, expected_spese)
 
         # Filtro tipo cliente presente SOLO in Entrate
         self.assertTrue(hasattr(view, "cb_cliente_entrate"))

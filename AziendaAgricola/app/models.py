@@ -94,18 +94,6 @@ class Prodotto:
     def calcolaPrezzoTotale(self, quantita: float) -> float:
         return self.prezzoUnitario * quantita
 
-def formatta_unita(unita: str) -> str:
-    if not unita:
-        return ""
-    u = unita.strip().lower()
-    if u in ("kilogrammi", "kg"):
-        return "kg"
-    if u in ("grammi", "g"):
-        return "g"
-    if u in ("litri", "l"):
-        return "l"
-    return unita.strip()
-
 # =========================================================
 # CONTATTI E CLIENTI/FORNITORI
 # =========================================================

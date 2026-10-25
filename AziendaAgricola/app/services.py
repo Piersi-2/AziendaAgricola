@@ -100,10 +100,10 @@ class GestoreUtenti:
         users = self.repo.caricaUtenti()
         return any(isinstance(u, Manager) or u.ruolo == livelloAccesso.MANAGER for u in users)
 
-    def crea_manager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
+    def creaManager(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str) -> Manager:
         if self.presenzaManager():
             raise ValueError("Esiste già un profilo Manager nel sistema. Non è possibile crearne più di uno.")
-        self._valida_nuovo_utente(username, email, password, dataNascita)
+        self._validaNuovoUtente(username, email, password, dataNascita)
         users = self.repo.caricaUtenti()
         m = Manager(
             id=str(uuid.uuid4())[:8],
@@ -120,8 +120,8 @@ class GestoreUtenti:
         self.repo.salvaUtenti(users)
         return m
 
-    def crea_dipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
-        self._valida_nuovo_utente(username, email, password, dataNascita)
+    def creaDipendente(self, username: str, password: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, dataAssunzione: str = "", mansione: str = "", stipendio: float = 0.0) -> Dipendente:
+        self._validaNuovoUtente(username, email, password, dataNascita)
         users = self.repo.caricaUtenti()
         d = Dipendente(
             id=str(uuid.uuid4())[:8],
@@ -138,7 +138,7 @@ class GestoreUtenti:
         self.repo.salvaUtenti(users)
         return d
 
-    def modifica_profilo(self, user_id: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
+    def modificaProfilo(self, user_id: str, nome: str, cognome: str, email: str, telefono: str, dataNascita: str, password: Optional[str] = None):
         if not dataNascita or not str(dataNascita).strip():
             raise ValueError("La data di nascita è obbligatoria.")
 
@@ -161,7 +161,7 @@ class GestoreUtenti:
         )
         self.repo.salvaUtenti(users)
 
-    def elimina_dipendente(self, user_id: str):
+    def eliminaDipendente(self, user_id: str):
         users = self.repo.caricaUtenti()
         target = next((x for x in users if x.id == user_id), None)
         if not target:
@@ -173,10 +173,10 @@ class GestoreUtenti:
         users = [x for x in users if x.id != user_id]
         self.repo.salvaUtenti(users)
 
-    def get_all_users(self) -> List[Utente]:
+    def getAllUsers(self) -> List[Utente]:
         return self.repo.caricaUtenti()
 
-    def _valida_nuovo_utente(self, username: str, email: str, password: str, dataNascita: str = ""):
+    def _validaNuovoUtente(self, username: str, email: str, password: str, dataNascita: str = ""):
         if not dataNascita or not str(dataNascita).strip():
             raise ValueError("La data di nascita è obbligatoria.")
 
@@ -198,7 +198,7 @@ class GestoreProdotti:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def aggiungi_prodotto(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str) -> Prodotto:
+    def aggiungiProdotto(self, nome: str, descrizione: str, prezzo: float, unita: str, tipo: str) -> Prodotto:
         prods = self.repo.caricaProdotti()
         if any(p.nome.lower() == nome.lower() for p in prods):
             raise ValueError(f"Un prodotto con nome '{nome}' esiste già a catalogo.")
@@ -225,7 +225,7 @@ class GestoreProdotti:
         self.repo.salvaProdotti(prods)
         return p
 
-    def modifica_prodotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float):
+    def modificaProdotto(self, prodotto_id: str, nome: str, descrizione: str, prezzo: float):
         prods = self.repo.caricaProdotti()
         p = next((x for x in prods if x.idProdotto == prodotto_id), None)
         if not p:
@@ -240,15 +240,15 @@ class GestoreProdotti:
         p.aggiornaPrezzoListino(prezzo)
         self.repo.salvaProdotti(prods)
 
-    def elimina_prodotto(self, prodotto_id: str):
+    def eliminaProdotto(self, prodotto_id: str):
         prods = self.repo.caricaProdotti()
         prods = [p for p in prods if p.idProdotto != prodotto_id]
         self.repo.salvaProdotti(prods)
 
-    def get_all_products(self) -> List[Prodotto]:
+    def getAllProducts(self) -> List[Prodotto]:
         return self.repo.caricaProdotti()
 
-    def aggiungi_categoria(self, nome: str, unita: str) -> CategoriaProdotto:
+    def aggiungiCategoria(self, nome: str, unita: str) -> CategoriaProdotto:
         nome_clean = nome.strip().upper()
         if not nome_clean:
             raise ValueError("Il nome della categoria non può essere vuoto.")
@@ -266,10 +266,10 @@ class GestoreProdotti:
         self.repo.salvaCategorie(categories)
         return cat
 
-    def get_all_categories(self) -> List[CategoriaProdotto]:
+    def getAllCategories(self) -> List[CategoriaProdotto]:
         return self.repo.caricaCategorie()
 
-    def elimina_categoria(self, nome_categoria: str):
+    def eliminaCategoria(self, nome_categoria: str):
         nome_clean = nome_categoria.strip().upper()
         
         categories = self.repo.caricaCategorie()
@@ -289,7 +289,7 @@ class GestoreMovimenti:
     def __init__(self, repo: DataRepository):
         self.repo = repo
 
-    def salva_allegato_pdf(self, source_path: str) -> str:
+    def salvaAllegatoPdf(self, source_path: str) -> str:
         if not os.path.exists(source_path):
             raise FileNotFoundError(f"Il file '{source_path}' non esiste.")
 
@@ -298,12 +298,12 @@ class GestoreMovimenti:
         shutil.copy2(source_path, dest_path)    # Copia il file nel dest_path mantenendo i metadati
         return dest_path
 
-    def registra_entrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, quantita: float = 1.0) -> Movimento:
+    def registraEntrata(self, categoria_prodotto: str, prodotto_id: str, cliente_tipo: str, importo: float, data: str, descrizione: str, cliente_dettagli: Optional[Dict[str, str]] = None, pdf_path: Optional[str] = None, quantita: float = 1.0) -> Movimento:
         mov_id = f"MOV-ENT-{str(uuid.uuid4())[:8]}"
 
         doc = None
         if pdf_path:
-            saved_pdf = self.salva_allegato_pdf(pdf_path)
+            saved_pdf = self.salvaAllegatoPdf(pdf_path)
             doc = Documento(
                 numeroDocumento=f"DOC-ENT-{str(uuid.uuid4())[:6]}",
                 allegatoPDF=saved_pdf
@@ -357,12 +357,12 @@ class GestoreMovimenti:
         self.repo.salvaMovimenti(movs)
         return m
 
-    def registra_uscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None) -> Movimento:
+    def registraUscita(self, categoria_uscita: str, prodotto_id: Optional[str], importo: float, data: str, descrizione: str, fornitore_note: str = "", pdf_path: Optional[str] = None) -> Movimento:
         mov_id = f"MOV-USC-{str(uuid.uuid4())[:8]}"
 
         doc = None
         if pdf_path:
-            saved_pdf = self.salva_allegato_pdf(pdf_path)
+            saved_pdf = self.salvaAllegatoPdf(pdf_path)
             doc = Documento(
                 numeroDocumento=f"DOC-USC-{str(uuid.uuid4())[:6]}",
                 allegatoPDF=saved_pdf
@@ -391,13 +391,103 @@ class GestoreMovimenti:
         self.repo.salvaMovimenti(movs)
         return m
 
-    def get_all_movements(self) -> List[Movimento]:
+    def getAllMovements(self) -> List[Movimento]:
         return self.repo.caricaMovimenti()
 
-    def get_uscite(self) -> List[Movimento]:
+    def getEntrate(self) -> List[Movimento]:
+        return [m for m in self.repo.caricaMovimenti() if m.tipo == TipoMovimento.ENTRATA]
+
+    def getUscite(self) -> List[Movimento]:
         return [m for m in self.repo.caricaMovimenti() if m.tipo == TipoMovimento.USCITA]
 
-    def elimina_movimento(self, movimento_id: str):
+    def getContatto(self, contatto_id: str) -> Optional[Contatto]:
+        contacts = self.repo.caricaContatti()
+        return next((c for c in contacts if c.idContatto == contatto_id), None)
+
+    def filtraEntrate(self, anno: Optional[str] = None, prodotto_id: Optional[str] = None, prodotto_nome: Optional[str] = None, tipo_cliente: Optional[str] = None) -> List[Movimento]:
+        entrate = self.getEntrate()
+        prods = self.repo.caricaProdotti()
+        prod_map = {p.idProdotto: p for p in prods}
+
+        # Filtro per Anno
+        if anno and anno != "Tutti gli anni":
+            entrate = [m for m in entrate if m.dataMovimento.startswith(anno)]
+
+        # Filtro per Prodotto
+        has_prod_filter = (prodotto_id is not None) or (prodotto_nome and prodotto_nome != "Tutti i prodotti")
+        if has_prod_filter:
+            def match_prod(m):
+                if prodotto_id and m.prodottoId == prodotto_id:
+                    return True
+                if prodotto_nome and prodotto_nome != "Tutti i prodotti":
+                    p_name_lower = prodotto_nome.strip().lower()
+                    if m.prodottoNome and m.prodottoNome.strip().lower() == p_name_lower:
+                        return True
+                    if m.prodottoId and m.prodottoId in prod_map and prod_map[m.prodottoId].nome.strip().lower() == p_name_lower:
+                        return True
+                return False
+            entrate = [m for m in entrate if match_prod(m)]
+
+        # Filtro per Tipo Cliente
+        if tipo_cliente and tipo_cliente in ("Azienda", "Privato"):
+            contacts = self.repo.caricaContatti()
+            contact_map = {c.idContatto: c for c in contacts}
+            def match_client(m):
+                c = contact_map.get(m.contattoId) if m.contattoId else None
+                if c:
+                    if tipo_cliente == "Azienda":
+                        return isinstance(c, Azienda)
+                    elif tipo_cliente == "Privato":
+                        return isinstance(c, Privato)
+                desc = m.contattoDescrizione or ""
+                if tipo_cliente == "Azienda":
+                    return "Azienda" in desc
+                elif tipo_cliente == "Privato":
+                    return "Privato" in desc
+                return False
+            entrate = [m for m in entrate if match_client(m)]
+
+        return entrate
+
+    def filtraUscite(self, anno: Optional[str] = None, tipo_spesa: Optional[str] = None) -> List[Movimento]:
+        uscite = self.getUscite()
+
+        # Filtro per Anno
+        if anno and anno != "Tutti gli anni":
+            uscite = [m for m in uscite if m.dataMovimento.startswith(anno)]
+
+        # Filtro per Tipo di Spesa
+        if tipo_spesa and tipo_spesa not in ("Tutti i tipi di spesa", "Tutte le spese", ""):
+            spesa_clean = tipo_spesa.strip().upper()
+            uscite = [
+                m for m in uscite
+                if m.sottoTipoUscita and m.sottoTipoUscita.strip().upper() == spesa_clean
+            ]
+
+        return uscite
+
+    def modificaMovimento(self, movimento_id: str, data: str, importo: float, quantita: float, descrizione: str) -> Movimento:
+        if importo < 0:
+            raise ValueError("L'importo totale non può essere negativo.")
+        if quantita < 0:
+            raise ValueError("La quantità non può essere negativa.")
+        if len(descrizione) > 500:
+            raise ValueError("La descrizione supera il limite di 500 caratteri.")
+
+        movs = self.repo.caricaMovimenti()
+        target = next((m for m in movs if m.idMovimento == movimento_id), None)
+        if not target:
+            raise ValueError(f"Movimento con ID '{movimento_id}' non trovato.")
+
+        target.dataMovimento = data
+        target.prezzoTotale = importo
+        target.quantita = quantita
+        target.descrizione = descrizione
+
+        self.repo.salvaMovimenti(movs)
+        return target
+
+    def eliminaMovimento(self, movimento_id: str):
         movs = self.repo.caricaMovimenti()
         movs = [m for m in movs if m.idMovimento != movimento_id]
         self.repo.salvaMovimenti(movs)

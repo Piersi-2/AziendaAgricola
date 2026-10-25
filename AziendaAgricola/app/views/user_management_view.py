@@ -78,10 +78,7 @@ class UserManagementView(QWidget):
 
         main_layout.addWidget(profile_box)
 
-        # ---------------------------------------------------------
         # Se Manager: Gestione Dipendenti e Cronologia Login
-        # ---------------------------------------------------------
-
         if isinstance(self.current_user, Manager):
             manager_box = QGroupBox("Gestione Utenti e Dipendenti (Riservato Manager)")
             m_layout = QVBoxLayout(manager_box)
@@ -126,7 +123,7 @@ class UserManagementView(QWidget):
         if not hasattr(self, 'users_table'):
             return
 
-        users = self.user_manager.get_all_users()
+        users = self.user_manager.getAllUsers()
         self.users_table.setRowCount(len(users))
 
         for idx, u in enumerate(users):     # idx numero di riga, u utenti
@@ -153,7 +150,7 @@ class UserManagementView(QWidget):
             return
 
         try:
-            self.user_manager.modifica_profilo(
+            self.user_manager.modificaProfilo(
                 user_id=self.current_user.id,
                 nome=nome,
                 cognome=cognome,
@@ -224,7 +221,7 @@ class UserManagementView(QWidget):
                     QMessageBox.warning(dlg, "Attenzione", "Compilare tutti i campi obbligatori, inclusa la data di nascita.")
                     return
 
-                self.user_manager.crea_dipendente(
+                self.user_manager.creaDipendente(
                     username=username,
                     password=password,
                     nome=nome,
@@ -251,7 +248,7 @@ class UserManagementView(QWidget):
             return
 
         uid = self.users_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        users = self.user_manager.get_all_users()
+        users = self.user_manager.getAllUsers()
         target = next((u for u in users if u.id == uid), None)
         if not target:
             return
@@ -302,7 +299,7 @@ class UserManagementView(QWidget):
                     QMessageBox.warning(dlg, "Attenzione", "Nome, cognome, email e data di nascita sono obbligatori.")
                     return
 
-                self.user_manager.modifica_profilo(
+                self.user_manager.modificaProfilo(
                     user_id=uid,
                     nome=nome,
                     cognome=cognome,
@@ -357,7 +354,7 @@ class UserManagementView(QWidget):
         )
         if confirm == QMessageBox.StandardButton.Yes:
             try:
-                self.user_manager.elimina_dipendente(user_id)
+                self.user_manager.eliminaDipendente(user_id)
                 QMessageBox.information(self, "Successo", "Profilo eliminato con successo.")
                 self.load_users_table()
             except Exception as e:
