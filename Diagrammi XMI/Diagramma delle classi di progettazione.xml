@@ -429,6 +429,18 @@
 					</ownedEnd>
 				</packagedElement>
 				<packagedElement xmi:type="uml:Class" xmi:id="EAID_2292B027_7115_4e75_8FC0_FA398D7C53CE" name="GestoreMovimenti" visibility="public">
+					<ownedOperation xmi:id="EAID_CF277DD1_0EE5_46d4_BA20_0015D99F7192" name="filtraEntrate" visibility="public" concurrency="sequential">
+						<ownedParameter xmi:id="EAID_847278C2_BA21_4dd3_9505_C916F13BC00C" name="anno" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_8EE145C7_89C6_4b71_AF41_0417A9AD3909" name="nome" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_3CFD3751_282C_4e2f_8802_14CAF49F4F30" name="prodottoNome" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_E629E54A_4480_401c_A88D_723704E89F0E" name="tipoCliente" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_RT000000_0EE5_46d4_BA20_0015D99F7192" name="return" direction="return" type="EAJava_List_Movimento_"/>
+					</ownedOperation>
+					<ownedOperation xmi:id="EAID_21541EF9_05DB_4336_A783_02A2DD012F1D" name="filtraUscite" visibility="public" concurrency="sequential">
+						<ownedParameter xmi:id="EAID_760C4A54_ADD7_4a14_BCE7_C2AD01DE5B84" name="anno" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_B398518E_2565_42a3_929C_9ED2B2ABBA4B" name="tipoSpesa" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true" type="EAJava_String"/>
+						<ownedParameter xmi:id="EAID_RT000000_05DB_4336_A783_02A2DD012F1D" name="return" direction="return" type="EAJava_List_Movimento_"/>
+					</ownedOperation>
 					<ownedOperation xmi:id="EAID_D43FC4B5_BE14_4038_AF76_192598FCC4D3" name="modificaMovimento" visibility="public" concurrency="sequential">
 						<ownedParameter xmi:id="EAID_A7BD002D_8779_421e_A3A8_EF84A03D58C9" name="movimento" type="EAID_11C5F9BB_9A92_4141_AE60_381DF24FD815" direction="in" isStream="false" isException="false" isOrdered="false" isUnique="true"/>
 						<ownedParameter xmi:id="EAID_RT000000_BE14_4038_AF76_192598FCC4D3" name="return" direction="return" type="EAJava_void"/>
@@ -1705,6 +1717,100 @@
 				<xrefs/>
 				<extendedProperties tagged="0" package_name="Sistema"/>
 				<operations>
+					<operation xmi:idref="EAID_CF277DD1_0EE5_46d4_BA20_0015D99F7192" name="filtraEntrate" scope="Public">
+						<properties position="5"/>
+						<stereotype/>
+						<model ea_guid="{CF277DD1-0EE5-46d4-BA20-0015D99F7192}" ea_localid="164"/>
+						<type type="List&lt;Movimento&gt;" const="false" static="false" isAbstract="false" synchronised="0" concurrency="Sequential" pure="0" isQuery="false"/>
+						<behaviour/>
+						<code/>
+						<style/>
+						<styleex/>
+						<documentation/>
+						<tags/>
+						<parameters>
+							<parameter xmi:idref="EAID_RETURNID_0EE5_46d4_BA20_0015D99F7192" visibility="public">
+								<properties pos="0" type="List&lt;Movimento&gt;" const="false" ea_guid="{RETURNID-0EE5-46d4-BA20-0015D99F7192}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_847278C2_BA21_4dd3_9505_C916F13BC00C" visibility="public">
+								<properties pos="0" type="String" const="false" ea_guid="{847278C2-BA21-4dd3-9505-C916F13BC00C}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_8EE145C7_89C6_4b71_AF41_0417A9AD3909" visibility="public">
+								<properties pos="1" type="String" const="false" ea_guid="{8EE145C7-89C6-4b71-AF41-0417A9AD3909}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_3CFD3751_282C_4e2f_8802_14CAF49F4F30" visibility="public">
+								<properties pos="2" type="String" const="false" ea_guid="{3CFD3751-282C-4e2f-8802-14CAF49F4F30}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_E629E54A_4480_401c_A88D_723704E89F0E" visibility="public">
+								<properties pos="3" type="String" const="false" ea_guid="{E629E54A-4480-401c-A88D-723704E89F0E}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+						</parameters>
+						<xrefs/>
+					</operation>
+					<operation xmi:idref="EAID_21541EF9_05DB_4336_A783_02A2DD012F1D" name="filtraUscite" scope="Public">
+						<properties position="6"/>
+						<stereotype/>
+						<model ea_guid="{21541EF9-05DB-4336-A783-02A2DD012F1D}" ea_localid="165"/>
+						<type type="List&lt;Movimento&gt;" const="false" static="false" isAbstract="false" synchronised="0" concurrency="Sequential" pure="0" isQuery="false"/>
+						<behaviour/>
+						<code/>
+						<style/>
+						<styleex/>
+						<documentation/>
+						<tags/>
+						<parameters>
+							<parameter xmi:idref="EAID_RETURNID_05DB_4336_A783_02A2DD012F1D" visibility="public">
+								<properties pos="0" type="List&lt;Movimento&gt;" const="false" ea_guid="{RETURNID-05DB-4336-A783-02A2DD012F1D}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_760C4A54_ADD7_4a14_BCE7_C2AD01DE5B84" visibility="public">
+								<properties pos="0" type="String" const="false" ea_guid="{760C4A54-ADD7-4a14-BCE7-C2AD01DE5B84}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+							<parameter xmi:idref="EAID_B398518E_2565_42a3_929C_9ED2B2ABBA4B" visibility="public">
+								<properties pos="1" type="String" const="false" ea_guid="{B398518E-2565-42a3-929C-9ED2B2ABBA4B}"/>
+								<style/>
+								<styleex/>
+								<documentation/>
+								<tags/>
+								<xrefs/>
+							</parameter>
+						</parameters>
+						<xrefs/>
+					</operation>
 					<operation xmi:idref="EAID_D43FC4B5_BE14_4038_AF76_192598FCC4D3" name="modificaMovimento" scope="Public">
 						<properties position="1"/>
 						<stereotype/>
@@ -3619,6 +3725,7 @@
 							<general href="http://schema.omg.org/spec/UML/2.1/uml.xml#Boolean"/>
 						</generalization>
 					</packagedElement>
+					<packagedElement xmi:type="uml:PrimitiveType" xmi:id="EAJava_List_Movimento_" name="List&lt;Movimento&gt;" visibility="public"/>
 					<packagedElement xmi:type="uml:PrimitiveType" xmi:id="EAJava_ReportGuadagno" name="ReportGuadagno" visibility="public"/>
 					<packagedElement xmi:type="uml:PrimitiveType" xmi:id="EAJava_Dipendente" name="Dipendente" visibility="public"/>
 				</packagedElement>
@@ -3691,14 +3798,14 @@
 			<diagram xmi:id="EAID_E8EA21BF_C6BC_47f4_A544_9B4FB6DBD7B2">
 				<model package="EAPK_B12A2723_E8ED_4b94_A709_BB0C79E0C3DF" localID="96" owner="EAPK_B12A2723_E8ED_4b94_A709_BB0C79E0C3DF"/>
 				<properties name="Sistema" type="Logical"/>
-				<project author="giaco" version="1.0" created="2026-07-14 17:06:52" modified="2026-10-24 19:50:07"/>
+				<project author="giaco" version="1.0" created="2026-07-14 17:06:52" modified="2026-10-25 12:26:56"/>
 				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=803;DocSize.cy=1146;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
-				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=E7473E19;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=B75D3707;"/>
 				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
 				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
 				<extendedProperties/>
 				<elements>
-					<element geometry="Left=561;Top=260;Right=781;Bottom=330;" subject="EAID_58A5E92D_B537_4824_8CA2_B32A326BA569" seqno="1" style="DUID=DE30AF12;"/>
+					<element geometry="Left=586;Top=276;Right=806;Bottom=346;" subject="EAID_58A5E92D_B537_4824_8CA2_B32A326BA569" seqno="1" style="DUID=DE30AF12;"/>
 					<element geometry="Left=454;Top=20;Right=723;Bottom=126;" subject="EAID_52DBBF71_119F_455d_BB19_2C0AB91C7311" seqno="2" style="DUID=EFCD594B;"/>
 					<element geometry="Left=821;Top=137;Right=987;Bottom=298;" subject="EAID_DE964C61_95F8_4e3c_924B_49BD8556290A" seqno="3" style="DUID=4193353A;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
 					<element geometry="Left=805;Top=394;Right=1004;Bottom=508;" subject="EAID_CC349B7E_1102_43be_9597_8670B3813970" seqno="4" style="DUID=7450124F;"/>
@@ -3706,7 +3813,7 @@
 					<element geometry="Left=27;Top=522;Right=193;Bottom=670;" subject="EAID_6040B202_D623_4f2f_A0C5_BA366B1D5FDC" seqno="6" style="DUID=9D27634C;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
 					<element geometry="Left=291;Top=539;Right=577;Bottom=640;" subject="EAID_70FAF8FD_BA5B_4bdc_A6FF_6BC827B08153" seqno="7" style="DUID=14CA49D7;"/>
 					<element geometry="Left=34;Top=195;Right=209;Bottom=395;" subject="EAID_11C5F9BB_9A92_4141_AE60_381DF24FD815" seqno="8" style="DUID=AF86E689;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
-					<element geometry="Left=305;Top=161;Right=508;Bottom=298;" subject="EAID_2292B027_7115_4e75_8FC0_FA398D7C53CE" seqno="9" style="DUID=94864B4F;"/>
+					<element geometry="Left=296;Top=161;Right=556;Bottom=298;" subject="EAID_2292B027_7115_4e75_8FC0_FA398D7C53CE" seqno="9" style="DUID=94864B4F;"/>
 					<element geometry="Left=57;Top=27;Right=277;Bottom=119;" subject="EAID_361379F2_ACC4_4f04_92B5_C1AFC73F7420" seqno="10" style="DUID=200DFA87;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
 					<element geometry="Left=859;Top=546;Right=949;Bottom=628;" subject="EAID_1A4AB2C5_9BA3_48c3_947A_C33CD770E74A" seqno="11" style="DUID=202114C8;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
 					<element geometry="Left=291;Top=368;Right=562;Bottom=490;" subject="EAID_F086DF49_ADD5_4d3b_B0D4_8A2CBD647440" seqno="12" style="DUID=4257CAD8;NSL=0;BCol=-1;BFol=-1;LCol=-1;LWth=-1;fontsz=0;bold=0;black=0;italic=0;ul=0;charset=0;pitch=0;"/>
