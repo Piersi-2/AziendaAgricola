@@ -56,9 +56,7 @@ class TestViews(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.temp_dir)
 
-    # -------------------------------------------------------------
-    # 1. Test Vista Prodotti
-    # -------------------------------------------------------------
+    # Test Vista Prodotti
     def test_product_view_columns_and_headers(self):
         """Verifica le 5 colonne e le intestazioni della vista Catalogo Prodotti."""
         view = ProductManagementView(self.product_service)
@@ -69,9 +67,7 @@ class TestViews(unittest.TestCase):
         ]
         self.assertEqual(headers, expected_headers)
 
-    # -------------------------------------------------------------
-    # 2. Test Vista Movimenti Finanziari
-    # -------------------------------------------------------------
+    # Test Vista Movimenti Finanziari
     def test_entrate_table_columns(self):
         """Verifica le 9 colonne della tabella Entrate (inclusa UdM tra Quantità e Importo)."""
         view = FinancialMovementView(self.financial_service, self.product_service, self.manager_user)
@@ -116,9 +112,7 @@ class TestViews(unittest.TestCase):
         client_options = [view.cb_cliente_entrate.itemText(i) for i in range(view.cb_cliente_entrate.count())]
         self.assertEqual(client_options, ["Tutti i clienti", "Azienda", "Privato"])
 
-    # -------------------------------------------------------------
-    # 3. Test Finestra Principale e Ruoli
-    # -------------------------------------------------------------
+    # Test Finestra Principale e Ruoli
     def test_main_window_tabs_for_manager(self):
         """Il Manager deve avere accesso a 4 tab, incluso Guadagno Aziendale."""
         window = MainWindow(self.manager_user, self.repo, self.auth_service)
@@ -145,9 +139,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(tab_titles, expected_tabs)
         self.assertNotIn("Guadagno Aziendale", tab_titles)
 
-    # -------------------------------------------------------------
-    # 4. Test Vista Gestione Utenti
-    # -------------------------------------------------------------
+    # Test Vista Gestione Utenti
     def test_user_management_view_permissions(self):
         """Il Manager vede la tabella utenti aziendali, il Dipendente solo il proprio profilo."""
         view_mgr = UserManagementView(self.manager_user, self.user_manager, self.auth_service)
@@ -160,9 +152,7 @@ class TestViews(unittest.TestCase):
         view_dip = UserManagementView(self.dipendente_user, self.user_manager, self.auth_service)
         self.assertFalse(hasattr(view_dip, "users_table"))
 
-    # -------------------------------------------------------------
-    # 5. Test Vista Report Guadagno
-    # -------------------------------------------------------------
+    # Test Vista Report Guadagno
     def test_report_view_elements(self):
         """Verifica la presenza del selettore anno e del pannello di visualizzazione report."""
         view = ReportView(self.report_service)
@@ -173,9 +163,7 @@ class TestViews(unittest.TestCase):
         self.assertEqual(view.cb_anno.itemText(0), str(curr_year))
         self.assertIn("REPORT GUADAGNO AZIENDALE", view.report_display.toPlainText())
 
-    # -------------------------------------------------------------
-    # 6. Test Dialog di Autenticazione
-    # -------------------------------------------------------------
+    # Test Dialog di Autenticazione
     def test_login_dialog_modes(self):
         """Verifica che con manager registrato si apra la schermata di login normale."""
         dialog = LoginDialog(self.auth_service, self.user_manager)
