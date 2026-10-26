@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmlns:thecustomprofile="http://www.sparxsystems.com/profiles/thecustomprofile/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1554"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" name="Diagramma di deployment" visibility="public">
+			<packagedElement xmi:type="uml:Device" xmi:id="EAID_50130FAA_B93C_4b52_9C7F_6C98E0997E2B" name="PC Utente" visibility="public">
+				<nestedNode xmi:type="uml:ExecutionEnvironment" xmi:id="EAID_B58CBEC4_DECC_4612_B9AF_EE48D964374F" name="File/SQLite" visibility="public">
+					<nestedArtifact xmi:type="uml:Artifact" xmi:id="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4" name="DatliLocali" visibility="public"/>
+				</nestedNode>
+				<nestedNode xmi:type="uml:ExecutionEnvironment" xmi:id="EAID_6F8ACCB7_8C51_4519_8484_77C0CA967638" name="Python 3.12(PyQt 5)" visibility="public">
+					<nestedArtifact xmi:type="uml:Artifact" xmi:id="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99" name="ApplicazioneDesktop" visibility="public"/>
+				</nestedNode>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Usage" xmi:id="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8" visibility="public" supplier="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4" client="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99"/>
+		</packagedElement>
+		<thecustomprofile:use base_Usage="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8"/>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" xmi:type="uml:Package" name="Diagramma di deployment" scope="public">
+				<model package2="EAID_975A4EDE_84CF_44ed_9973_942F0428230D" package="EAPK_0EFCF1C8_9DF3_40de_AF96_8C12B74636C8" tpos="0" ea_localid="148" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-07-22 16:44:21" modified="2026-10-24 14:14:15" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Model"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-07-22 16:44:21" modified="2026-10-26 13:34:27" lastloaddate="2026-10-24 14:11:10" lastsavedate="2026-10-24 14:11:10"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;VICON=3;"/>
+			</element>
+			<element xmi:idref="EAID_50130FAA_B93C_4b52_9C7F_6C98E0997E2B" xmi:type="uml:Device" name="PC Utente" scope="public">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" tpos="0" ea_localid="1114" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Device" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-07-22 17:02:43" modified="2026-10-26 13:20:44" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagramma di deployment"/>
+			</element>
+			<element xmi:idref="EAID_B58CBEC4_DECC_4612_B9AF_EE48D964374F" xmi:type="uml:ExecutionEnvironment" name="File/SQLite" scope="public">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" owner="EAID_50130FAA_B93C_4b52_9C7F_6C98E0997E2B" tpos="0" ea_localid="1119" ea_eleType="element"/>
+				<properties isSpecification="false" sType="ExecutionEnvironment" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-07-22 17:06:55" modified="2026-10-26 13:15:27" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagramma di deployment"/>
+			</element>
+			<element xmi:idref="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4" xmi:type="uml:Artifact" name="DatliLocali" scope="public">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" owner="EAID_B58CBEC4_DECC_4612_B9AF_EE48D964374F" tpos="0" ea_localid="1115" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Artifact" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-10-26 13:15:35" modified="2026-10-26 13:16:35" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagramma di deployment"/>
+				<links>
+					<Dependency xmi:id="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8" start="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99" end="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_6F8ACCB7_8C51_4519_8484_77C0CA967638" xmi:type="uml:ExecutionEnvironment" name="Python 3.12(PyQt 5)" scope="public">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" owner="EAID_50130FAA_B93C_4b52_9C7F_6C98E0997E2B" tpos="0" ea_localid="1116" ea_eleType="element"/>
+				<properties isSpecification="false" sType="ExecutionEnvironment" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-07-22 17:04:42" modified="2026-10-26 13:35:00" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagramma di deployment"/>
+			</element>
+			<element xmi:idref="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99" xmi:type="uml:Artifact" name="ApplicazioneDesktop" scope="public">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" owner="EAID_6F8ACCB7_8C51_4519_8484_77C0CA967638" tpos="0" ea_localid="1118" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Artifact" nType="0" scope="public" isRoot="false" isLeaf="false" isAbstract="false"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-10-26 13:14:35" modified="2026-10-26 13:14:41" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagramma di deployment"/>
+				<links>
+					<Dependency xmi:id="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8" start="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99" end="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4"/>
+				</links>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8">
+				<source xmi:idref="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99">
+					<model ea_localid="1118" type="Artifact" name="ApplicazioneDesktop"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4">
+					<model ea_localid="1115" type="Artifact" name="DatliLocali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="800"/>
+				<properties ea_type="Dependency" stereotype="use" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels mb=" &#xA;«use»"/>
+				<extendedProperties conditional=" &#xA;«use»" virtualInheritance="0"/>
+				<style/>
+				<xrefs value="$XREFPROP=$XID={A89EBB40-1B7E-4b9c-98C4-C56018C6E4A3}$XID;$NAM=Stereotypes$NAM;$TYP=connector property$TYP;$VIS=Public$VIS;$PAR=0$PAR;$DES=@STEREO;Name=use;GUID={5591C9FB-4A9B-4061-92BE-716258644506};@ENDSTEREO;$DES;$CLT={E8FDFD0D-99D8-496c-A899-EAEFB77D83A8}$CLT;$SUP=&lt;none&gt;$SUP;$ENDXREF;"/>
+				<tags/>
+			</connector>
+		</connectors>
+		<primitivetypes>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPrimitiveTypesPackage" name="EA_PrimitiveTypes_Package" visibility="public"/>
+		</primitivetypes>
+		<profiles>
+			<uml:Profile xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1/" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmi:id="thecustomprofile" nsPrefix="thecustomprofile" name="thecustomprofile" metamodelReference="mmref01">
+				<ownedComment xmi:type="uml:Comment" xmi:id="comment01" annotatedElement="thecustomprofile">
+					<body> Version:1.0</body>
+				</ownedComment>
+				<packageImport xmi:id="mmref01">
+					<importedPackage href="http://schema.omg.org/spec/UML/2.1/"/>
+				</packageImport>
+				<packagedElement xmi:type="uml:Stereotype" xmi:id="use" name="use">
+					<ownedAttribute xmi:type="uml:Property" xmi:id="use-base_Usage" name="base_Usage" association="Usage_use">
+						<type href="http://schema.omg.org/spec/UML/2.1/Usage"/>
+					</ownedAttribute>
+				</packagedElement>
+				<packagedElement xmi:type="uml:Extension" xmi:id="Usage_use" name="A_Usage_use" memberEnd="extension_use use-base_Usage">
+					<ownedEnd xmi:id="extension_use" name="extension_use" type="use" isComposite="true" lower="0" upper="1" memberEnd="extension_use use-base_Usage"/>
+				</packagedElement>
+			</uml:Profile>
+		</profiles>
+		<diagrams>
+			<diagram xmi:id="EAID_4EF2207D_8A58_418f_A224_3D8258C7EF5B">
+				<model package="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D" localID="108" owner="EAPK_975A4EDE_84CF_44ed_9973_942F0428230D"/>
+				<properties name="Diagramma di Deployment" type="Deployment"/>
+				<project author="giaco" version="1.0" created="2026-07-22 16:44:42" modified="2026-10-26 13:41:46"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=803;DocSize.cy=1146;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;SaveTag=B993D426;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=596;Top=245;Right=686;Bottom=295;" subject="EAID_57F9DF71_4215_47ac_921C_5597A9EAA1F4" seqno="1" style="DUID=71942BB4;"/>
+					<element geometry="Left=284;Top=248;Right=395;Bottom=298;" subject="EAID_A7EE53E1_27B6_4b5e_8564_004A7C965C99" seqno="2" style="DUID=C8F5CD2C;"/>
+					<element geometry="Left=566;Top=179;Right=723;Bottom=324;" subject="EAID_B58CBEC4_DECC_4612_B9AF_EE48D964374F" seqno="3" style="DUID=97EF6212;"/>
+					<element geometry="Left=263;Top=179;Right=420;Bottom=323;" subject="EAID_6F8ACCB7_8C51_4519_8484_77C0CA967638" seqno="4" style="DUID=E9B079C9;"/>
+					<element geometry="Left=163;Top=26;Right=812;Bottom=481;" subject="EAID_50130FAA_B93C_4b52_9C7F_6C98E0997E2B" seqno="5" style="DUID=4D0957D4;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=CX=25:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_E8FDFD0D_99D8_496c_A899_EAEFB77D83A8" style="Mode=3;EOID=71942BB4;SOID=C8F5CD2C;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>

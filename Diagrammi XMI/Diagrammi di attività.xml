@@ -1,0 +1,2827 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<xmi:XMI xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:xmi="http://schema.omg.org/spec/XMI/2.1">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1554"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" name="Diagrammi di attività" visibility="public">
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" name="Accessi Profili utente" visibility="public">
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_E487C97C_4528_4ec1_8AB5_49ED5F8B78A7" name="Activity1" visibility="public" isReadOnly="false" isSingleExecution="false"/>
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AC000001_BFAD_4b91_9702_99F4C0135A4C" name="EA_Activity1" visibility="public">
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_CE1DD8FB_5A1D_4cba_A9D4_7FAC9753C6A0" name="Accesso al sistema" visibility="public"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_825FFBB4_A9C4_4a1b_8123_1543A9590D8E" name="Action1" visibility="public"/>
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" name="Credenziali valide?" visibility="public">
+						<incoming xmi:idref="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE"/>
+						<outgoing xmi:idref="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C"/>
+						<outgoing xmi:idref="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6" name="no" visibility="public" source="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" target="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C" name="si" visibility="public" source="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" target="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099"/>
+					<node xmi:type="uml:ActivityFinalNode" xmi:id="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F" name="Final" visibility="public">
+						<incoming xmi:idref="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23"/>
+					</node>
+					<node xmi:type="uml:Action" xmi:id="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" name="sistema chiede credenziali" visibility="public">
+						<incoming xmi:idref="EAID_B525B027_DBCD_449d_B4C7_1B584768A151"/>
+						<outgoing xmi:idref="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8" visibility="public" source="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" target="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" name="sistema conferma l'accesso" visibility="public">
+						<incoming xmi:idref="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C"/>
+						<outgoing xmi:idref="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23" visibility="public" source="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" target="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F"/>
+					<node xmi:type="uml:InitialNode" xmi:id="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" name="Start" visibility="public">
+						<outgoing xmi:idref="EAID_B525B027_DBCD_449d_B4C7_1B584768A151"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_B525B027_DBCD_449d_B4C7_1B584768A151" visibility="public" source="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" target="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" name="utente inserisce credenziali" visibility="public">
+						<incoming xmi:idref="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8"/>
+						<incoming xmi:idref="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A"/>
+						<outgoing xmi:idref="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE" visibility="public" source="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" target="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" name="Visualizza errore" visibility="public">
+						<incoming xmi:idref="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6"/>
+						<outgoing xmi:idref="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A" visibility="public" source="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" target="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+				</packagedElement>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" name="Aggiungi Prodotto" visibility="public">
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AC000002_76C5_4abe_B59C_5888853A10EF" name="EA_Activity2" visibility="public">
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" name="Dati validi?" visibility="public">
+						<incoming xmi:idref="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5"/>
+						<outgoing xmi:idref="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA"/>
+						<outgoing xmi:idref="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C" name="si" visibility="public" source="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" target="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA" name="no" visibility="public" source="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" target="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6"/>
+					<node xmi:type="uml:ActivityFinalNode" xmi:id="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8" name="Final" visibility="public">
+						<incoming xmi:idref="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E"/>
+					</node>
+					<node xmi:type="uml:Action" xmi:id="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" name="Inserimento dati prodotto" visibility="public">
+						<incoming xmi:idref="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D"/>
+						<incoming xmi:idref="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E"/>
+						<outgoing xmi:idref="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5" visibility="public" source="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" target="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" name="Salvataggio nel database" visibility="public">
+						<incoming xmi:idref="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C"/>
+						<outgoing xmi:idref="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E" visibility="public" source="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" target="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" name="Segnala errore campi" visibility="public">
+						<incoming xmi:idref="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA"/>
+						<outgoing xmi:idref="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D" visibility="public" source="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" target="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+					<node xmi:type="uml:InitialNode" xmi:id="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" name="Start" visibility="public">
+						<outgoing xmi:idref="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E" visibility="public" source="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" target="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+				</packagedElement>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" name="Guadagno Aziendale" visibility="public">
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_97BD3423_A638_4c17_AB48_7C5AD426036D" name="Activity1" visibility="public" isReadOnly="false" isSingleExecution="false"/>
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AB8F30D6_F082_47d0_B15D_17104F2B6CDC" name="Activity2" visibility="public" isReadOnly="false" isSingleExecution="false"/>
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AC000003_06D0_45a2_A00F_54C83F8FA6F1" name="EA_Activity3" visibility="public">
+					<node xmi:type="uml:Action" xmi:id="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC" name="Calcolo totale entrate" visibility="public">
+						<incoming xmi:idref="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8"/>
+						<outgoing xmi:idref="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8" visibility="public" source="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC" target="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0" name="Calcolo totale uscite" visibility="public">
+						<incoming xmi:idref="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8"/>
+						<outgoing xmi:idref="EAID_68374181_D244_43f8_8368_4421C9CEDBBE"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_68374181_D244_43f8_8368_4421C9CEDBBE" visibility="public" source="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0" target="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" name="Errore?" visibility="public">
+						<incoming xmi:idref="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459"/>
+						<outgoing xmi:idref="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268"/>
+						<outgoing xmi:idref="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879" name="Si" visibility="public" source="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" target="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268" name="No" visibility="public" source="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" target="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C"/>
+					<node xmi:type="uml:ActivityFinalNode" xmi:id="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D" name="Final" visibility="public">
+						<incoming xmi:idref="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411"/>
+					</node>
+					<node xmi:type="uml:Action" xmi:id="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" name="Mostra riepilogo guadagni" visibility="public">
+						<incoming xmi:idref="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268"/>
+						<outgoing xmi:idref="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411" visibility="public" source="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" target="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_CCF57556_1599_4576_953E_445C5628CBD4" name="Richiesta periodo di riferimento" visibility="public">
+						<incoming xmi:idref="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48"/>
+						<outgoing xmi:idref="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8" visibility="public" source="EAID_CCF57556_1599_4576_953E_445C5628CBD4" target="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" name="Seleziona &quot;Guadagno aziendale&quot;" visibility="public">
+						<incoming xmi:idref="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED"/>
+						<incoming xmi:idref="EAID_68374181_D244_43f8_8368_4421C9CEDBBE"/>
+						<incoming xmi:idref="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B"/>
+						<outgoing xmi:idref="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F" visibility="public" source="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" target="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" name="Sistema calcola il riepilogo" visibility="public">
+						<incoming xmi:idref="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F"/>
+						<outgoing xmi:idref="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459" visibility="public" source="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" target="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB"/>
+					<node xmi:type="uml:InitialNode" xmi:id="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" name="Start" visibility="public">
+						<outgoing xmi:idref="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48"/>
+						<outgoing xmi:idref="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED" visibility="public" source="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" target="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48" visibility="public" source="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" target="EAID_CCF57556_1599_4576_953E_445C5628CBD4"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" name="Visualizza errore" visibility="public">
+						<incoming xmi:idref="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879"/>
+						<outgoing xmi:idref="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B" visibility="public" source="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" target="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+				</packagedElement>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" name="Registra Entrate" visibility="public">
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AC000004_7423_47af_B611_06BB1B294E92" name="EA_Activity4" visibility="public">
+					<node xmi:type="uml:Action" xmi:id="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" name="conferma l'invio" visibility="public">
+						<incoming xmi:idref="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6"/>
+						<outgoing xmi:idref="EAID_A039727B_320C_4f21_A079_A3F64F82031D"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_A039727B_320C_4f21_A079_A3F64F82031D" visibility="public" source="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" target="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571"/>
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" name="Dati validi?" visibility="public">
+						<incoming xmi:idref="EAID_A039727B_320C_4f21_A079_A3F64F82031D"/>
+						<outgoing xmi:idref="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB"/>
+						<outgoing xmi:idref="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309"/>
+						<outgoing xmi:idref="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405" name="si" visibility="public" source="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" target="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309" name="no" visibility="public" source="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" target="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB" name="si" visibility="public" source="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" target="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76"/>
+					<node xmi:type="uml:ActivityFinalNode" xmi:id="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD" name="Final" visibility="public">
+						<incoming xmi:idref="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340"/>
+					</node>
+					<node xmi:type="uml:Action" xmi:id="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" name="il sistema mostra il modulo dati" visibility="public">
+						<incoming xmi:idref="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C"/>
+						<incoming xmi:idref="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B"/>
+						<outgoing xmi:idref="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20" visibility="public" source="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" target="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" name="inserimento data, tipo, importo e descizione" visibility="public">
+						<incoming xmi:idref="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F"/>
+						<outgoing xmi:idref="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6" visibility="public" source="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" target="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" name="Mostra errore formato" visibility="public">
+						<incoming xmi:idref="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309"/>
+						<outgoing xmi:idref="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B" visibility="public" source="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" target="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76" name="Registra transazione in entrata" visibility="public">
+						<incoming xmi:idref="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB"/>
+						<outgoing xmi:idref="EAID_288CE836_FDB5_460b_98AF_816660032F6E"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_288CE836_FDB5_460b_98AF_816660032F6E" visibility="public" source="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76" target="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" name="seleziona &quot;nuova entrata&quot;" visibility="public">
+						<incoming xmi:idref="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308"/>
+						<outgoing xmi:idref="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C" visibility="public" source="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" target="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" name="seleziona la categoria" visibility="public">
+						<incoming xmi:idref="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20"/>
+						<outgoing xmi:idref="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F" visibility="public" source="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" target="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" name="Sistema registra i dati" visibility="public">
+						<incoming xmi:idref="EAID_288CE836_FDB5_460b_98AF_816660032F6E"/>
+						<incoming xmi:idref="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405"/>
+						<outgoing xmi:idref="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340" visibility="public" source="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" target="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD"/>
+					<node xmi:type="uml:InitialNode" xmi:id="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" name="Start" visibility="public">
+						<outgoing xmi:idref="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308" visibility="public" source="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" target="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89"/>
+				</packagedElement>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" name="Registra Uscite" visibility="public">
+				<packagedElement xmi:type="uml:Activity" xmi:id="EAID_AC000005_420C_4402_9BCD_DD0D45EF1181" name="EA_Activity5" visibility="public">
+					<node xmi:type="uml:Action" xmi:id="EAID_597989FF_3AF6_498d_8F34_8E009922D882" name="Aggiorna saldo totale" visibility="public">
+						<incoming xmi:idref="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C"/>
+						<outgoing xmi:idref="EAID_5F923E59_56AD_4029_9869_97FC73398C46"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_5F923E59_56AD_4029_9869_97FC73398C46" visibility="public" source="EAID_597989FF_3AF6_498d_8F34_8E009922D882" target="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" name="Conferma l'invio" visibility="public">
+						<incoming xmi:idref="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9"/>
+						<outgoing xmi:idref="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292" visibility="public" source="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" target="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B"/>
+					<node xmi:type="uml:DecisionNode" xmi:id="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" name="Dati validi?" visibility="public">
+						<incoming xmi:idref="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE"/>
+						<outgoing xmi:idref="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394"/>
+						<outgoing xmi:idref="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0" name="no" visibility="public" source="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" target="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394" name="si" visibility="public" source="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" target="EAID_EE976341_4224_456a_9C11_7A55FB7314E6"/>
+					<node xmi:type="uml:ActivityFinalNode" xmi:id="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C" name="Final" visibility="public">
+						<incoming xmi:idref="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2"/>
+						<incoming xmi:idref="EAID_5F923E59_56AD_4029_9869_97FC73398C46"/>
+					</node>
+					<node xmi:type="uml:Action" xmi:id="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" name="Inserisce data, tipo, importo&#xA;e descrizione" visibility="public">
+						<incoming xmi:idref="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98"/>
+						<outgoing xmi:idref="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9" visibility="public" source="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" target="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" name="Seleziona &quot;Nuova uscita&quot;" visibility="public">
+						<incoming xmi:idref="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A"/>
+						<outgoing xmi:idref="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35" visibility="public" source="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" target="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" name="Seleziona la categoria" visibility="public">
+						<incoming xmi:idref="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14"/>
+						<outgoing xmi:idref="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98" visibility="public" source="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" target="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" name="Sistema mostra il modulo dati" visibility="public">
+						<incoming xmi:idref="EAID_AA300545_2E18_442f_BB57_F66ED359F709"/>
+						<incoming xmi:idref="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35"/>
+						<outgoing xmi:idref="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14" visibility="public" source="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" target="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" name="Sistema registra i dati" visibility="public">
+						<incoming xmi:idref="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394"/>
+						<outgoing xmi:idref="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2"/>
+						<outgoing xmi:idref="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C" visibility="public" source="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" target="EAID_597989FF_3AF6_498d_8F34_8E009922D882"/>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2" visibility="public" source="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" target="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" name="Sistema verifica i dati" visibility="public">
+						<incoming xmi:idref="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292"/>
+						<outgoing xmi:idref="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE" visibility="public" source="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" target="EAID_76C6971F_6833_4ee7_9814_D26E1897D149"/>
+					<node xmi:type="uml:InitialNode" xmi:id="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" name="Start" visibility="public">
+						<outgoing xmi:idref="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A" visibility="public" source="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" target="EAID_437B5D50_5CD3_4729_B600_55CD0064448B"/>
+					<node xmi:type="uml:Action" xmi:id="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" name="Visualizza errore" visibility="public">
+						<incoming xmi:idref="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0"/>
+						<outgoing xmi:idref="EAID_AA300545_2E18_442f_BB57_F66ED359F709"/>
+					</node>
+					<edge xmi:type="uml:ControlFlow" xmi:id="EAID_AA300545_2E18_442f_BB57_F66ED359F709" visibility="public" source="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" target="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+				</packagedElement>
+			</packagedElement>
+		</packagedElement>
+	</uml:Model>
+	<xmi:Extension extender="Enterprise Architect" extenderID="6.5">
+		<elements>
+			<element xmi:idref="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" xmi:type="uml:Package" name="Diagrammi di attività" scope="public">
+				<model package2="EAID_ABA255D0_273A_414d_A6FF_AA58070F03E5" package="EAPK_0EFCF1C8_9DF3_40de_AF96_8C12B74636C8" tpos="0" ea_localid="110" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="giaco" version="1.0" phase="1.0" created="2026-07-01 14:42:09" modified="2026-07-01 14:42:09" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Model"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-07-01 14:42:09" modified="2026-07-17 16:36:01" lastloaddate="2026-07-17 16:36:00" lastsavedate="2026-07-17 16:36:00"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE" packageFlags="isModel=1;VICON=3;"/>
+			</element>
+			<element xmi:idref="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" xmi:type="uml:Package" name="Accessi Profili utente" scope="public">
+				<model package2="EAID_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" package="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" tpos="0" ea_localid="111" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:30:16" modified="2026-07-01 14:55:30" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagrammi di attività"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-06-24 17:30:16" modified="2026-06-24 17:30:16" lastloaddate="2026-07-01 14:54:30" lastsavedate="2026-07-01 14:54:30"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE"/>
+			</element>
+			<element xmi:idref="EAID_E487C97C_4528_4ec1_8AB5_49ED5F8B78A7" xmi:type="uml:Activity" name="Activity1" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="841" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Activity" nType="0" scope="public" isAbstract="false"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 11:54:58" modified="2026-07-14 11:54:58" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+			</element>
+			<element xmi:idref="EAID_CE1DD8FB_5A1D_4cba_A9D4_7FAC9753C6A0" xmi:type="uml:Decision" name="Accesso al sistema" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="839" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:24:01" modified="2026-06-24 17:30:22" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+			</element>
+			<element xmi:idref="EAID_825FFBB4_A9C4_4a1b_8123_1543A9590D8E" xmi:type="uml:Action" name="Action1" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="838" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:21:32" modified="2026-06-24 17:30:26" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+			</element>
+			<element xmi:idref="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" xmi:type="uml:Decision" name="Credenziali valide?" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="835" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:15:40" modified="2026-07-14 11:53:17" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6" start="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" end="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666"/>
+					<ControlFlow xmi:id="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C" start="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" end="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099"/>
+					<ControlFlow xmi:id="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE" start="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" end="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F" xmi:type="uml:StateNode" name="Final" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="843" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="101" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:25:58" modified="2026-06-24 17:30:36" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23" start="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" end="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" xmi:type="uml:Action" name="sistema chiede credenziali" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="837" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 11:51:51" modified="2026-07-14 12:03:54" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8" start="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" end="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+					<ControlFlow xmi:id="EAID_B525B027_DBCD_449d_B4C7_1B584768A151" start="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" end="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" xmi:type="uml:Action" name="sistema conferma l'accesso" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="836" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:25:15" modified="2026-07-14 12:04:33" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23" start="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" end="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F"/>
+					<ControlFlow xmi:id="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C" start="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" end="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" xmi:type="uml:StateNode" name="Start" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="834" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="100" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:12:46" modified="2026-06-24 17:30:26" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_B525B027_DBCD_449d_B4C7_1B584768A151" start="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" end="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" xmi:type="uml:Action" name="utente inserisce credenziali" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="840" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:14:10" modified="2026-07-14 12:04:07" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE" start="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" end="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184"/>
+					<ControlFlow xmi:id="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A" start="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" end="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+					<ControlFlow xmi:id="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8" start="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" end="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" xmi:type="uml:Action" name="Visualizza errore" scope="public">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" tpos="0" ea_localid="842" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:21:54" modified="2026-07-14 11:53:33" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Accessi Profili utente"/>
+				<links>
+					<ControlFlow xmi:id="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A" start="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" end="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2"/>
+					<ControlFlow xmi:id="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6" start="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" end="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666"/>
+				</links>
+			</element>
+			<element xmi:idref="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" xmi:type="uml:Package" name="Aggiungi Prodotto" scope="public">
+				<model package2="EAID_4458C264_76C5_4abe_B59C_5888853A10EF" package="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" tpos="0" ea_localid="112" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:31:23" modified="2026-07-01 14:55:31" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagrammi di attività"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-06-24 17:31:23" modified="2026-06-24 17:31:23" lastloaddate="2026-07-01 14:54:30" lastsavedate="2026-07-01 14:54:30"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE"/>
+			</element>
+			<element xmi:idref="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" xmi:type="uml:Decision" name="Dati validi?" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="844" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:33:36" modified="2026-06-24 17:33:38" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C" start="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" end="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9"/>
+					<ControlFlow xmi:id="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA" start="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" end="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6"/>
+					<ControlFlow xmi:id="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5" start="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" end="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8" xmi:type="uml:StateNode" name="Final" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="847" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="101" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:34:33" modified="2026-06-24 17:34:43" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E" start="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" end="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" xmi:type="uml:Action" name="Inserimento dati prodotto" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="845" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:32:05" modified="2026-06-24 17:32:07" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5" start="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" end="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878"/>
+					<ControlFlow xmi:id="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E" start="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" end="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+					<ControlFlow xmi:id="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D" start="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" end="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" xmi:type="uml:Action" name="Salvataggio nel database" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="848" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:34:23" modified="2026-06-24 17:34:24" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E" start="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" end="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8"/>
+					<ControlFlow xmi:id="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C" start="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" end="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" xmi:type="uml:Action" name="Segnala errore campi" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="849" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:33:53" modified="2026-06-24 17:33:54" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D" start="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" end="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+					<ControlFlow xmi:id="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA" start="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" end="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" xmi:type="uml:StateNode" name="Start" scope="public">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" tpos="0" ea_localid="846" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="100" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:31:46" modified="2026-06-24 17:31:48" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Aggiungi Prodotto"/>
+				<links>
+					<ControlFlow xmi:id="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E" start="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" end="EAID_0E77E7EA_6413_4ece_8717_853D26C67771"/>
+				</links>
+			</element>
+			<element xmi:idref="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" xmi:type="uml:Package" name="Guadagno Aziendale" scope="public">
+				<model package2="EAID_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" package="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" tpos="0" ea_localid="113" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:44:24" modified="2026-07-01 14:55:33" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagrammi di attività"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-06-24 17:44:24" modified="2026-06-24 17:44:24" lastloaddate="2026-07-01 14:54:30" lastsavedate="2026-07-01 14:54:30"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE"/>
+			</element>
+			<element xmi:idref="EAID_97BD3423_A638_4c17_AB48_7C5AD426036D" xmi:type="uml:Activity" name="Activity1" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="856" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Activity" nType="0" scope="public" isAbstract="false"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:19" modified="2026-06-24 17:45:19" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+			</element>
+			<element xmi:idref="EAID_AB8F30D6_F082_47d0_B15D_17104F2B6CDC" xmi:type="uml:Activity" name="Activity2" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="859" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Activity" nType="0" scope="public" isAbstract="false"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:31" modified="2026-06-24 17:45:31" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+			</element>
+			<element xmi:idref="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC" xmi:type="uml:Action" name="Calcolo totale entrate" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="852" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:14" modified="2026-06-24 17:47:05" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8" start="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC" end="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0"/>
+					<ControlFlow xmi:id="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8" start="EAID_CCF57556_1599_4576_953E_445C5628CBD4" end="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0" xmi:type="uml:Action" name="Calcolo totale uscite" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="857" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:17" modified="2026-06-24 17:47:11" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_68374181_D244_43f8_8368_4421C9CEDBBE" start="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<ControlFlow xmi:id="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8" start="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC" end="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" xmi:type="uml:Decision" name="Errore?" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="854" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:27:48" modified="2026-07-14 12:27:55" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879" start="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" end="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8"/>
+					<ControlFlow xmi:id="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268" start="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" end="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C"/>
+					<ControlFlow xmi:id="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459" start="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" end="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D" xmi:type="uml:StateNode" name="Final" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="850" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="101" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:42" modified="2026-06-24 17:47:35" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411" start="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" end="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" xmi:type="uml:Action" name="Mostra riepilogo guadagni" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="851" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:28:13" modified="2026-07-14 12:28:20" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411" start="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" end="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D"/>
+					<ControlFlow xmi:id="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268" start="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" end="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_CCF57556_1599_4576_953E_445C5628CBD4" xmi:type="uml:Action" name="Richiesta periodo di riferimento" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="860" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:11" modified="2026-06-24 17:46:58" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8" start="EAID_CCF57556_1599_4576_953E_445C5628CBD4" end="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC"/>
+					<ControlFlow xmi:id="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48" start="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" end="EAID_CCF57556_1599_4576_953E_445C5628CBD4"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" xmi:type="uml:Action" name="Seleziona &quot;Guadagno aziendale&quot;" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="855" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:29" modified="2026-07-14 12:30:13" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F" start="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" end="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7"/>
+					<ControlFlow xmi:id="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B" start="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<ControlFlow xmi:id="EAID_68374181_D244_43f8_8368_4421C9CEDBBE" start="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<ControlFlow xmi:id="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED" start="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" xmi:type="uml:Action" name="Sistema calcola il riepilogo" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="853" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:45:38" modified="2026-07-14 12:30:38" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459" start="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" end="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB"/>
+					<ControlFlow xmi:id="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F" start="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" end="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" xmi:type="uml:StateNode" name="Start" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="858" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="100" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:44:38" modified="2026-06-24 17:47:40" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED" start="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<ControlFlow xmi:id="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48" start="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" end="EAID_CCF57556_1599_4576_953E_445C5628CBD4"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" xmi:type="uml:Action" name="Visualizza errore" scope="public">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" tpos="0" ea_localid="861" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:29:00" modified="2026-07-14 12:29:05" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Guadagno Aziendale"/>
+				<links>
+					<ControlFlow xmi:id="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B" start="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" end="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B"/>
+					<ControlFlow xmi:id="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879" start="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" end="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8"/>
+				</links>
+			</element>
+			<element xmi:idref="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" xmi:type="uml:Package" name="Registra Entrate" scope="public">
+				<model package2="EAID_9A40B6DB_7423_47af_B611_06BB1B294E92" package="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" tpos="0" ea_localid="114" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:35:55" modified="2026-07-01 14:55:34" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagrammi di attività"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-06-24 17:35:55" modified="2026-06-24 17:35:55" lastloaddate="2026-07-01 14:54:31" lastsavedate="2026-07-01 14:54:31"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE"/>
+			</element>
+			<element xmi:idref="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" xmi:type="uml:Action" name="conferma l'invio" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="872" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:07:38" modified="2026-07-14 12:07:47" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_A039727B_320C_4f21_A079_A3F64F82031D" start="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" end="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571"/>
+					<ControlFlow xmi:id="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6" start="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" end="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" xmi:type="uml:Decision" name="Dati validi?" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="866" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:36:36" modified="2026-07-14 12:20:50" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+					<ControlFlow xmi:id="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005"/>
+					<ControlFlow xmi:id="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76"/>
+					<ControlFlow xmi:id="EAID_A039727B_320C_4f21_A079_A3F64F82031D" start="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" end="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD" xmi:type="uml:StateNode" name="Final" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="862" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="101" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:37:38" modified="2026-06-24 17:37:43" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340" start="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" end="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" xmi:type="uml:Action" name="il sistema mostra il modulo dati" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="870" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:05:39" modified="2026-07-14 12:05:57" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20" start="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" end="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76"/>
+					<ControlFlow xmi:id="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B" start="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" end="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+					<ControlFlow xmi:id="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C" start="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" end="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" xmi:type="uml:Action" name="inserimento data, tipo, importo e descizione" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="867" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:06:22" modified="2026-07-14 12:07:27" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6" start="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" end="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B"/>
+					<ControlFlow xmi:id="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F" start="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" end="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" xmi:type="uml:Action" name="Mostra errore formato" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="865" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:36:58" modified="2026-06-24 17:36:59" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B" start="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" end="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+					<ControlFlow xmi:id="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76" xmi:type="uml:Action" name="Registra transazione in entrata" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="871" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:37:23" modified="2026-06-24 17:37:25" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_288CE836_FDB5_460b_98AF_816660032F6E" start="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76" end="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+					<ControlFlow xmi:id="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" xmi:type="uml:Action" name="seleziona &quot;nuova entrata&quot;" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="869" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:36:14" modified="2026-07-14 12:05:31" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C" start="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" end="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2"/>
+					<ControlFlow xmi:id="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308" start="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" end="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" xmi:type="uml:Action" name="seleziona la categoria" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="868" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:06:05" modified="2026-07-14 12:06:09" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F" start="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" end="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC"/>
+					<ControlFlow xmi:id="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20" start="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" end="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" xmi:type="uml:Action" name="Sistema registra i dati" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="864" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:39:31" modified="2026-07-14 12:21:33" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340" start="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" end="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD"/>
+					<ControlFlow xmi:id="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405" start="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" end="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+					<ControlFlow xmi:id="EAID_288CE836_FDB5_460b_98AF_816660032F6E" start="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76" end="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" xmi:type="uml:StateNode" name="Start" scope="public">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" tpos="0" ea_localid="863" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="100" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:36:07" modified="2026-06-24 17:36:10" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Entrate"/>
+				<links>
+					<ControlFlow xmi:id="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308" start="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" end="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89"/>
+				</links>
+			</element>
+			<element xmi:idref="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" xmi:type="uml:Package" name="Registra Uscite" scope="public">
+				<model package2="EAID_F40D9E50_420C_4402_9BCD_DD0D45EF1181" package="EAPK_ABA255D0_273A_414d_A6FF_AA58070F03E5" tpos="0" ea_localid="115" ea_eleType="package"/>
+				<properties isSpecification="false" sType="Package" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:40:24" modified="2026-07-01 14:55:37" complexity="1" status="Proposed"/>
+				<code gentype="Java"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Diagrammi di attività"/>
+				<packageproperties version="1.0" tpos="0"/>
+				<paths/>
+				<times created="2026-06-24 17:40:24" modified="2026-06-24 17:40:24" lastloaddate="2026-07-01 14:54:31" lastsavedate="2026-07-01 14:54:31"/>
+				<flags iscontrolled="FALSE" isprotected="FALSE" batchsave="0" batchload="0" usedtd="FALSE" logxml="FALSE"/>
+			</element>
+			<element xmi:idref="EAID_597989FF_3AF6_498d_8F34_8E009922D882" xmi:type="uml:Action" name="Aggiorna saldo totale" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="876" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:41:39" modified="2026-06-24 17:43:07" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_5F923E59_56AD_4029_9869_97FC73398C46" start="EAID_597989FF_3AF6_498d_8F34_8E009922D882" end="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+					<ControlFlow xmi:id="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C" start="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" end="EAID_597989FF_3AF6_498d_8F34_8E009922D882"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" xmi:type="uml:Action" name="Conferma l'invio" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="873" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:15:43" modified="2026-07-14 12:15:45" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292" start="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" end="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B"/>
+					<ControlFlow xmi:id="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9" start="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" end="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" xmi:type="uml:Decision" name="Dati validi?" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="878" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Decision" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:40:49" modified="2026-07-14 12:20:29" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0" start="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" end="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E"/>
+					<ControlFlow xmi:id="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394" start="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" end="EAID_EE976341_4224_456a_9C11_7A55FB7314E6"/>
+					<ControlFlow xmi:id="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE" start="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" end="EAID_76C6971F_6833_4ee7_9814_D26E1897D149"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C" xmi:type="uml:StateNode" name="Final" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="879" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="101" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:41:49" modified="2026-06-24 17:43:17" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_5F923E59_56AD_4029_9869_97FC73398C46" start="EAID_597989FF_3AF6_498d_8F34_8E009922D882" end="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+					<ControlFlow xmi:id="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2" start="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" end="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" xmi:type="uml:Action" name="Inserisce data, tipo, importo&#xA;e descrizione" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="877" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:15:30" modified="2026-07-14 12:15:32" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9" start="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" end="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1"/>
+					<ControlFlow xmi:id="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98" start="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" end="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" xmi:type="uml:Action" name="Seleziona &quot;Nuova uscita&quot;" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="875" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:40:46" modified="2026-07-14 12:15:06" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35" start="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" end="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+					<ControlFlow xmi:id="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A" start="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" end="EAID_437B5D50_5CD3_4729_B600_55CD0064448B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" xmi:type="uml:Action" name="Seleziona la categoria" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="880" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:15:17" modified="2026-07-14 12:15:19" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98" start="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" end="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F"/>
+					<ControlFlow xmi:id="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14" start="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" end="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" xmi:type="uml:Action" name="Sistema mostra il modulo dati" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="882" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:13:49" modified="2026-07-14 12:14:58" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14" start="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" end="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238"/>
+					<ControlFlow xmi:id="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35" start="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" end="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+					<ControlFlow xmi:id="EAID_AA300545_2E18_442f_BB57_F66ED359F709" start="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" end="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" xmi:type="uml:Action" name="Sistema registra i dati" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="884" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:41:35" modified="2026-07-14 12:22:26" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C" start="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" end="EAID_597989FF_3AF6_498d_8F34_8E009922D882"/>
+					<ControlFlow xmi:id="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2" start="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" end="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C"/>
+					<ControlFlow xmi:id="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394" start="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" end="EAID_EE976341_4224_456a_9C11_7A55FB7314E6"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" xmi:type="uml:Action" name="Sistema verifica i dati" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="883" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-07-14 12:16:02" modified="2026-07-14 12:16:03" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE" start="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" end="EAID_76C6971F_6833_4ee7_9814_D26E1897D149"/>
+					<ControlFlow xmi:id="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292" start="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" end="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" xmi:type="uml:StateNode" name="Start" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="874" ea_eleType="element"/>
+				<properties isSpecification="false" sType="StateNode" nType="100" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:40:42" modified="2026-06-24 17:42:13" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A" start="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" end="EAID_437B5D50_5CD3_4729_B600_55CD0064448B"/>
+				</links>
+			</element>
+			<element xmi:idref="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" xmi:type="uml:Action" name="Visualizza errore" scope="public">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" tpos="0" ea_localid="881" ea_eleType="element"/>
+				<properties isSpecification="false" sType="Action" nType="0" scope="public"/>
+				<project author="ASUS" version="1.0" phase="1.0" created="2026-06-24 17:41:04" modified="2026-07-14 12:19:27" complexity="1" status="Proposed"/>
+				<code gentype="&lt;none&gt;"/>
+				<style appearance="BackColor=-1;BorderColor=-1;BorderWidth=-1;FontColor=-1;VSwimLanes=1;HSwimLanes=1;BorderStyle=0;"/>
+				<tags/>
+				<xrefs/>
+				<extendedProperties tagged="0" package_name="Registra Uscite"/>
+				<links>
+					<ControlFlow xmi:id="EAID_AA300545_2E18_442f_BB57_F66ED359F709" start="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" end="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87"/>
+					<ControlFlow xmi:id="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0" start="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" end="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E"/>
+				</links>
+			</element>
+		</elements>
+		<connectors>
+			<connector xmi:idref="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6" name="no">
+				<source xmi:idref="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184">
+					<model ea_localid="835" type="Decision" name="Credenziali valide?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666">
+					<model ea_localid="842" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="440"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="no"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C" name="si">
+				<source xmi:idref="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184">
+					<model ea_localid="835" type="Decision" name="Credenziali valide?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099">
+					<model ea_localid="836" type="Action" name="sistema conferma l'accesso"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="439"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE">
+				<source xmi:idref="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2">
+					<model ea_localid="840" type="Action" name="utente inserisce credenziali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184">
+					<model ea_localid="835" type="Decision" name="Credenziali valide?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="441"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23">
+				<source xmi:idref="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099">
+					<model ea_localid="836" type="Action" name="sistema conferma l'accesso"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F">
+					<model ea_localid="843" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="438"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8">
+				<source xmi:idref="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B">
+					<model ea_localid="837" type="Action" name="sistema chiede credenziali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2">
+					<model ea_localid="840" type="Action" name="utente inserisce credenziali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="437"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_B525B027_DBCD_449d_B4C7_1B584768A151">
+				<source xmi:idref="EAID_005B99CA_D734_4c77_A9A3_CC898645089E">
+					<model ea_localid="834" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B">
+					<model ea_localid="837" type="Action" name="sistema chiede credenziali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="442"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A">
+				<source xmi:idref="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666">
+					<model ea_localid="842" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2">
+					<model ea_localid="840" type="Action" name="utente inserisce credenziali"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="436"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C" name="si">
+				<source xmi:idref="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878">
+					<model ea_localid="844" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9">
+					<model ea_localid="848" type="Action" name="Salvataggio nel database"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="435"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA" name="no">
+				<source xmi:idref="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878">
+					<model ea_localid="844" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6">
+					<model ea_localid="849" type="Action" name="Segnala errore campi"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="433"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="no"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5">
+				<source xmi:idref="EAID_0E77E7EA_6413_4ece_8717_853D26C67771">
+					<model ea_localid="845" type="Action" name="Inserimento dati prodotto"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878">
+					<model ea_localid="844" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="434"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E">
+				<source xmi:idref="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9">
+					<model ea_localid="848" type="Action" name="Salvataggio nel database"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8">
+					<model ea_localid="847" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="430"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E">
+				<source xmi:idref="EAID_44D85021_5662_43cc_A50B_2F335FB87C79">
+					<model ea_localid="846" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_0E77E7EA_6413_4ece_8717_853D26C67771">
+					<model ea_localid="845" type="Action" name="Inserimento dati prodotto"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="432"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D">
+				<source xmi:idref="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6">
+					<model ea_localid="849" type="Action" name="Segnala errore campi"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_0E77E7EA_6413_4ece_8717_853D26C67771">
+					<model ea_localid="845" type="Action" name="Inserimento dati prodotto"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="431"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_F2BA6D19_C698_4e04_9AA8_1691479D29D8">
+				<source xmi:idref="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC">
+					<model ea_localid="852" type="Action" name="Calcolo totale entrate"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0">
+					<model ea_localid="857" type="Action" name="Calcolo totale uscite"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="426"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_12F3C72F_BFB6_439c_9F9A_5825BEA30DE8">
+				<source xmi:idref="EAID_CCF57556_1599_4576_953E_445C5628CBD4">
+					<model ea_localid="860" type="Action" name="Richiesta periodo di riferimento"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_4D9C9C65_1B03_42b4_A0AA_0F6C2F19E2BC">
+					<model ea_localid="852" type="Action" name="Calcolo totale entrate"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="427"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_68374181_D244_43f8_8368_4421C9CEDBBE">
+				<source xmi:idref="EAID_A40DE335_A098_4e60_8445_E1F80837C8B0">
+					<model ea_localid="857" type="Action" name="Calcolo totale uscite"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B">
+					<model ea_localid="855" type="Action" name="Seleziona &quot;Guadagno aziendale&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="421"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879" name="Si">
+				<source xmi:idref="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB">
+					<model ea_localid="854" type="Decision" name="Errore?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8">
+					<model ea_localid="861" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="423"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="Si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268" name="No">
+				<source xmi:idref="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB">
+					<model ea_localid="854" type="Decision" name="Errore?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C">
+					<model ea_localid="851" type="Action" name="Mostra riepilogo guadagni"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="428"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="No"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459">
+				<source xmi:idref="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7">
+					<model ea_localid="853" type="Action" name="Sistema calcola il riepilogo"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB">
+					<model ea_localid="854" type="Decision" name="Errore?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="425"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411">
+				<source xmi:idref="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C">
+					<model ea_localid="851" type="Action" name="Mostra riepilogo guadagni"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D">
+					<model ea_localid="850" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="429"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_E8F4D739_C56E_437e_9AB5_B023C6AD5F48">
+				<source xmi:idref="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43">
+					<model ea_localid="858" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_CCF57556_1599_4576_953E_445C5628CBD4">
+					<model ea_localid="860" type="Action" name="Richiesta periodo di riferimento"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="419"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F">
+				<source xmi:idref="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B">
+					<model ea_localid="855" type="Action" name="Seleziona &quot;Guadagno aziendale&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7">
+					<model ea_localid="853" type="Action" name="Sistema calcola il riepilogo"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="424"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B">
+				<source xmi:idref="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8">
+					<model ea_localid="861" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B">
+					<model ea_localid="855" type="Action" name="Seleziona &quot;Guadagno aziendale&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="422"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED">
+				<source xmi:idref="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43">
+					<model ea_localid="858" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B">
+					<model ea_localid="855" type="Action" name="Seleziona &quot;Guadagno aziendale&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="420"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_A039727B_320C_4f21_A079_A3F64F82031D">
+				<source xmi:idref="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B">
+					<model ea_localid="872" type="Action" name="conferma l'invio"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571">
+					<model ea_localid="866" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="412"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6">
+				<source xmi:idref="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC">
+					<model ea_localid="867" type="Action" name="inserimento data, tipo, importo e descizione"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B">
+					<model ea_localid="872" type="Action" name="conferma l'invio"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="409"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405" name="si">
+				<source xmi:idref="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571">
+					<model ea_localid="866" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6">
+					<model ea_localid="864" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="416"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309" name="no">
+				<source xmi:idref="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571">
+					<model ea_localid="866" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005">
+					<model ea_localid="865" type="Action" name="Mostra errore formato"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="413"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="no"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_AA2A8FC0_7CB6_4c4b_A601_727C7EEC6DCB" name="si">
+				<source xmi:idref="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571">
+					<model ea_localid="866" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76">
+					<model ea_localid="871" type="Action" name="Registra transazione in entrata"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="411"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340">
+				<source xmi:idref="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6">
+					<model ea_localid="864" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD">
+					<model ea_localid="862" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="418"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20">
+				<source xmi:idref="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2">
+					<model ea_localid="870" type="Action" name="il sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76">
+					<model ea_localid="868" type="Action" name="seleziona la categoria"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="408"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B">
+				<source xmi:idref="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005">
+					<model ea_localid="865" type="Action" name="Mostra errore formato"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2">
+					<model ea_localid="870" type="Action" name="il sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="414"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C">
+				<source xmi:idref="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89">
+					<model ea_localid="869" type="Action" name="seleziona &quot;nuova entrata&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2">
+					<model ea_localid="870" type="Action" name="il sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="407"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F">
+				<source xmi:idref="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76">
+					<model ea_localid="868" type="Action" name="seleziona la categoria"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC">
+					<model ea_localid="867" type="Action" name="inserimento data, tipo, importo e descizione"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="410"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_288CE836_FDB5_460b_98AF_816660032F6E">
+				<source xmi:idref="EAID_C42BBA8E_3DF5_46d5_97D3_C4F563787D76">
+					<model ea_localid="871" type="Action" name="Registra transazione in entrata"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6">
+					<model ea_localid="864" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="415"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308">
+				<source xmi:idref="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0">
+					<model ea_localid="863" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89">
+					<model ea_localid="869" type="Action" name="seleziona &quot;nuova entrata&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="417"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_5F923E59_56AD_4029_9869_97FC73398C46">
+				<source xmi:idref="EAID_597989FF_3AF6_498d_8F34_8E009922D882">
+					<model ea_localid="876" type="Action" name="Aggiorna saldo totale"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C">
+					<model ea_localid="879" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="402"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_762FE8E3_FE2C_4cc2_A80F_1801A81DD89C">
+				<source xmi:idref="EAID_EE976341_4224_456a_9C11_7A55FB7314E6">
+					<model ea_localid="884" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_597989FF_3AF6_498d_8F34_8E009922D882">
+					<model ea_localid="876" type="Action" name="Aggiorna saldo totale"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="401"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292">
+				<source xmi:idref="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1">
+					<model ea_localid="873" type="Action" name="Conferma l'invio"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B">
+					<model ea_localid="883" type="Action" name="Sistema verifica i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="406"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9">
+				<source xmi:idref="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F">
+					<model ea_localid="877" type="Action" name="Inserisce data, tipo, importo&#xA;e descrizione"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1">
+					<model ea_localid="873" type="Action" name="Conferma l'invio"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="405"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0" name="no">
+				<source xmi:idref="EAID_76C6971F_6833_4ee7_9814_D26E1897D149">
+					<model ea_localid="878" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E">
+					<model ea_localid="881" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="398"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="no"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394" name="si">
+				<source xmi:idref="EAID_76C6971F_6833_4ee7_9814_D26E1897D149">
+					<model ea_localid="878" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_EE976341_4224_456a_9C11_7A55FB7314E6">
+					<model ea_localid="884" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="397"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels rt="si"/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE">
+				<source xmi:idref="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B">
+					<model ea_localid="883" type="Action" name="Sistema verifica i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_76C6971F_6833_4ee7_9814_D26E1897D149">
+					<model ea_localid="878" type="Decision" name="Dati validi?"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="399"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2">
+				<source xmi:idref="EAID_EE976341_4224_456a_9C11_7A55FB7314E6">
+					<model ea_localid="884" type="Action" name="Sistema registra i dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C">
+					<model ea_localid="879" type="StateNode" name="Final"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="396"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98">
+				<source xmi:idref="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238">
+					<model ea_localid="880" type="Action" name="Seleziona la categoria"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F">
+					<model ea_localid="877" type="Action" name="Inserisce data, tipo, importo&#xA;e descrizione"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="400"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35">
+				<source xmi:idref="EAID_437B5D50_5CD3_4729_B600_55CD0064448B">
+					<model ea_localid="875" type="Action" name="Seleziona &quot;Nuova uscita&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87">
+					<model ea_localid="882" type="Action" name="Sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="403"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A">
+				<source xmi:idref="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002">
+					<model ea_localid="874" type="StateNode" name="Start"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_437B5D50_5CD3_4729_B600_55CD0064448B">
+					<model ea_localid="875" type="Action" name="Seleziona &quot;Nuova uscita&quot;"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="404"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14">
+				<source xmi:idref="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87">
+					<model ea_localid="882" type="Action" name="Sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238">
+					<model ea_localid="880" type="Action" name="Seleziona la categoria"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="395"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+			<connector xmi:idref="EAID_AA300545_2E18_442f_BB57_F66ED359F709">
+				<source xmi:idref="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E">
+					<model ea_localid="881" type="Action" name="Visualizza errore"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="false"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</source>
+				<target xmi:idref="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87">
+					<model ea_localid="882" type="Action" name="Sistema mostra il modulo dati"/>
+					<role visibility="Public" targetScope="instance"/>
+					<type aggregation="none" containment="Unspecified"/>
+					<constraints/>
+					<modifiers isOrdered="false" changeable="none" isNavigable="true"/>
+					<style value="Union=0;Derived=0;AllowDuplicates=0;"/>
+					<documentation/>
+					<xrefs/>
+					<tags/>
+				</target>
+				<model ea_localid="394"/>
+				<properties ea_type="ControlFlow" direction="Source -&gt; Destination"/>
+				<documentation/>
+				<appearance linemode="3" linecolor="-1" linewidth="0" seqno="0" headStyle="0" lineStyle="0"/>
+				<labels/>
+				<extendedProperties virtualInheritance="0"/>
+				<style/>
+				<xrefs/>
+				<tags/>
+			</connector>
+		</connectors>
+		<primitivetypes>
+			<packagedElement xmi:type="uml:Package" xmi:id="EAPrimitiveTypesPackage" name="EA_PrimitiveTypes_Package" visibility="public"/>
+		</primitivetypes>
+		<profiles/>
+		<diagrams>
+			<diagram xmi:id="EAID_070DF716_AE1C_48d3_8CA1_AF9771E60278">
+				<model package="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C" localID="80" owner="EAPK_B9FD0C7B_BFAD_4b91_9702_99F4C0135A4C"/>
+				<properties name="Accessi Profilo Utente" type="Activity"/>
+				<project author="ASUS" version="1.0" created="2026-06-24 17:11:42" modified="2026-07-17 16:48:55"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="SaveTag=0D7A1ADE;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=152;Top=87;Right=222;Bottom=129;" subject="EAID_7D2955B6_6477_436f_B663_8EAB213DF37B" seqno="1" style="DUID=C89C8A53;"/>
+					<element geometry="Left=178;Top=472;Right=198;Bottom=492;" subject="EAID_FFA4E92F_145C_413c_B8C6_397C55E4E99F" seqno="2" style="DUID=37143233;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=141;Top=371;Right=234;Bottom=415;" subject="EAID_737172E0_64DA_4ac4_8E18_1A84A06A9099" seqno="3" style="DUID=B4090D5A;"/>
+					<element geometry="Left=346;Top=249;Right=416;Bottom=284;" subject="EAID_E6EAA72B_4AFA_48e6_BCE2_E6CC7B32A666" seqno="4" style="DUID=D95AD84B;"/>
+					<element geometry="Left=145;Top=230;Right=229;Bottom=303;" subject="EAID_116C86F6_CD5F_4de1_B95C_1E2622E70184" seqno="5" style="DUID=8BE8BFBE;LBL=CX=46:CY=27:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=152;Top=156;Right=222;Bottom=211;" subject="EAID_E36E8E5A_ED75_408c_81F5_7C63362EABB2" seqno="6" style="DUID=75FF8D14;"/>
+					<element geometry="Left=177;Top=24;Right=197;Bottom=44;" subject="EAID_005B99CA_D734_4c77_A9A3_CC898645089E" seqno="7" style="DUID=422C700C;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B525B027_DBCD_449d_B4C7_1B584768A151" style="Mode=3;EOID=C89C8A53;SOID=422C700C;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_392B9D8D_77DF_4af9_80AC_9A865A0F98BE" style="Mode=3;EOID=8BE8BFBE;SOID=75FF8D14;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=11:CY=14:OX=-69:OY=13:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_B06213ED_810D_414a_B2AF_289503FCF1B6" style="Mode=3;EOID=D95AD84B;SOID=8BE8BFBE;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=7:CY=14:OX=0:OY=-25:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_D4FDCCA3_6F7F_427f_A819_24DB800E4C1C" style="Mode=3;EOID=B4090D5A;SOID=8BE8BFBE;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_2301D3EE_FB3A_4fe4_ADD8_9F589F3DEF23" style="Mode=3;EOID=37143233;SOID=B4090D5A;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_DFE5D997_4BE4_44a3_A5F6_38E6E71231F8" style="Mode=3;EOID=75FF8D14;SOID=C89C8A53;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=-7;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=381:-190$;" subject="EAID_487DC8E5_AF73_49df_BB76_216948E89D7A" style="Mode=3;EOID=75FF8D14;SOID=D95AD84B;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_ECF63EB4_99FA_40f1_8A81_ED9F373B4E39">
+				<model package="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF" localID="81" owner="EAPK_4458C264_76C5_4abe_B59C_5888853A10EF"/>
+				<properties name="Aggiungi Prodotto" type="Activity"/>
+				<project author="ASUS" version="1.0" created="2026-06-24 17:31:35" modified="2026-07-17 16:48:55"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="SaveTag=C475E5D6;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=190;Top=500;Right=210;Bottom=520;" subject="EAID_8D5F5FC3_94E9_4111_B4CE_5BD03BEDEFB8" seqno="1" style="DUID=6EEDEF99;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=143;Top=378;Right=256;Bottom=433;" subject="EAID_E43B3095_0BBC_400a_91D7_377E0E5963E9" seqno="2" style="DUID=A7F9BFFF;"/>
+					<element geometry="Left=364;Top=263;Right=464;Bottom=308;" subject="EAID_ECAC6135_F85D_456f_9BC2_C05802E03CF6" seqno="3" style="DUID=47ECA664;"/>
+					<element geometry="Left=159;Top=257;Right=240;Bottom=314;" subject="EAID_09A2F2D8_BEB1_4384_95D7_559AE8716878" seqno="4" style="DUID=271F811A;LBL=CX=27:CY=27:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=143;Top=136;Right=256;Bottom=192;" subject="EAID_0E77E7EA_6413_4ece_8717_853D26C67771" seqno="5" style="DUID=12BF01E4;"/>
+					<element geometry="Left=189;Top=55;Right=209;Bottom=75;" subject="EAID_44D85021_5662_43cc_A50B_2F335FB87C79" seqno="6" style="DUID=B9B04DA1;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=7:CY=14:OX=2:OY=-28:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_319278E3_7ECB_49d9_ADF7_92CB7391F62C" style="Mode=3;EOID=A7F9BFFF;SOID=271F811A;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_879642E6_8950_4e36_BFC0_72CAFC1A9AF5" style="Mode=3;EOID=271F811A;SOID=12BF01E4;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=11:CY=14:OX=-57:OY=1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_96B73DE9_7541_4c20_BF1D_312D688AE2BA" style="Mode=3;EOID=47ECA664;SOID=271F811A;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_50FC1C8B_2763_4ff7_9B4B_D3B6625D284E" style="Mode=3;EOID=12BF01E4;SOID=B9B04DA1;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=-40;SY=0;EX=0;EY=-28;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=374:-192$;" subject="EAID_CCE3342A_4C85_4d77_B47D_B18CDFAA543D" style="Mode=3;EOID=12BF01E4;SOID=47ECA664;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_4AEDE2B5_D405_4d05_9991_B6ED6061E27E" style="Mode=3;EOID=6EEDEF99;SOID=A7F9BFFF;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_839FC414_4AED_4b22_A3E6_B31411A118A7">
+				<model package="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1" localID="82" owner="EAPK_63F7114B_06D0_45a2_A00F_54C83F8FA6F1"/>
+				<properties name="Guadagno Aziendale" type="Activity"/>
+				<project author="ASUS" version="1.0" created="2026-06-24 17:44:32" modified="2026-07-17 16:48:55"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="SaveTag=58F753C5;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=224;Top=269;Right=294;Bottom=304;" subject="EAID_E0B0EB7F_9E6C_4e14_927F_BE772B12D2B8" seqno="1" style="DUID=CDF1D1D4;"/>
+					<element geometry="Left=84;Top=348;Right=154;Bottom=390;" subject="EAID_1FA39231_E8B1_460f_A07C_7E468D85FE2C" seqno="2" style="DUID=DA6DEC49;"/>
+					<element geometry="Left=86;Top=256;Right=152;Bottom=318;" subject="EAID_7B2E9A06_F413_49ef_9EC9_7B3CEE8B40CB" seqno="3" style="DUID=33705B23;LBL=CX=30:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=109;Top=431;Right=129;Bottom=451;" subject="EAID_0176B070_38B9_45a8_9AAA_0BB832A1650D" seqno="4" style="DUID=AF8D41C7;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=84;Top=174;Right=154;Bottom=216;" subject="EAID_56952714_3F2C_4772_92D5_AC70D78F3AD7" seqno="5" style="DUID=63F0A14C;"/>
+					<element geometry="Left=74;Top=84;Right=165;Bottom=139;" subject="EAID_7CDFEBF8_69D9_4220_B6C8_4F3C7D10701B" seqno="6" style="DUID=2D631E00;"/>
+					<element geometry="Left=109;Top=20;Right=129;Bottom=40;" subject="EAID_AA289D5E_D444_4edb_BC56_EE857F916C43" seqno="7" style="DUID=E1C8C72C;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_230E2C73_42E5_41e1_ACB9_427586FBD411" style="Mode=3;EOID=AF8D41C7;SOID=DA6DEC49;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=12:CY=14:OX=-4:OY=-7:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_BDDC4617_EF3A_4287_A360_2BE4BEBAA268" style="Mode=3;EOID=DA6DEC49;SOID=33705B23;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_98A993D4_CD95_4e9d_AC74_8D5F72D1E459" style="Mode=3;EOID=33705B23;SOID=63F0A14C;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_CBB1C4E4_C6AD_4304_84F4_4B893FE4C61F" style="Mode=3;EOID=63F0A14C;SOID=2D631E00;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=8:CY=14:OX=-42:OY=-4:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_96831354_FB8D_4aa9_8CBA_E0EE3795F879" style="Mode=3;EOID=CDF1D1D4;SOID=33705B23;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=1;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=259:-110$;" subject="EAID_67CD27C8_CA41_4ac5_9F6D_9331E741260B" style="Mode=3;EOID=2D631E00;SOID=CDF1D1D4;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=26;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_88AE1E93_32F0_4574_AA66_81AE47DE70ED" style="Mode=3;EOID=2D631E00;SOID=E1C8C72C;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_DA3FD6DC_1DCC_46b8_A3AB_5A05D43DD7FE">
+				<model package="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92" localID="83" owner="EAPK_9A40B6DB_7423_47af_B611_06BB1B294E92"/>
+				<properties name="Registra Entrate" type="Activity"/>
+				<project author="ASUS" version="1.0" created="2026-06-24 17:36:01" modified="2026-07-17 16:48:56"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="SaveTag=07ADA7C6;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=78;Top=374;Right=148;Bottom=409;" subject="EAID_E7CCBD1F_BACC_4b38_90B2_1324D298CB3B" seqno="1" style="DUID=5F3753F1;"/>
+					<element geometry="Left=56;Top=274;Right=169;Bottom=336;" subject="EAID_8D7F9E1C_FBE7_44eb_9216_AADA1CC72FAC" seqno="2" style="DUID=AB6480EF;"/>
+					<element geometry="Left=77;Top=209;Right=147;Bottom=244;" subject="EAID_990BE3ED_E90A_4da5_98CC_36F1436DEE76" seqno="3" style="DUID=17CB7B82;"/>
+					<element geometry="Left=77;Top=146;Right=147;Bottom=188;" subject="EAID_BE926D89_3FA7_4192_9169_6D4B825FEAE2" seqno="4" style="DUID=BDD45DC0;"/>
+					<element geometry="Left=60;Top=550;Right=168;Bottom=596;" subject="EAID_4FDCA35E_64DC_4831_B0A2_E9C5D981D8C6" seqno="5" style="DUID=D8450438;"/>
+					<element geometry="Left=104;Top=637;Right=124;Bottom=657;" subject="EAID_2C12AF14_3EC8_4b88_ABBE_8789381695CD" seqno="6" style="DUID=E24F3B02;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=260;Top=454;Right=372;Bottom=517;" subject="EAID_5FA95F5F_D33E_4635_96B8_9501CF0E8005" seqno="7" style="DUID=9CFF7F9F;"/>
+					<element geometry="Left=82;Top=460;Right=145;Bottom=511;" subject="EAID_7B5D2264_54DD_44c9_8967_D0AB426E7571" seqno="8" style="DUID=720B1D1D;LBL=CX=45:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=66;Top=74;Right=158;Bottom=126;" subject="EAID_9C171A01_C3C6_4e37_B955_8827301F1B89" seqno="9" style="DUID=1BE10D12;"/>
+					<element geometry="Left=103;Top=31;Right=123;Bottom=51;" subject="EAID_41EDEF0B_23B9_4e09_AE68_B9B806425BF0" seqno="10" style="DUID=4B6D6D0B;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_5A29820A_3868_4e6d_BFB1_2DA488896340" style="Mode=3;EOID=E24F3B02;SOID=D8450438;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_977C2C5D_E914_468e_AF43_9F784D4DB308" style="Mode=3;EOID=1BE10D12;SOID=4B6D6D0B;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=7:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=0:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_063AF55B_73D8_4ca6_80C0_0EB21CD73405" style="Mode=3;EOID=D8450438;SOID=720B1D1D;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=1;SY=0;EX=0;EY=0;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=317:-167$;" subject="EAID_1ED9A9AE_68A4_40ce_8581_E34072BF8D0B" style="Mode=3;EOID=BDD45DC0;SOID=9CFF7F9F;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=11:CY=14:OX=-56:OY=-1:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_208EE90D_C2D7_4e22_B2A1_1B4674462309" style="Mode=3;EOID=9CFF7F9F;SOID=720B1D1D;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_A039727B_320C_4f21_A079_A3F64F82031D" style="Mode=3;EOID=720B1D1D;SOID=5F3753F1;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_E1672A66_C158_44b3_80DD_27CF56658C2F" style="Mode=3;EOID=AB6480EF;SOID=17CB7B82;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_E65BCB69_94E6_41ed_B393_59D0DEA3DCB6" style="Mode=3;EOID=5F3753F1;SOID=AB6480EF;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_D70116D1_D7AD_4c20_88E8_6BA500AFDD20" style="Mode=3;EOID=17CB7B82;SOID=BDD45DC0;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_AC82D597_FD4B_464e_B045_C3001CE9C95C" style="Mode=3;EOID=BDD45DC0;SOID=1BE10D12;Color=-1;LWidth=0;Hidden=0;"/>
+				</elements>
+			</diagram>
+			<diagram xmi:id="EAID_AAAE48BD_1F45_444b_9ADD_034AB038EC1B">
+				<model package="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181" localID="84" owner="EAPK_F40D9E50_420C_4402_9BCD_DD0D45EF1181"/>
+				<properties name="Registra Uscite" type="Activity"/>
+				<project author="ASUS" version="1.0" created="2026-06-24 17:40:31" modified="2026-07-17 16:48:56"/>
+				<style1 value="ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"/>
+				<style2 value="SaveTag=61912C1D;ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;MDGDgm=;STBLDgm=;ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;SuppressedCompartments=;Theme=:119;"/>
+				<swimlanes value="locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;hli=0;SwimlaneFont=lfh:-16,lfw:0,lfi:0,lfu:0,lfs:0,lfface:ARIAL,lfe:0,lfo:0,lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"/>
+				<matrixitems value="locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;width=1;clrLine=0;"/>
+				<extendedProperties/>
+				<elements>
+					<element geometry="Left=109;Top=431;Right=179;Bottom=466;" subject="EAID_D1F69064_BFA3_4faf_A91C_1BFA2DBF837B" seqno="1" style="DUID=73D82C08;"/>
+					<element geometry="Left=109;Top=368;Right=179;Bottom=403;" subject="EAID_03EAEC3F_2F9F_4aa7_8C38_D784E478E0A1" seqno="2" style="DUID=6D1C9C81;"/>
+					<element geometry="Left=109;Top=290;Right=179;Bottom=345;" subject="EAID_700B44ED_581D_427c_B7B7_B9BC34D59B3F" seqno="3" style="DUID=320D02AB;"/>
+					<element geometry="Left=109;Top=225;Right=179;Bottom=260;" subject="EAID_975E4544_6B85_4140_B1B0_3E19C0FCD238" seqno="4" style="DUID=A9B5564F;"/>
+					<element geometry="Left=109;Top=154;Right=179;Bottom=196;" subject="EAID_D19572F6_D4A6_4d9f_A96E_048D45E92D87" seqno="5" style="DUID=00C99CB2;"/>
+					<element geometry="Left=137;Top=708;Right=157;Bottom=728;" subject="EAID_90ACCCC8_B44D_41f6_A58A_4A581D99FE3C" seqno="6" style="DUID=253BA8A9;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=112;Top=623;Right=182;Bottom=665;" subject="EAID_EE976341_4224_456a_9C11_7A55FB7314E6" seqno="7" style="DUID=9449CA25;"/>
+					<element geometry="Left=256;Top=538;Right=326;Bottom=580;" subject="EAID_9B42EF0D_29AD_4235_8034_C91E42F7B68E" seqno="8" style="DUID=D7BF659B;"/>
+					<element geometry="Left=110;Top=531;Right=183;Bottom=587;" subject="EAID_76C6971F_6833_4ee7_9814_D26E1897D149" seqno="9" style="DUID=51B4EC1C;LBL=CX=45:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="Left=108;Top=89;Right=178;Bottom=131;" subject="EAID_437B5D50_5CD3_4729_B600_55CD0064448B" seqno="10" style="DUID=D232D949;"/>
+					<element geometry="Left=133;Top=20;Right=153;Bottom=40;" subject="EAID_15D2F49B_3B29_4155_9F75_ACF82570A002" seqno="11" style="DUID=BEEAAF97;LBL=CX=20:CY=14:OX=0:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:ALT=0:ROT=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_25A12957_4A18_447c_9EB6_4E5EAAC4E292" style="Mode=3;EOID=73D82C08;SOID=6D1C9C81;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_5139E9FF_D946_4548_9BB3_8D5FD8F776B9" style="Mode=3;EOID=6D1C9C81;SOID=320D02AB;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_953E6B5F_89FE_41f7_9729_D96B2F64B06A" style="Mode=3;EOID=D232D949;SOID=BEEAAF97;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_15BBA20C_C1F7_4554_B826_ACC7F4008E35" style="Mode=3;EOID=00C99CB2;SOID=D232D949;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_C752C59B_577E_4dec_A00F_DEC5EAE1ED98" style="Mode=3;EOID=320D02AB;SOID=A9B5564F;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_378341FF_EF1C_42fc_BDDD_C115D755E9BE" style="Mode=3;EOID=51B4EC1C;SOID=73D82C08;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=2;$LLB=;LLT=;LMT=;LMB=;LRT=CX=11:CY=14:OX=-34:OY=0:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_51CA925C_6AFB_4b50_A4A1_868C43D1DBF0" style="Mode=3;EOID=D7BF659B;SOID=51B4EC1C;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=CX=7:CY=14:OX=0:OY=-8:HDN=0:BLD=0:ITA=0:UND=0:CLR=-1:ALN=1:DIR=0:ROT=0;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_6D5B1CFF_D41D_4264_B0B5_1C8151F51394" style="Mode=3;EOID=9449CA25;SOID=51B4EC1C;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_A884D86F_78A9_4c4c_A8F3_8EEBFF0F2EF2" style="Mode=3;EOID=253BA8A9;SOID=9449CA25;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=3;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" subject="EAID_8EE5973A_F0A8_4d5b_8FF7_25CDB94DAF14" style="Mode=3;EOID=A9B5564F;SOID=00C99CB2;Color=-1;LWidth=0;Hidden=0;"/>
+					<element geometry="SX=-8;SY=0;EX=0;EY=-1;EDGE=1;$LLB=;LLT=;LMT=;LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=283:-176$;" subject="EAID_AA300545_2E18_442f_BB57_F66ED359F709" style="Mode=3;EOID=00C99CB2;SOID=D7BF659B;Color=-1;LWidth=0;TREE=OS;Hidden=0;"/>
+				</elements>
+			</diagram>
+		</diagrams>
+	</xmi:Extension>
+</xmi:XMI>
