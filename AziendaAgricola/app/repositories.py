@@ -74,9 +74,6 @@ class DataRepository:
                         ruolo=ruolo,
                         ultimoLogin=d.get("ultimoLogin"),
                         statoAttivo=d.get("statoAttivo", True),
-                        dataAssunzione=d.get("dataAssunzione", ""),
-                        mansione=d.get("mansione", ""),
-                        stipendioMensile=float(d.get("stipendioMensile", 0.0))
                     )
                 users.append(u)
             return users
@@ -101,10 +98,6 @@ class DataRepository:
                 "ultimoLogin": u.ultimoLogin,
                 "statoAttivo": u.statoAttivo
             }
-            if isinstance(u, Dipendente):
-                d["dataAssunzione"] = u.dataAssunzione
-                d["mansione"] = u.mansione
-                d["stipendioMensile"] = u.stipendioMensile
             raw_list.append(d)
 
         with open(self.users_file, 'w', encoding='utf-8') as f:

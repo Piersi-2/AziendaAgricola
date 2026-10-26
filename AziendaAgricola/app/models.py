@@ -61,10 +61,6 @@ class Manager(Utente):
 
 @dataclass
 class Dipendente(Utente):
-    dataAssunzione: str = ""
-    mansione: str = ""
-    stipendioMensile: float = 0.0  
-
     def __post_init__(self):
         self.ruolo = livelloAccesso.DIPENDENTE
 
