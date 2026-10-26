@@ -13,5 +13,5 @@ A ogni movimento è possibile allegare uno o più documenti PDF, come fatture o 
 
 Nella sezione dedicata al guadagno aziendale, accessibile solo al manager, il sistema calcola per l’anno selezionato il totale delle entrate, il totale delle uscite e il margine netto, e permette di generare un report riepilogativo.
 
-L’applicazione `e sviluppata in Python 3, con interfaccia grafica realizzata in PyQt5 e salvataggio dei dati in file JSON.
+L’applicazione è sviluppata in Python 3, con interfaccia grafica realizzata in PyQt5 e salvataggio dei dati in file JSON.
 
